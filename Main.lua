@@ -70,7 +70,7 @@ local Tabs = {
 }
 
 
--- Minimize / Restore Simpel untuk Fluent
+-- GUI utama Fluent
 local fluentGui = Window.GUI
 
 -- Tombol restore
@@ -83,23 +83,27 @@ restoreBtn.TextColor3 = Color3.new(1, 1, 1)
 restoreBtn.TextScaled = true
 restoreBtn.Visible = false
 restoreBtn.ZIndex = 999
-restoreBtn.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+restoreBtn.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+
+-- Simpan posisi asli
+local originalPos = fluentGui.Position
 
 -- Fungsi restore
 restoreBtn.MouseButton1Click:Connect(function()
-    fluentGui.Visible = true
+    fluentGui.Position = originalPos
     restoreBtn.Visible = false
 end)
 
 -- Tombol di tab Settings untuk minimize
 Tabs.Settings:AddButton({
     Title = "Minimize",
-    Description = "Sembunyikan GUI",
+    Description = "Sembunyikan GUI ke luar layar",
     Callback = function()
-        fluentGui.Visible = false
+        fluentGui.Position = UDim2.new(2, 0, 2, 0) -- pindah ke luar layar
         restoreBtn.Visible = true
     end
 })
+
 
 
 
