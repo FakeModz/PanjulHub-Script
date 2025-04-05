@@ -8,43 +8,6 @@ SaveConfig = true,
 ConfigFolder = "ModzHub"
 })
 
-
---Hook
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-
-
-
---Variable
-local autoCast = false
-local autoShake = false
-
---Function
-
-
-
---UI Design
-local Tab = Window:MakeTab({
-	Name = "Fishing",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
-})
-
-Tab:AddToggle({
-	Name = "Auto Cast",
-	Default = false,
-	Callback = function(Value)
-
-	end
-})
-
-Tab:AddToggle({
-	Name = "Auto Shake",
-	Default = false,
-	Callback = function(Value)
-		
-	end
-})
-
 Tab:AddToggle({
 	Name = "Sell All Fish",
 	Default = false,
