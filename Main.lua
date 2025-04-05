@@ -42,10 +42,10 @@ local Teleport = Window:MakeTab({
 
 
 --Variable
-local AutoCasting = false
-local AutoReeling = false
-local InstantBob = false
-local AutoSelling = false
+--local AutoCasting = false
+--local AutoReeling = false
+--local InstantBob = false
+--local AutoSelling = false
 
 
 
