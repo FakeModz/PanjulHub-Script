@@ -11,6 +11,14 @@ tab:AddToggle("Auto Fish", false, function(state)
     print("Auto Fish:", state)
 end)
 
+tab:AddToggle("Auto Fish", false, function(state)
+    print("Auto Fish:", state)
+end)
+
+tab:AddToggle("Auto Fish", false, function(state)
+    print("Auto Fish:", state)
+end)
+
 
 tab:AddButton("Buy Rod", function()
     print("Button clicked!")
