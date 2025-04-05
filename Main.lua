@@ -58,52 +58,41 @@ local Window = Fluent:CreateWindow({
     MinimizeKey = nil -- nonaktifkan minimize dengan keyboard
 })
 
--- Minimize Button (ikon garis)
-local MinimizeButton = Instance.new("ImageButton")
-MinimizeButton.Name = "MinimizeButton"
-MinimizeButton.Size = UDim2.new(0, 24, 0, 24)
-MinimizeButton.Position = UDim2.new(1, -60, 0, 6)
-MinimizeButton.BackgroundTransparency = 1
-MinimizeButton.Image = "rbxassetid://7072706622" -- ikon minimize
-MinimizeButton.Parent = Window.Window
+-- Buat window utama
+local Window = Fluent:CreateWindow({
+    Title = "Fisch | Panjul Hub",
+    SubTitle = "vBeta",
+    TabWidth = 150,
+    Size = UDim2.fromOffset(600, 400),
+    Acrylic = false,
+    Theme = "Darker",
+    MinimizeKey = nil -- Nonaktifkan minimize pakai keyboard
+})
 
--- Maximize Button (ikon kotak)
-local MaximizeButton = Instance.new("ImageButton")
-MaximizeButton.Name = "MaximizeButton"
-MaximizeButton.Size = UDim2.new(0, 24, 0, 24)
-MaximizeButton.Position = UDim2.new(1, -30, 0, 6)
-MaximizeButton.BackgroundTransparency = 1
-MaximizeButton.Image = "rbxassetid://7072711178" -- ikon maximize
-MaximizeButton.Visible = false -- disembunyikan dulu
-MaximizeButton.Parent = Window.Window
+-- Tambah Tab "Settings"
+local SettingsTab = Window:AddTab({
+    Title = "Settings",
+    Icon = "settings"
+})
 
--- Simpan isi konten yang ingin disembunyikan
-local contentToToggle = {}
-for _, child in pairs(Window.Window:GetChildren()) do
-    if child:IsA("Frame") or child:IsA("ScrollingFrame") then
-        if child.Name ~= "MinimizeButton" and child.Name ~= "MaximizeButton" then
-            table.insert(contentToToggle, child)
-        end
+-- Tombol Minimize
+SettingsTab:AddButton({
+    Title = "Minimize Menu",
+    Description = "Sembunyikan menu sementara",
+    Callback = function()
+        Window:Minimize()
     end
-end
+})
 
--- Fungsi untuk minimize
-MinimizeButton.MouseButton1Click:Connect(function()
-    for _, content in pairs(contentToToggle) do
-        content.Visible = false
+-- Tombol Show (Restore)
+SettingsTab:AddButton({
+    Title = "Tampilkan Menu Lagi",
+    Description = "Munculkan kembali menu jika tersembunyi",
+    Callback = function()
+        Window:Show()
     end
-    MinimizeButton.Visible = false
-    MaximizeButton.Visible = true
-end)
+})
 
--- Fungsi untuk maximize
-MaximizeButton.MouseButton1Click:Connect(function()
-    for _, content in pairs(contentToToggle) do
-        content.Visible = true
-    end
-    MinimizeButton.Visible = true
-    MaximizeButton.Visible = false
-end)
 
 
 
