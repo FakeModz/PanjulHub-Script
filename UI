@@ -37,7 +37,7 @@ function ModzHub:CreateWindow(config)
     local MinimizedIcon = Instance.new("ImageButton")
     MinimizedIcon.Size = UDim2.new(0, 40, 0, 40)
     MinimizedIcon.Position = UDim2.new(0, 10, 0, 10)
-    MinimizedIcon.Image = "rbxasset://textures/IconRoblox.png"
+    MinimizedIcon.Image = "rbxasset://6031075938"
     MinimizedIcon.BackgroundTransparency = 1
     MinimizedIcon.Visible = false
     MinimizedIcon.ZIndex = 10
