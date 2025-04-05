@@ -1,7 +1,7 @@
 --local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/FakeModz/PanjulHub-Script/refs/heads/main/UI')))()
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
 --Roblox Client
-ReplicatedStorage = game:GetService("ReplicatedStorage")
+--ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 
 
@@ -80,7 +80,8 @@ Items:AddToggle({
 	Name = "Auto Sell",
 	Default = false,
 	Callback = function(Value)
-    ReplicatedStorage.events:WaitForChild("SellAll"):InvokeServer()
+			print(Value) 
+    --ReplicatedStorage.events:WaitForChild("SellAll"):InvokeServer()
 	end    
 })
 
