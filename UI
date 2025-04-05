@@ -31,7 +31,6 @@ function ModzHub:CreateWindow(config)
     Main.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
     Main.BorderSizePixel = 0
     Main.Name = "Main"
-    Main.AnchorPoint = Vector2.new(0, 0)
     Main.Parent = ScreenGui
     Main.Visible = true
 
@@ -39,38 +38,37 @@ function ModzHub:CreateWindow(config)
     local MinimizedIcon = Instance.new("ImageButton")
     MinimizedIcon.Size = UDim2.new(0, 40, 0, 40)
     MinimizedIcon.Position = UDim2.new(0.5, -20, 0.5, -20)
+    MinimizedIcon.AnchorPoint = Vector2.new(0.5, 0.5)
     MinimizedIcon.Image = "rbxasset://textures/IconRoblox.png"
     MinimizedIcon.BackgroundTransparency = 1
     MinimizedIcon.Visible = false
     MinimizedIcon.Parent = ScreenGui
 
-    -- Drag Minimized Icon
-    local dragging, dragInput, dragStart, startPos
-    MinimizedIcon.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
-            dragging = true
-            dragStart = input.Position
-            startPos = MinimizedIcon.Position
-            input.Changed:Connect(function()
-                if input.UserInputState == Enum.UserInputState.End then
-                    dragging = false
-                end
-            end)
-        end
-    end)
+    -- Dragging
+    local dragging, offset
+    local function enableDrag(frame)
+        frame.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                dragging = true
+                offset = Vector2.new(input.Position.X - frame.Position.X.Offset, input.Position.Y - frame.Position.Y.Offset)
+            end
+        end)
 
-    MinimizedIcon.InputChanged:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseMovement then
-            dragInput = input
-        end
-    end)
+        UIS.InputEnded:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                dragging = false
+            end
+        end)
 
-    UIS.InputChanged:Connect(function(input)
-        if input == dragInput and dragging then
-            local delta = input.Position - dragStart
-            MinimizedIcon.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-        end
-    end)
+        UIS.InputChanged:Connect(function(input)
+            if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+                frame.Position = UDim2.new(0, input.Position.X - offset.X, 0, input.Position.Y - offset.Y)
+            end
+        end)
+    end
+
+    enableDrag(Main)
+    enableDrag(MinimizedIcon)
 
     -- Title Bar
     local TitleBar = Instance.new("TextLabel")
@@ -138,11 +136,12 @@ function ModzHub:CreateWindow(config)
                 AddToggle = function(_, label, default, callback)
                     local Holder = Instance.new("Frame", TabFrame)
                     Holder.Size = UDim2.new(1, -20, 0, 30)
+                    Holder.Position = UDim2.new(0, 10, 0, 0)
                     Holder.BackgroundTransparency = 1
 
                     local Label = Instance.new("TextLabel", Holder)
-                    Label.Size = UDim2.new(1, -60, 1, 0)
-                    Label.Position = UDim2.new(0, 0, 0, 0)
+                    Label.Size = UDim2.new(1, -70, 1, 0)
+                    Label.Position = UDim2.new(0, 10, 0, 0)
                     Label.BackgroundTransparency = 1
                     Label.Text = label
                     Label.Font = Enum.Font.Gotham
@@ -152,7 +151,7 @@ function ModzHub:CreateWindow(config)
 
                     local ToggleBtn = Instance.new("Frame", Holder)
                     ToggleBtn.Size = UDim2.new(0, 50, 0, 24)
-                    ToggleBtn.Position = UDim2.new(1, -50, 0.5, -12)
+                    ToggleBtn.Position = UDim2.new(1, -60, 0.5, -12)
                     ToggleBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
                     ToggleBtn.BorderSizePixel = 0
                     ToggleBtn.ClipsDescendants = true
@@ -189,22 +188,25 @@ function ModzHub:CreateWindow(config)
                 AddButton = function(_, label, callback)
                     local Btn = Instance.new("TextButton", TabFrame)
                     Btn.Size = UDim2.new(1, -20, 0, 30)
+                    Btn.Position = UDim2.new(0, 10, 0, 0)
+                    Btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
                     Btn.Text = label
                     Btn.Font = Enum.Font.Gotham
                     Btn.TextSize = 14
                     Btn.TextColor3 = Color3.fromRGB(255,255,255)
-                    Btn.BackgroundColor3 = Color3.fromRGB(50,50,50)
                     Btn.MouseButton1Click:Connect(callback)
                 end,
 
                 AddLabel = function(_, text)
                     local Label = Instance.new("TextLabel", TabFrame)
-                    Label.Size = UDim2.new(1, -20, 0, 25)
+                    Label.Size = UDim2.new(1, -20, 0, 30)
+                    Label.Position = UDim2.new(0, 10, 0, 0)
+                    Label.BackgroundTransparency = 1
                     Label.Text = text
                     Label.Font = Enum.Font.Gotham
                     Label.TextSize = 14
                     Label.TextColor3 = Color3.fromRGB(255,255,255)
-                    Label.BackgroundTransparency = 1
+                    Label.TextXAlignment = Enum.TextXAlignment.Left
                 end
             }
         end
