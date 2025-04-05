@@ -1,30 +1,41 @@
-local ModzHub = loadstring(game:HttpGet("https://raw.githubusercontent.com/FakeModz/PanjulHub-Script/refs/heads/main/UI"))()
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
 
-local window = ModzHub:CreateWindow({
-    Title = "Modz Hub | Fisch",
-    })
-
-local tab = window:CreateTab("Fishing Tab")
+local Window = OrionLib:MakeWindow({Name = "Panjul Hub | Fisch", HidePremium = false, SaveConfig = true, ConfigFolder = "PanjulHubZ"})
 
 
-tab:AddToggle("Auto Fish", false, function(state)
-    print("Auto Fish:", state)
-end)
 
-tab:AddToggle("Auto Fish", false, function(state)
-    print("Auto Fish:", state)
-end)
+local Fishing = Window:MakeTab({
+	Name = "Fishing",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
 
-tab:AddToggle("Auto Fish", false, function(state)
-    print("Auto Fish:", state)
-end)
+Fishing:AddToggle({
+	Name = "Sell All Fish",
+	Default = false,
+	Callback = function(Value)
+		print(Value)
+	end    
+})
+
+Fishing:AddToggle({
+	Name = "Auto Cast",
+	Default = false,
+	Callback = function(Value)
+		print(Value)
+	end    
+})
+
+OrionLib:Init()
 
 
-tab:AddButton("Buy Rod", function()
-    print("Button clicked!")
-end)
 
-tab:AddLabel("This is just a label")
+
+
+
+
+
+
 
 
 
