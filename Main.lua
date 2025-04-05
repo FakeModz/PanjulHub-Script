@@ -10,6 +10,27 @@ local Fishing = Window:MakeTab({
 	PremiumOnly = false
 })
 
+local Items = Window:MakeTab({
+	Name = "Items",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local Misc = Window:MakeTab({
+	Name = "Misc",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local Teleport = Window:MakeTab({
+	Name = "Teleport",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+
+
+--Fishing
 Fishing:AddToggle({
 	Name = "Sell All Fish",
 	Default = false,
@@ -25,6 +46,12 @@ Fishing:AddToggle({
 		print(Value)
 	end    
 })
+
+
+
+
+
+
 
 OrionLib:Init()
 
