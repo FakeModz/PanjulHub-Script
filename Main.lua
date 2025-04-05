@@ -58,39 +58,39 @@ local Window = Fluent:CreateWindow({
     MinimizeKey = nil
 })
 
--- Buat tombol restore melayang
+-- Buat tombol restore yang tidak ikut hilang saat minimize
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
 local restoreButton = Instance.new("TextButton")
-restoreButton.Name = "RestoreFluentWindow"
+restoreButton.Name = "RestoreButton"
 restoreButton.Size = UDim2.new(0, 100, 0, 30)
 restoreButton.Position = UDim2.new(0, 10, 0, 10) -- pojok kiri atas
 restoreButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 restoreButton.TextColor3 = Color3.new(1, 1, 1)
-restoreButton.Text = "Show Menu"
-restoreButton.Visible = false -- sembunyikan dulu
+restoreButton.Text = "Tampilkan Menu"
+restoreButton.Visible = false
+restoreButton.Parent = playerGui
 
--- Masukkan ke StarterGui (playergui biar tampil di layar)
-restoreButton.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
 
--- Saat tombol minimize ditekan
-local function minimizeWindow()
-    Window:Minimize()
-    restoreButton.Visible = true
-end
-
--- Saat tombol restore ditekan
-restoreButton.MouseButton1Click:Connect(function()
-    Window:Show()
-    restoreButton.Visible = false
-end)
-
--- Tambahkan tombol Minimize ke Tab Settings
-local SettingsTab = Window:AddTab({ Title = "Settings", Icon = "settings" })
-
-SettingsTab:AddButton({
+Tabs.Settings:AddButton({
     Title = "Minimize Menu",
     Description = "Sembunyikan menu sementara",
-    Callback = minimizeWindow
+    Callback = function()
+        Window:Minimize()
+        restoreButton.Visible = true
+    end
 })
+
+restoreButton.MouseButton1Click:Connect(function()
+    -- Tekan tombol minimize keybind secara virtual
+    local VirtualInputManager = game:GetService("VirtualInputManager")
+    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.LeftControl, false, game)
+    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.LeftControl, false, game)
+
+    restoreButton.Visible = false
+end)
 
 
 
