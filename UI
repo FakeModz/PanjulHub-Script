@@ -467,7 +467,7 @@ function OrionLib:MakeWindow(WindowConfig)
 	local FirstTab = true
 	local Minimized = false
 	local Loaded = false
-	local UIHidden = false
+	
 
 	WindowConfig = WindowConfig or {}
 	WindowConfig.Name = WindowConfig.Name or "Panjul Hub"
@@ -658,11 +658,7 @@ function OrionLib:MakeWindow(WindowConfig)
 		WindowConfig.CloseCallback()
 	end)
 
-	AddConnection(UserInputService.InputBegan, function(Input)
-		if Input.KeyCode == Enum.KeyCode.RightShift and UIHidden then
-			MainWindow.Visible = true
-		end
-	end)
+
 
 	AddConnection(MinimizeBtn.MouseButton1Up, function()
 		if Minimized then
