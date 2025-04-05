@@ -55,7 +55,7 @@ local Window = Fluent:CreateWindow({
     Size = UDim2.fromOffset(500, 300),
     Acrylic = false,
     Theme = "Darker",
-    MinimizeKey = Enum.KeyCode.F10
+    MinimizeKey = Enum.KeyCode.LeftControl
 })
 
 
