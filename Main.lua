@@ -70,38 +70,37 @@ local Tabs = {
 }
 
 
--- Ambil GUI utama Fluent
-local mainGui = Window.GUI
+-- Minimize / Restore Simpel untuk Fluent
+local fluentGui = Window.GUI
 
--- Buat tombol ImageButton untuk restore
-local restoreButton = Instance.new("ImageButton")
-restoreButton.Name = "RestoreFluent"
-restoreButton.Image = "rbxassetid://6031097225" -- hamburger icon
-restoreButton.Size = UDim2.new(0, 36, 0, 36)
-restoreButton.Position = UDim2.new(0, 10, 0, 10)
-restoreButton.BackgroundTransparency = 1
-restoreButton.Visible = false
-restoreButton.ZIndex = 1000
-
--- Taruh di PlayerGui
-local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-restoreButton.Parent = playerGui
+-- Tombol restore
+local restoreBtn = Instance.new("TextButton")
+restoreBtn.Text = "≡"
+restoreBtn.Size = UDim2.new(0, 40, 0, 40)
+restoreBtn.Position = UDim2.new(0, 10, 0, 10)
+restoreBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+restoreBtn.TextColor3 = Color3.new(1, 1, 1)
+restoreBtn.TextScaled = true
+restoreBtn.Visible = false
+restoreBtn.ZIndex = 999
+restoreBtn.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
 -- Fungsi restore
-restoreButton.MouseButton1Click:Connect(function()
-    mainGui.Enabled = true
-    restoreButton.Visible = false
+restoreBtn.MouseButton1Click:Connect(function()
+    fluentGui.Visible = true
+    restoreBtn.Visible = false
 end)
 
--- Tombol minimize di tab Settings
+-- Tombol di tab Settings untuk minimize
 Tabs.Settings:AddButton({
-    Title = "Minimize Fluent",
-    Description = "Sembunyikan window",
+    Title = "Minimize",
+    Description = "Sembunyikan GUI",
     Callback = function()
-        mainGui.Enabled = false
-        restoreButton.Visible = true
+        fluentGui.Visible = false
+        restoreBtn.Visible = true
     end
 })
+
 
 
 
