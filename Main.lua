@@ -81,7 +81,7 @@ Items:AddToggle({
 	Default = false,
 	Callback = function(Value)
 			print(Value) 
-    --ReplicatedStorage.events:WaitForChild("SellAll"):InvokeServer()
+        game:GetService("ReplicatedStorage").events:WaitForChild("SellAll"):InvokeServer()
 	end    
 })
 
