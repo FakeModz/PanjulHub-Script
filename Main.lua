@@ -1,166 +1,157 @@
--- Rayfield Mobile V2 - Lengkap & Centered
+-- Modz Hub Mobile UI - Full Customizable
 local UIS = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 
--- GUI
-local Gui = Instance.new("ScreenGui")
-Gui.Name = "Rayfield_MobileV2"
-Gui.ResetOnSpawn = false
+local Gui = Instance.new("ScreenGui", game.CoreGui)
+Gui.Name = "ModzHubUI"
 Gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-Gui.Parent = game.CoreGui
+Gui.ResetOnSpawn = false
 
--- Main Frame (Centered)
+-- Main UI
 local Main = Instance.new("Frame", Gui)
-Main.Size = UDim2.new(0, 300, 0, 360)
+Main.Size = UDim2.new(0, 360, 0, 300)
 Main.Position = UDim2.new(0.5, 0, 0.5, 0)
 Main.AnchorPoint = Vector2.new(0.5, 0.5)
-Main.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+Main.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 Main.BorderSizePixel = 0
 Main.Active = true
+Main.Draggable = false
 
--- Touch Drag
-local dragging, dragInput, dragStart, startPos
+-- Drag support mobile
+local dragging, startPos, startInput
 Main.InputBegan:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.Touch then
 		dragging = true
-		dragStart = input.Position
-		startPos = Main.Position
+		startPos = input.Position
+		startInput = Main.Position
 		input.Changed:Connect(function()
 			if input.UserInputState == Enum.UserInputState.End then dragging = false end
 		end)
 	end
 end)
 UIS.InputChanged:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.Touch and dragging then
-		local delta = input.Position - dragStart
-		Main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+	if dragging and input.UserInputType == Enum.UserInputType.Touch then
+		local delta = input.Position - startPos
+		Main.Position = UDim2.new(startInput.X.Scale, startInput.X.Offset + delta.X, startInput.Y.Scale, startInput.Y.Offset + delta.Y)
 	end
 end)
 
--- Title
-local Title = Instance.new("TextLabel", Main)
-Title.Size = UDim2.new(1, 0, 0, 32)
-Title.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-Title.Text = "Rayfield Mobile UI"
-Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-Title.Font = Enum.Font.SourceSansBold
-Title.TextSize = 18
-Title.BorderSizePixel = 0
+-- Header
+local Header = Instance.new("Frame", Main)
+Header.Size = UDim2.new(1, 0, 0, 36)
+Header.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+Header.BorderSizePixel = 0
 
--- Minimize Button
-local MinBtn = Instance.new("TextButton", Main)
-MinBtn.Size = UDim2.new(0, 26, 0, 26)
-MinBtn.Position = UDim2.new(1, -30, 0, 3)
+local Title = Instance.new("TextLabel", Header)
+Title.Size = UDim2.new(1, -80, 1, 0)
+Title.Position = UDim2.new(0, 10, 0, 0)
+Title.BackgroundTransparency = 1
+Title.Text = "Modz Hub | Fisch"
+Title.Font = Enum.Font.GothamBold
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextSize = 18
+Title.TextXAlignment = Enum.TextXAlignment.Left
+
+-- Minimize & Close
+local MinBtn = Instance.new("TextButton", Header)
+MinBtn.Size = UDim2.new(0, 32, 0, 32)
+MinBtn.Position = UDim2.new(1, -70, 0, 2)
 MinBtn.Text = "-"
-MinBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-MinBtn.Font = Enum.Font.SourceSansBold
+MinBtn.Font = Enum.Font.GothamBold
 MinBtn.TextSize = 20
-MinBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+MinBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+MinBtn.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 MinBtn.BorderSizePixel = 0
 
--- Logo icon (appear saat minimize)
-local Logo = Instance.new("ImageButton", Gui)
-Logo.Size = UDim2.new(0, 48, 0, 48)
-Logo.Position = UDim2.new(0.02, 0, 0.2, 0)
-Logo.BackgroundTransparency = 1
-Logo.Image = "rbxassetid://7733960981" -- Ganti asset sesuai keinginan
-Logo.Visible = false
-Logo.MouseButton1Click:Connect(function()
-	Main.Visible = true
-	Logo.Visible = false
+local CloseBtn = Instance.new("TextButton", Header)
+CloseBtn.Size = UDim2.new(0, 32, 0, 32)
+CloseBtn.Position = UDim2.new(1, -35, 0, 2)
+CloseBtn.Text = "X"
+CloseBtn.Font = Enum.Font.GothamBold
+CloseBtn.TextSize = 18
+CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+CloseBtn.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+CloseBtn.BorderSizePixel = 0
+
+CloseBtn.MouseButton1Click:Connect(function()
+	Gui:Destroy()
 end)
 
--- Tab Container
-local Tab = Instance.new("ScrollingFrame", Main)
-Tab.Size = UDim2.new(1, -10, 1, -40)
-Tab.Position = UDim2.new(0, 5, 0, 35)
-Tab.CanvasSize = UDim2.new(0, 0, 0, 600)
-Tab.ScrollBarThickness = 4
-Tab.BackgroundTransparency = 1
+-- Sidebar
+local Sidebar = Instance.new("Frame", Main)
+Sidebar.Size = UDim2.new(0, 100, 1, -36)
+Sidebar.Position = UDim2.new(0, 0, 0, 36)
+Sidebar.BackgroundColor3 = Color3.fromRGB(28, 28, 28)
+Sidebar.BorderSizePixel = 0
 
--- Section
-local function createSection(name, y)
-	local Label = Instance.new("TextLabel", Tab)
-	Label.Size = UDim2.new(1, 0, 0, 28)
-	Label.Position = UDim2.new(0, 0, 0, y)
-	Label.Text = name
-	Label.TextColor3 = Color3.fromRGB(255, 255, 0)
-	Label.Font = Enum.Font.GothamBold
-	Label.TextSize = 18
-	Label.BackgroundTransparency = 1
-	return y + 32
-end
+-- Content area
+local Content = Instance.new("Frame", Main)
+Content.Size = UDim2.new(1, -100, 1, -36)
+Content.Position = UDim2.new(0, 100, 0, 36)
+Content.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
+Content.BorderSizePixel = 0
 
--- Button
-local function createButton(text, y, callback)
-	local Btn = Instance.new("TextButton", Tab)
-	Btn.Size = UDim2.new(1, 0, 0, 40)
-	Btn.Position = UDim2.new(0, 0, 0, y)
-	Btn.Text = text
-	Btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-	Btn.Font = Enum.Font.Gotham
-	Btn.TextSize = 16
-	Btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-	Btn.BorderSizePixel = 0
-	Btn.MouseButton1Click:Connect(callback)
-	return y + 44
-end
+-- Placeholder tab: Fishing
+local FishingTab = Instance.new("TextButton", Sidebar)
+FishingTab.Size = UDim2.new(1, 0, 0, 36)
+FishingTab.Text = "Fishing"
+FishingTab.Font = Enum.Font.Gotham
+FishingTab.TextColor3 = Color3.fromRGB(255, 255, 255)
+FishingTab.TextSize = 14
+FishingTab.BackgroundColor3 = Color3.fromRGB(38, 38, 38)
+FishingTab.BorderSizePixel = 0
 
--- Toggle (Slider Style)
-local function createToggle(text, y, callback)
-	local ToggleFrame = Instance.new("Frame", Tab)
-	ToggleFrame.Size = UDim2.new(1, 0, 0, 40)
-	ToggleFrame.Position = UDim2.new(0, 0, 0, y)
-	ToggleFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-	ToggleFrame.BorderSizePixel = 0
+-- Content inside tab
+local AutoCastLabel = Instance.new("TextLabel", Content)
+AutoCastLabel.Size = UDim2.new(0, 100, 0, 30)
+AutoCastLabel.Position = UDim2.new(0, 20, 0, 20)
+AutoCastLabel.Text = "Auto Cast"
+AutoCastLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+AutoCastLabel.Font = Enum.Font.Gotham
+AutoCastLabel.TextSize = 16
+AutoCastLabel.BackgroundTransparency = 1
+AutoCastLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-	local Label = Instance.new("TextLabel", ToggleFrame)
-	Label.Size = UDim2.new(0.8, -10, 1, 0)
-	Label.Position = UDim2.new(0, 10, 0, 0)
-	Label.Text = text
-	Label.TextColor3 = Color3.fromRGB(255, 255, 255)
-	Label.Font = Enum.Font.Gotham
-	Label.TextSize = 16
-	Label.BackgroundTransparency = 1
+local ToggleBack = Instance.new("Frame", Content)
+ToggleBack.Size = UDim2.new(0, 50, 0, 24)
+ToggleBack.Position = UDim2.new(0, 140, 0, 22)
+ToggleBack.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+ToggleBack.BorderSizePixel = 0
 
-	local ToggleBtn = Instance.new("Frame", ToggleFrame)
-	ToggleBtn.Size = UDim2.new(0, 40, 0, 20)
-	ToggleBtn.Position = UDim2.new(1, -50, 0.5, -10)
-	ToggleBtn.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-	ToggleBtn.BorderSizePixel = 0
-	ToggleBtn.ClipsDescendants = true
+local ToggleBall = Instance.new("Frame", ToggleBack)
+ToggleBall.Size = UDim2.new(0, 20, 0, 20)
+ToggleBall.Position = UDim2.new(0, 2, 0, 2)
+ToggleBall.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
+ToggleBall.BorderSizePixel = 0
+ToggleBall.ZIndex = 2
 
-	local Circle = Instance.new("Frame", ToggleBtn)
-	Circle.Size = UDim2.new(0, 18, 0, 18)
-	Circle.Position = UDim2.new(0, 1, 0, 1)
-	Circle.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
-	Circle.BorderSizePixel = 0
-	Circle.ZIndex = 2
+local toggleState = false
+ToggleBack.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.Touch then
+		toggleState = not toggleState
+		local pos = toggleState and UDim2.new(0, 28, 0, 2) or UDim2.new(0, 2, 0, 2)
+		local col = toggleState and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(200, 0, 0)
+		TweenService:Create(ToggleBall, TweenInfo.new(0.2), {
+			Position = pos,
+			BackgroundColor3 = col
+		}):Play()
+	end
+end)
 
-	local state = false
-	ToggleFrame.InputBegan:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.Touch then
-			state = not state
-			local goalPos = state and UDim2.new(0, 21, 0, 1) or UDim2.new(0, 1, 0, 1)
-			local color = state and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(200, 0, 0)
-			TweenService:Create(Circle, TweenInfo.new(0.2), {Position = goalPos, BackgroundColor3 = color}):Play()
-			callback(state)
-		end
-	end)
+-- Minimize
+local IconBtn = Instance.new("ImageButton", Gui)
+IconBtn.Image = "rbxassetid://7733960981"
+IconBtn.Size = UDim2.new(0, 50, 0, 50)
+IconBtn.Position = UDim2.new(0.02, 0, 0.2, 0)
+IconBtn.BackgroundTransparency = 1
+IconBtn.Visible = false
 
-	return y + 44
-end
-
--- Isi UI
-local y = 0
-y = createSection("Control", y)
-y = createButton("Cetak Halo", y, function() print("Halo!") end)
-y = createToggle("Aktifkan Fitur", y, function(on) print("Toggle State:", on) end)
-
--- Minimize Function
-local minimized = false
 MinBtn.MouseButton1Click:Connect(function()
-	minimized = not minimized
-	Main.Visible = not minimized
-	Logo.Visible = minimized
+	Main.Visible = false
+	IconBtn.Visible = true
+end)
+
+IconBtn.MouseButton1Click:Connect(function()
+	Main.Visible = true
+	IconBtn.Visible = false
 end)
