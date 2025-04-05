@@ -12,40 +12,7 @@ local autoCast = false
 local autoShake = false
 
 --Function
-function AutoCasts()
-while AutoCasting do
-            local player = game.Players.LocalPlayer
-            local character = player.Character
 
-            if character then
-                local tool = character:FindFirstChildOfClass("Tool")
-
-                if tool then
-                    local hasBobber = tool:FindFirstChild("bobber")
-
-                    if not hasBobber then
-                        local castEvent = tool:FindFirstChild("events") and tool.events:FindFirstChild("cast")
-
-                        if castEvent then
-                            local Random = math.random() * (99 - 90) + 90
-                            local FRandom = string.format("%.4f", Random)
-                            print(FRandom)
-                            
-                            local Random2 = math.random(90, 99)
-                            castEvent:FireServer(Random2)
-
-                            local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
-                            if humanoidRootPart then
-                                humanoidRootPart.Anchored = false
-                            end
-                        end
-                    end
-                end
-                task.wait(1)
-            end
-        end
-    end)
-end
 
 
 --UI Design
