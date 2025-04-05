@@ -1,7 +1,7 @@
 --local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/FakeModz/PanjulHub-Script/refs/heads/main/UI')))()
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
 --Roblox Client
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 
 
