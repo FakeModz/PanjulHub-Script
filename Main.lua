@@ -1,7 +1,7 @@
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/FakeModz/PanjulHub-Script/refs/heads/main/UI')))()
 
 --Roblox Client
---local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 
 
@@ -42,10 +42,10 @@ local Teleport = Window:MakeTab({
 
 
 --Variable
---local AutoCasting = false
---local AutoReeling = false
---local InstantBob = false
---local AutoSelling = false
+local AutoCasting = false
+local AutoReeling = false
+local InstantBob = false
+local AutoSelling = false
 
 
 
@@ -85,7 +85,7 @@ Items:AddToggle({
 })
 
 --Slider Auto Sell
-Tab:AddSlider({
+Items:AddSlider({
 	Name = "Auto Sell Delay",
 	Min = 0,
 	Max = 100,
