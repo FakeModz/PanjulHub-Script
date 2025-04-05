@@ -84,20 +84,6 @@ Items:AddToggle({
 	end    
 })
 
---Slider Auto Sell
-Items:AddSlider({
-	Name = "Auto Sell Delay",
-	Min = 0,
-	Max = 100,
-	Default = 5,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	ValueName = "bananas",
-	Callback = function(Value)
-		print(Value)
-	end    
-})
-
 
 
 --Misc
