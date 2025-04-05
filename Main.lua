@@ -1,157 +1,192 @@
--- Modz Hub Mobile UI - Full Customizable
+-- ModzHub Library UI (Modular Style + Control Buttons)
+-- Gunakan fungsi `CreateWindow()` dan `CreateTab()` dari sini
+
+local ModzHub = {}
 local UIS = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
+local CoreGui = game:GetService("CoreGui")
 
-local Gui = Instance.new("ScreenGui", game.CoreGui)
-Gui.Name = "ModzHubUI"
-Gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-Gui.ResetOnSpawn = false
+local DEFAULT_WIDTH = 400
 
--- Main UI
-local Main = Instance.new("Frame", Gui)
-Main.Size = UDim2.new(0, 360, 0, 300)
-Main.Position = UDim2.new(0.5, 0, 0.5, 0)
-Main.AnchorPoint = Vector2.new(0.5, 0.5)
-Main.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-Main.BorderSizePixel = 0
-Main.Active = true
-Main.Draggable = false
+-- Drag Function
+local function enableDrag(frame)
+    local dragging, dragInput, dragStart, startPos
+    frame.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            dragStart = input.Position
+            startPos = frame.Position
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
+        end
+    end)
+    frame.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+            dragInput = input
+        end
+    end)
+    UIS.InputChanged:Connect(function(input)
+        if input == dragInput and dragging then
+            local delta = input.Position - dragStart
+            frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        end
+    end)
+end
 
--- Drag support mobile
-local dragging, startPos, startInput
-Main.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.Touch then
-		dragging = true
-		startPos = input.Position
-		startInput = Main.Position
-		input.Changed:Connect(function()
-			if input.UserInputState == Enum.UserInputState.End then dragging = false end
-		end)
-	end
-end)
-UIS.InputChanged:Connect(function(input)
-	if dragging and input.UserInputType == Enum.UserInputType.Touch then
-		local delta = input.Position - startPos
-		Main.Position = UDim2.new(startInput.X.Scale, startInput.X.Offset + delta.X, startInput.Y.Scale, startInput.Y.Offset + delta.Y)
-	end
-end)
+-- CreateWindow(options)
+function ModzHub:CreateWindow(config)
+    config = config or {}
+    local title = config.Title or "Modz Hub"
+    local width = config.Width or DEFAULT_WIDTH
 
--- Header
-local Header = Instance.new("Frame", Main)
-Header.Size = UDim2.new(1, 0, 0, 36)
-Header.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-Header.BorderSizePixel = 0
+    -- UI Holder
+    local ScreenGui = Instance.new("ScreenGui")
+    ScreenGui.Name = "ModzHubUI"
+    ScreenGui.ResetOnSpawn = false
+    ScreenGui.IgnoreGuiInset = true
+    ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
+    ScreenGui.Parent = CoreGui
 
-local Title = Instance.new("TextLabel", Header)
-Title.Size = UDim2.new(1, -80, 1, 0)
-Title.Position = UDim2.new(0, 10, 0, 0)
-Title.BackgroundTransparency = 1
-Title.Text = "Modz Hub | Fisch"
-Title.Font = Enum.Font.GothamBold
-Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-Title.TextSize = 18
-Title.TextXAlignment = Enum.TextXAlignment.Left
+    -- Main Frame
+    local Main = Instance.new("Frame")
+    Main.Size = UDim2.new(0, width, 0, 300)
+    Main.Position = UDim2.new(0.5, -width/2, 0.5, -150)
+    Main.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    Main.BorderSizePixel = 0
+    Main.Name = "Main"
+    Main.AnchorPoint = Vector2.new(0, 0)
+    Main.Parent = ScreenGui
+    Main.Visible = true
 
--- Minimize & Close
-local MinBtn = Instance.new("TextButton", Header)
-MinBtn.Size = UDim2.new(0, 32, 0, 32)
-MinBtn.Position = UDim2.new(1, -70, 0, 2)
-MinBtn.Text = "-"
-MinBtn.Font = Enum.Font.GothamBold
-MinBtn.TextSize = 20
-MinBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-MinBtn.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-MinBtn.BorderSizePixel = 0
+    -- Minimized Icon
+    local MinimizedIcon = Instance.new("ImageButton")
+    MinimizedIcon.Size = UDim2.new(0, 40, 0, 40)
+    MinimizedIcon.Position = UDim2.new(0.5, -20, 0.5, -20)
+    MinimizedIcon.Image = "rbxasset://textures/IconRoblox.png"
+    MinimizedIcon.BackgroundTransparency = 1
+    MinimizedIcon.Visible = false
+    MinimizedIcon.Parent = ScreenGui
+    enableDrag(MinimizedIcon)
 
-local CloseBtn = Instance.new("TextButton", Header)
-CloseBtn.Size = UDim2.new(0, 32, 0, 32)
-CloseBtn.Position = UDim2.new(1, -35, 0, 2)
-CloseBtn.Text = "X"
-CloseBtn.Font = Enum.Font.GothamBold
-CloseBtn.TextSize = 18
-CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-CloseBtn.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-CloseBtn.BorderSizePixel = 0
+    -- Title Bar
+    local TitleBar = Instance.new("TextLabel")
+    TitleBar.Size = UDim2.new(1, -100, 0, 40)
+    TitleBar.Position = UDim2.new(0, 10, 0, 0)
+    TitleBar.BackgroundTransparency = 1
+    TitleBar.Text = title
+    TitleBar.TextSize = 18
+    TitleBar.Font = Enum.Font.GothamBold
+    TitleBar.TextColor3 = Color3.fromRGB(255,255,255)
+    TitleBar.TextXAlignment = Enum.TextXAlignment.Left
+    TitleBar.Parent = Main
 
-CloseBtn.MouseButton1Click:Connect(function()
-	Gui:Destroy()
-end)
+    -- Control Buttons
+    local function createButton(txt, pos, cb)
+        local Btn = Instance.new("TextButton")
+        Btn.Size = UDim2.new(0, 30, 0, 30)
+        Btn.Position = pos
+        Btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        Btn.Text = txt
+        Btn.TextColor3 = Color3.fromRGB(255,255,255)
+        Btn.Font = Enum.Font.Gotham
+        Btn.TextSize = 14
+        Btn.Parent = Main
+        Btn.MouseButton1Click:Connect(cb)
+        return Btn
+    end
 
--- Sidebar
-local Sidebar = Instance.new("Frame", Main)
-Sidebar.Size = UDim2.new(0, 100, 1, -36)
-Sidebar.Position = UDim2.new(0, 0, 0, 36)
-Sidebar.BackgroundColor3 = Color3.fromRGB(28, 28, 28)
-Sidebar.BorderSizePixel = 0
+    local MinBtn = createButton("-", UDim2.new(1, -70, 0, 5), function()
+        Main.Visible = false
+        MinimizedIcon.Visible = true
+    end)
 
--- Content area
-local Content = Instance.new("Frame", Main)
-Content.Size = UDim2.new(1, -100, 1, -36)
-Content.Position = UDim2.new(0, 100, 0, 36)
-Content.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
-Content.BorderSizePixel = 0
+    local ExitBtn = createButton("X", UDim2.new(1, -35, 0, 5), function()
+        ScreenGui:Destroy()
+    end)
 
--- Placeholder tab: Fishing
-local FishingTab = Instance.new("TextButton", Sidebar)
-FishingTab.Size = UDim2.new(1, 0, 0, 36)
-FishingTab.Text = "Fishing"
-FishingTab.Font = Enum.Font.Gotham
-FishingTab.TextColor3 = Color3.fromRGB(255, 255, 255)
-FishingTab.TextSize = 14
-FishingTab.BackgroundColor3 = Color3.fromRGB(38, 38, 38)
-FishingTab.BorderSizePixel = 0
+    MinimizedIcon.MouseButton1Click:Connect(function()
+        Main.Visible = true
+        MinimizedIcon.Visible = false
+    end)
 
--- Content inside tab
-local AutoCastLabel = Instance.new("TextLabel", Content)
-AutoCastLabel.Size = UDim2.new(0, 100, 0, 30)
-AutoCastLabel.Position = UDim2.new(0, 20, 0, 20)
-AutoCastLabel.Text = "Auto Cast"
-AutoCastLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-AutoCastLabel.Font = Enum.Font.Gotham
-AutoCastLabel.TextSize = 16
-AutoCastLabel.BackgroundTransparency = 1
-AutoCastLabel.TextXAlignment = Enum.TextXAlignment.Left
+    -- Content Area
+    local TabHolder = Instance.new("Frame")
+    TabHolder.Name = "TabHolder"
+    TabHolder.Size = UDim2.new(1, 0, 1, -40)
+    TabHolder.Position = UDim2.new(0, 0, 0, 40)
+    TabHolder.BackgroundTransparency = 1
+    TabHolder.Parent = Main
 
-local ToggleBack = Instance.new("Frame", Content)
-ToggleBack.Size = UDim2.new(0, 50, 0, 24)
-ToggleBack.Position = UDim2.new(0, 140, 0, 22)
-ToggleBack.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-ToggleBack.BorderSizePixel = 0
+    return {
+        CreateTab = function(_, tabName)
+            local TabFrame = Instance.new("Frame")
+            TabFrame.Name = tabName or "Tab"
+            TabFrame.BackgroundTransparency = 1
+            TabFrame.Size = UDim2.new(1, 0, 1, 0)
+            TabFrame.Parent = TabHolder
 
-local ToggleBall = Instance.new("Frame", ToggleBack)
-ToggleBall.Size = UDim2.new(0, 20, 0, 20)
-ToggleBall.Position = UDim2.new(0, 2, 0, 2)
-ToggleBall.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
-ToggleBall.BorderSizePixel = 0
-ToggleBall.ZIndex = 2
+            local Layout = Instance.new("UIListLayout", TabFrame)
+            Layout.Padding = UDim.new(0, 5)
+            Layout.FillDirection = Enum.FillDirection.Vertical
+            Layout.SortOrder = Enum.SortOrder.LayoutOrder
 
-local toggleState = false
-ToggleBack.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.Touch then
-		toggleState = not toggleState
-		local pos = toggleState and UDim2.new(0, 28, 0, 2) or UDim2.new(0, 2, 0, 2)
-		local col = toggleState and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(200, 0, 0)
-		TweenService:Create(ToggleBall, TweenInfo.new(0.2), {
-			Position = pos,
-			BackgroundColor3 = col
-		}):Play()
-	end
-end)
+            return {
+                AddToggle = function(_, label, default, callback)
+                    local Holder = Instance.new("Frame", TabFrame)
+                    Holder.Size = UDim2.new(1, -20, 0, 30)
+                    Holder.BackgroundTransparency = 1
 
--- Minimize
-local IconBtn = Instance.new("ImageButton", Gui)
-IconBtn.Image = "rbxassetid://7733960981"
-IconBtn.Size = UDim2.new(0, 50, 0, 50)
-IconBtn.Position = UDim2.new(0.02, 0, 0.2, 0)
-IconBtn.BackgroundTransparency = 1
-IconBtn.Visible = false
+                    local Label = Instance.new("TextLabel", Holder)
+                    Label.Size = UDim2.new(1, -60, 1, 0)
+                    Label.Position = UDim2.new(0, 0, 0, 0)
+                    Label.BackgroundTransparency = 1
+                    Label.Text = label
+                    Label.Font = Enum.Font.Gotham
+                    Label.TextSize = 14
+                    Label.TextColor3 = Color3.fromRGB(255,255,255)
+                    Label.TextXAlignment = Enum.TextXAlignment.Left
 
-MinBtn.MouseButton1Click:Connect(function()
-	Main.Visible = false
-	IconBtn.Visible = true
-end)
+                    local ToggleBtn = Instance.new("Frame", Holder)
+                    ToggleBtn.Size = UDim2.new(0, 50, 0, 24)
+                    ToggleBtn.Position = UDim2.new(1, -50, 0.5, -12)
+                    ToggleBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+                    ToggleBtn.BorderSizePixel = 0
+                    ToggleBtn.ClipsDescendants = true
 
-IconBtn.MouseButton1Click:Connect(function()
-	Main.Visible = true
-	IconBtn.Visible = false
-end)
+                    local Ball = Instance.new("Frame", ToggleBtn)
+                    Ball.Size = UDim2.new(0, 20, 0, 20)
+                    Ball.Position = default and UDim2.new(0, 28, 0, 2) or UDim2.new(0, 2, 0, 2)
+                    Ball.BackgroundColor3 = default and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(200, 0, 0)
+                    Ball.BorderSizePixel = 0
+                    Ball.BackgroundTransparency = 0.1
+
+                    local glow = Instance.new("UIStroke", Ball)
+                    glow.Thickness = 1
+                    glow.Color = Ball.BackgroundColor3
+
+                    local state = default
+                    ToggleBtn.InputBegan:Connect(function(input)
+                        if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+                            state = not state
+                            local pos = state and UDim2.new(0, 28, 0, 2) or UDim2.new(0, 2, 0, 2)
+                            local col = state and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(200, 0, 0)
+
+                            TweenService:Create(Ball, TweenInfo.new(0.2), {
+                                Position = pos,
+                                BackgroundColor3 = col
+                            }):Play()
+
+                            glow.Color = col
+                            if callback then callback(state) end
+                        end
+                    end)
+                end
+            }
+        end
+    }
+end
+
+return ModzHub
