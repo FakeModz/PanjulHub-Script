@@ -42,29 +42,20 @@ end)
 warn("[Anti Afk] - loaded successfully") 
 
 --<>----<>----<>----< Main Script >----<>----<>----<>--
-print("[Panjul Hub | Fisch]: loading...")
+print("[Space Hub | Fisch]: loading...")
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 
--- Buat window
 local Window = Fluent:CreateWindow({
-    Title = "Fisch | Panjul Hub",
-    SubTitle = "vBeta0.1",
+    Title = "Fisch | Space Hub",
+    SubTitle = "v1.6",
     TabWidth = 150,
-    Size = UDim2.fromOffset(500, 300),
+    Size = UDim2.fromOffset(600, 400),
     Acrylic = false,
     Theme = "Darker",
     MinimizeKey = Enum.KeyCode.LeftControl
 })
-
-
-
-
-
-
-
-
 
 -- Creating tabs
 local Tabs = {
@@ -1111,7 +1102,13 @@ do
         end
     })
 
-
+    Tabs.Fun:AddButton({
+        Title = "Radio UI",
+        Description = "Chill😎",
+        Callback = function()
+            loadstring(game:HttpGet('https://pastebin.com/raw/zv94NGMc'))()
+        end
+    })
 
     local section = Tabs.Fun:AddSection("Player")
 
@@ -1228,8 +1225,8 @@ InterfaceManager:SetLibrary(Fluent)
 -- SaveManager:IgnoreThemeSettings()
 SaveManager:SetIgnoreIndexes({})
 
-InterfaceManager:SetFolder("PanjulHub")
-SaveManager:SetFolder("PanjulHub/Fisch")
+InterfaceManager:SetFolder("SpaceHub")
+SaveManager:SetFolder("SpaceHub/Fisch")
 
 InterfaceManager:BuildInterfaceSection(Tabs.Settings)
 SaveManager:BuildConfigSection(Tabs.Settings)
@@ -1238,12 +1235,12 @@ SaveManager:BuildConfigSection(Tabs.Settings)
 Window:SelectTab(1)
 
 Fluent:Notify({
-    Title = "Panjul Hub",
+    Title = "Space Hub",
     Content = "The script has been loaded.",
     Duration = 8
 })
 Fluent:Notify({
-    Title = "Enable Anti Afk",
+    Title = "Anti Afk - ON",
     Content = "meow",
     Duration = 30
 })
