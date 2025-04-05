@@ -58,39 +58,37 @@ local Window = Fluent:CreateWindow({
     MinimizeKey = Enum.KeyCode.F10
 })
 
--- Buat tombol restore yang tidak ikut hilang saat minimize
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-local playerGui = player:WaitForChild("PlayerGui")
 
-local restoreButton = Instance.new("TextButton")
-restoreButton.Name = "RestoreButton"
-restoreButton.Size = UDim2.new(0, 100, 0, 30)
-restoreButton.Position = UDim2.new(0, 10, 0, 10) -- pojok kiri atas
-restoreButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-restoreButton.TextColor3 = Color3.new(1, 1, 1)
-restoreButton.Text = "Tampilkan Menu"
+-- Ambil GUI utama dari Fluent
+local mainGui = Window.GUI
+
+-- ImageButton buat restore
+local restoreButton = Instance.new("ImageButton")
+restoreButton.Image = "rbxassetid://6031097225" -- Hamburger icon (bisa diganti)
+restoreButton.Size = UDim2.new(0, 36, 0, 36)
+restoreButton.Position = UDim2.new(0, 10, 0, 10)
+restoreButton.BackgroundTransparency = 1
 restoreButton.Visible = false
-restoreButton.Parent = playerGui
+restoreButton.ZIndex = 1000
+restoreButton.Name = "RestoreFluent"
+restoreButton.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
+-- Saat ditekan, tampilkan Fluent kembali
+restoreButton.MouseButton1Click:Connect(function()
+    mainGui.Enabled = true
+    restoreButton.Visible = false
+end)
 
+-- Tambahkan tombol minimize di GUI Fluent
 Tabs.Settings:AddButton({
-    Title = "Minimize Menu",
-    Description = "Sembunyikan menu sementara",
+    Title = "Minimize Fluent",
     Callback = function()
-        Window:Minimize()
+        mainGui.Enabled = false
         restoreButton.Visible = true
     end
 })
 
-restoreButton.MouseButton1Click:Connect(function()
-    -- Tekan tombol minimize keybind secara virtual
-    local VirtualInputManager = game:GetService("VirtualInputManager")
-    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.LeftControl, false, game)
-    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.LeftControl, false, game)
 
-    restoreButton.Visible = false
-end)
 
 
 
