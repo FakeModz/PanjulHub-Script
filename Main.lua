@@ -1,152 +1,43 @@
-local Material = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/MaterialLua/master/Module.lua"))()
+-- Load Kavo UI Library
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
 
-local X = Material.Load({
-	Title = "ChibuHub",
-	Style = 3,
-	SizeX = 500,
-	SizeY = 350,
-	Theme = "Light",
-	ColorOverrides = {
-		MainFrame = Color3.fromRGB(235,235,235)
-	}
-})
+-- Buat Window
+local Window = Library.CreateLib("Script Keren", "DarkTheme") -- bisa juga "LightTheme"
 
-local Y = X.New({
-	Title = "1"
-})
+-- Tab Utama
+local Tab = Window:NewTab("Main")
+local Section = Tab:NewSection("Kontrol")
 
-local Z = X.New({
-	Title = "2"
-})
+-- Button
+Section:NewButton("Klik Saya", "Tombol ini print ke console", function()
+    print("Kamu menekan tombol!")
+end)
 
-local A = Y.Button({
-	Text = "Kill All",
-	Callback = function()
-		print("hello")
-	end,
-	Menu = {
-		Information = function(self)
-			X.Banner({
-				Text = "This function can get you banned in up-to-date servers; use at your own risk."
-			})
-		end
-	}
-})
+-- Toggle
+Section:NewToggle("Mode Rahasia", "Hidupkan/matikan mode", function(state)
+    if state then
+        print("Mode diaktifkan")
+    else
+        print("Mode dimatikan")
+    end
+end)
 
-local B = Y.Toggle({
-	Text = "I'm a switch",
-	Callback = function(Value)
-		print(Value)
-	end,
-	Enabled = false
-})
+-- Slider
+Section:NewSlider("Kecepatan", "Atur kecepatanmu", 100, 1, function(value)
+    print("Kecepatan diatur ke:", value)
+end)
 
-local C = Y.Slider({
-	Text = "Slip and... you get the idea",
-	Callback = function(Value)
-		print(Value)
-	end,
-	Min = 200,
-	Max = 400,
-	Def = 300
-})
+-- TextBox
+Section:NewTextBox("Masukkan Nama", "Print ke console", function(txt)
+    print("Nama kamu adalah:", txt)
+end)
 
-local D = Y.Dropdown({
-	Text = "Dropping care package",
-	Callback = function(Value)
-		print(Value)
-	end,
-	Options = {
-		"Floor 1",
-		"Floor 2",
-		"Floor 3",
-		"Floor 4",
-		"Floor 5"
-	},
-	Menu = {
-		Information = function(self)
-			X.Banner({
-				Text = "Test alert!"
-			})
-		end
-	}
-})
+-- Dropdown
+Section:NewDropdown("Pilih Senjata", {"Pedang", "Busur", "Senapan"}, function(current)
+    print("Kamu memilih:", current)
+end)
 
-local E = Y.ChipSet({
-	Text = "Chipping away",
-	Callback = function(ChipSet)
-		table.foreach(ChipSet, function(Option, Value)
-			print(Option, Value)
-		end)
-	end,
-	Options = {
-		ESP = true,
-		TeamCheck = false,
-		UselessBool = {
-			Enabled = true,
-			Menu = {
-				Information = function(self)
-					X.Banner({
-						Text = "This bool has absolutely no purpose whatsoever."
-					})
-				end
-			}
-		}
-	}
-})
-
-local F = Y.DataTable({
-	Text = "Chipping away",
-	Callback = function(ChipSet)
-		table.foreach(ChipSet, function(Option, Value)
-			print(Option, Value)
-		end)
-	end,
-	Options = {
-		ESP2 = true,
-		TeamCheck2 = false,
-		UselessBool2 = {
-			Enabled = true,
-			Menu = {
-				Information = function(self)
-					X.Banner({
-						Text = "This bool ALSO has absolutely no purpose. Sorry."
-					})
-				end
-			}
-		}
-	}
-})
-
-local G = Y.ColorPicker({
-	Text = "ESP Colour",
-	Default = Color3.fromRGB(0,255,110),
-	Callback = function(Value)
-		print("RGB:", Value.R * 255, Value.G * 255, Value.B * 255)
-	end,
-	Menu = {
-		Information = function(self)
-			X.Banner({
-				Text = "This changes the color of your ESP."
-			})
-		end
-	}
-})
-
-local H = Y.TextField({
-	Text = "Country",
-	Callback = function(Value)
-		print(Value)
-	end,
-	Menu = {
-		GB = function(self)
-			self.SetText("GB")
-		end,
-		JP = function(self)
-			self.SetText("JP")
-		end,
-		KO = function(self)
-			self.SetText("KO")
-		end
-	}
-})
+-- Keybind
+Section:NewKeybind("Tekan Tombol", "Menjalankan fungsi saat key ditekan", Enum.KeyCode.X, function()
+    print("Tombol X ditekan")
+end)
