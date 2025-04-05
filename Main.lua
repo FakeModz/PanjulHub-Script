@@ -8,6 +8,13 @@ SaveConfig = true,
 ConfigFolder = "ModzHub"
 })
 
+
+--Hook
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+
+
+--Variable
 local autoCast = false
 local autoShake = false
 
@@ -26,12 +33,7 @@ Tab:AddToggle({
 	Name = "Auto Cast",
 	Default = false,
 	Callback = function(Value)
-		autoCast = Value
-		while autoCast do
-			pcall(function()
-				game:GetService("ReplicatedStorage").Remotes.Fishing:FireServer("Cast")
-			end)
-			wait(1)
+
 		end
 	end
 })
@@ -40,13 +42,16 @@ Tab:AddToggle({
 	Name = "Auto Shake",
 	Default = false,
 	Callback = function(Value)
-		autoShake = Value
-		while autoShake do
-			pcall(function()
-				-- Ganti "ShakeRod" dengan nama remote yang benar jika berbeda
-				game:GetService("ReplicatedStorage").Remotes.ShakeRod:FireServer()
-			end)
-			wait(0.2) -- jeda antar shake, bisa disesuaikan
+		
+		end
+	end
+})
+
+Tab:AddToggle({
+	Name = "Sell All Fish",
+	Default = false,
+	Callback = function(Value)
+    game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("SellAll")
 		end
 	end
 })
