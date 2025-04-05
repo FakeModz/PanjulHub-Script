@@ -50,7 +50,7 @@ local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.
 -- Buat window
 local Window = Fluent:CreateWindow({
     Title = "Fisch | Panjul Hub",
-    SubTitle = "vBeta",
+    SubTitle = "vBeta1",
     TabWidth = 150,
     Size = UDim2.fromOffset(500, 400),
     Acrylic = false,
