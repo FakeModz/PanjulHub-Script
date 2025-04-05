@@ -55,7 +55,7 @@ local Window = Fluent:CreateWindow({
     Size = UDim2.fromOffset(500, 300),
     Acrylic = false,
     Theme = "Darker",
-    MinimizeKey = nil
+    MinimizeKey = Enum.KeyCode.F10
 })
 
 -- Buat tombol restore yang tidak ikut hilang saat minimize
