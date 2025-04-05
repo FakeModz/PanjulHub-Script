@@ -1,4 +1,4 @@
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/FakeModz/PanjulHub-Script/refs/heads/main/UI'))()
 
 local Window = Rayfield:CreateWindow({
    Name = "Panjul Hub | Fisch",
