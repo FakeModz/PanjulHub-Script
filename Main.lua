@@ -1,42 +1,33 @@
--- Load Kavo UI Library
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+local Window = Rayfield:CreateWindow({
+   Name = "Panjul Hub | Fisch",
+   Icon = "unlink-2", -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+   LoadingTitle = "Panjul Hub Loaded",
+   LoadingSubtitle = "by Panjul",
+   Theme = "Ocean", -- Check https://docs.sirius.menu/rayfield/configuration/themes
 
--- Buat Window
-local Window = Library.CreateLib("Script Keren", "DarkTheme")
+   DisableRayfieldPrompts = false,
+   DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
 
--- Buat Tab
-local Tab = Window:NewTab("Main")
-local Section = Tab:NewSection("Fitur")
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = nil, -- Create a custom folder for your hub/game
+      FileName = "PanjulHub"
+   },
 
--- Tombol Minimize / Maximize
-local isMinimized = false
-local gui = game:GetService("CoreGui"):FindFirstChild("KavoUI") or game.Players.LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("KavoUI")
+   Discord = {
+      Enabled = false, -- Prompt the user to join your Discord server if their executor supports it
+      Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ ABCD would be ABCD
+      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+   },
 
-Section:NewButton("Toggle GUI", "Minimize / Maximize GUI", function()
-    if gui then
-        gui.Enabled = not gui.Enabled
-        isMinimized = not gui.Enabled
-    else
-        warn("GUI tidak ditemukan")
-    end
-end)
-
--- Tambahkan Drag ke Frame
-task.delay(1, function()
-    if gui then
-        local mainFrame = gui:FindFirstChild("Main", true) -- cari secara rekursif
-        if mainFrame and mainFrame:IsA("Frame") then
-            mainFrame.Active = true
-            mainFrame.Draggable = true
-        else
-            warn("Main Frame tidak ditemukan")
-        end
-    else
-        warn("KavoUI tidak ditemukan")
-    end
-end)
-
--- Fitur tambahan contoh
-Section:NewButton("Contoh Print", "Print ke Output", function()
-    print("Berhasil klik tombol!")
-end)
+   KeySystem = false, -- Set this to true to use our key system
+   KeySettings = {
+      Title = "Untitled",
+      Subtitle = "Key System",
+      Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
+      FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+      SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
+      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+      Key = {"Hello"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+   }
+})
