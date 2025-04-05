@@ -1,4 +1,4 @@
--- ModzHub Library UI (Modular Style + Control Buttons)
+-- ModzHub Library UI (Fixed Layout + Improved UI Padding)
 -- Gunakan fungsi `CreateWindow()` dan `CreateTab()` dari sini
 
 local ModzHub = {}
@@ -13,8 +13,6 @@ local DEFAULT_HEIGHT = 300
 function ModzHub:CreateWindow(config)
     config = config or {}
     local title = config.Title or "Modz Hub"
-    local width = config.Width or DEFAULT_WIDTH
-    local height = config.Height or DEFAULT_HEIGHT
 
     -- UI Holder
     local ScreenGui = Instance.new("ScreenGui")
@@ -26,49 +24,52 @@ function ModzHub:CreateWindow(config)
 
     -- Main Frame
     local Main = Instance.new("Frame")
-    Main.Size = UDim2.new(0, width, 0, height)
-    Main.Position = UDim2.new(0.5, -width/2, 0.5, -height/2)
+    Main.Size = UDim2.new(0, DEFAULT_WIDTH, 0, DEFAULT_HEIGHT)
+    Main.Position = UDim2.new(0.5, -DEFAULT_WIDTH/2, 0.5, -DEFAULT_HEIGHT/2)
     Main.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
     Main.BorderSizePixel = 0
     Main.Name = "Main"
+    Main.AnchorPoint = Vector2.new(0, 0)
     Main.Parent = ScreenGui
     Main.Visible = true
 
     -- Minimized Icon
     local MinimizedIcon = Instance.new("ImageButton")
     MinimizedIcon.Size = UDim2.new(0, 40, 0, 40)
-    MinimizedIcon.Position = UDim2.new(0.5, -20, 0.5, -20)
-    MinimizedIcon.AnchorPoint = Vector2.new(0.5, 0.5)
+    MinimizedIcon.Position = UDim2.new(0, 10, 0, 10)
     MinimizedIcon.Image = "rbxasset://textures/IconRoblox.png"
     MinimizedIcon.BackgroundTransparency = 1
     MinimizedIcon.Visible = false
+    MinimizedIcon.ZIndex = 10
     MinimizedIcon.Parent = ScreenGui
 
-    -- Dragging
-    local dragging, offset
-    local function enableDrag(frame)
-        frame.InputBegan:Connect(function(input)
-            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                dragging = true
-                offset = Vector2.new(input.Position.X - frame.Position.X.Offset, input.Position.Y - frame.Position.Y.Offset)
-            end
-        end)
+    -- Make minimized icon draggable
+    local dragging, dragInput, dragStart, startPos
+    MinimizedIcon.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            dragStart = input.Position
+            startPos = MinimizedIcon.Position
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
+        end
+    end)
 
-        UIS.InputEnded:Connect(function(input)
-            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                dragging = false
-            end
-        end)
+    MinimizedIcon.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+            dragInput = input
+        end
+    end)
 
-        UIS.InputChanged:Connect(function(input)
-            if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-                frame.Position = UDim2.new(0, input.Position.X - offset.X, 0, input.Position.Y - offset.Y)
-            end
-        end)
-    end
-
-    enableDrag(Main)
-    enableDrag(MinimizedIcon)
+    UIS.InputChanged:Connect(function(input)
+        if input == dragInput and dragging then
+            local delta = input.Position - dragStart
+            MinimizedIcon.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        end
+    end)
 
     -- Title Bar
     local TitleBar = Instance.new("TextLabel")
@@ -114,8 +115,8 @@ function ModzHub:CreateWindow(config)
     -- Content Area
     local TabHolder = Instance.new("Frame")
     TabHolder.Name = "TabHolder"
-    TabHolder.Size = UDim2.new(1, 0, 1, -40)
-    TabHolder.Position = UDim2.new(0, 0, 0, 40)
+    TabHolder.Size = UDim2.new(1, -20, 1, -50)
+    TabHolder.Position = UDim2.new(0, 10, 0, 45)
     TabHolder.BackgroundTransparency = 1
     TabHolder.Parent = Main
 
@@ -183,30 +184,6 @@ function ModzHub:CreateWindow(config)
                             if callback then callback(state) end
                         end
                     end)
-                end,
-
-                AddButton = function(_, label, callback)
-                    local Btn = Instance.new("TextButton", TabFrame)
-                    Btn.Size = UDim2.new(1, -20, 0, 30)
-                    Btn.Position = UDim2.new(0, 10, 0, 0)
-                    Btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-                    Btn.Text = label
-                    Btn.Font = Enum.Font.Gotham
-                    Btn.TextSize = 14
-                    Btn.TextColor3 = Color3.fromRGB(255,255,255)
-                    Btn.MouseButton1Click:Connect(callback)
-                end,
-
-                AddLabel = function(_, text)
-                    local Label = Instance.new("TextLabel", TabFrame)
-                    Label.Size = UDim2.new(1, -20, 0, 30)
-                    Label.Position = UDim2.new(0, 10, 0, 0)
-                    Label.BackgroundTransparency = 1
-                    Label.Text = text
-                    Label.Font = Enum.Font.Gotham
-                    Label.TextSize = 14
-                    Label.TextColor3 = Color3.fromRGB(255,255,255)
-                    Label.TextXAlignment = Enum.TextXAlignment.Left
                 end
             }
         end
