@@ -2,9 +2,7 @@ local ModzHub = loadstring(game:HttpGet("https://raw.githubusercontent.com/FakeM
 
 local window = ModzHub:CreateWindow({
     Title = "Modz Hub | Fisch",
-    Width = 400, -- Optional (default 400)
-    Height = 300 -- Optional (default 300)
-})
+    })
 
 local tab = window:CreateTab("Fishing Tab")
 
