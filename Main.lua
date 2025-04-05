@@ -34,7 +34,6 @@ Tab:AddToggle({
 	Default = false,
 	Callback = function(Value)
 
-		end
 	end
 })
 
@@ -43,7 +42,6 @@ Tab:AddToggle({
 	Default = false,
 	Callback = function(Value)
 		
-		end
 	end
 })
 
@@ -51,8 +49,7 @@ Tab:AddToggle({
 	Name = "Sell All Fish",
 	Default = false,
 	Callback = function(Value)
-    game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("SellAll")
-		end
+    game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("SellAll"):FireServer()
 	end
 })
 
