@@ -29,10 +29,21 @@ local Teleport = Window:MakeTab({
 })
 
 
+--Roblox Client
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+
+--Variable
+local AutoCasting = false
+local AutoReeling = false
+local InstantBob = false
+local AutoSelling = false
+
+
 
 --Fishing
 Fishing:AddToggle({
-	Name = "Sell All Fish",
+	Name = "Auto Cast",
 	Default = false,
 	Callback = function(Value)
 		print(Value)
@@ -40,7 +51,50 @@ Fishing:AddToggle({
 })
 
 Fishing:AddToggle({
-	Name = "Auto Cast",
+	Name = "Auto Reel",
+	Default = false,
+	Callback = function(Value)
+		print(Value)
+	end    
+})
+
+Fishing:AddToggle({
+	Name = "Instant Bobber",
+	Default = false,
+	Callback = function(Value)
+		print(Value)
+	end    
+})
+
+--Items
+
+Items:AddToggle({
+	Name = "Auto Sell",
+	Default = false,
+	Callback = function(Value)
+    ReplicatedStorage.events:WaitForChild("SellAll"):InvokeServer()
+	end    
+})
+
+--Slider Auto Sell
+Tab:AddSlider({
+	Name = "Auto Sell Delay",
+	Min = 0,
+	Max = 100,
+	Default = 5,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	ValueName = "bananas",
+	Callback = function(Value)
+		print(Value)
+	end    
+})
+
+
+
+--Misc
+Misc:AddToggle({
+	Name = "Anti Afk",
 	Default = false,
 	Callback = function(Value)
 		print(Value)
@@ -54,15 +108,3 @@ Fishing:AddToggle({
 
 
 OrionLib:Init()
-
-
-
-
-
-
-
-
-
-
-
-
