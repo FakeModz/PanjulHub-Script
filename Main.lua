@@ -52,21 +52,10 @@ local Window = Fluent:CreateWindow({
     Title = "Fisch | Panjul Hub",
     SubTitle = "vBeta",
     TabWidth = 150,
-    Size = UDim2.fromOffset(600, 400),
+    Size = UDim2.fromOffset(500, 400),
     Acrylic = false,
     Theme = "Darker",
     MinimizeKey = Enum.KeyCode.F10
-})
-
--- Buat window utama
-local Window = Fluent:CreateWindow({
-    Title = "Fisch | Panjul Hub",
-    SubTitle = "vBeta",
-    TabWidth = 150,
-    Size = UDim2.fromOffset(600, 400),
-    Acrylic = false,
-    Theme = "Darker",
-    MinimizeKey = nil -- Nonaktifkan minimize pakai keyboard
 })
 
 -- Tambah Tab "Settings"
