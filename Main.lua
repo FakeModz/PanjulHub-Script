@@ -50,61 +50,47 @@ local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.
 -- Buat window
 local Window = Fluent:CreateWindow({
     Title = "Fisch | Panjul Hub",
-    SubTitle = "vBeta1",
+    SubTitle = "vBeta0.1",
     TabWidth = 150,
-    Size = UDim2.fromOffset(500, 400),
+    Size = UDim2.fromOffset(500, 300),
     Acrylic = false,
     Theme = "Darker",
     MinimizeKey = nil
 })
 
+-- Buat tombol restore melayang
+local restoreButton = Instance.new("TextButton")
+restoreButton.Name = "RestoreFluentWindow"
+restoreButton.Size = UDim2.new(0, 100, 0, 30)
+restoreButton.Position = UDim2.new(0, 10, 0, 10) -- pojok kiri atas
+restoreButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+restoreButton.TextColor3 = Color3.new(1, 1, 1)
+restoreButton.Text = "Show Menu"
+restoreButton.Visible = false -- sembunyikan dulu
 
--- Minimize Button (ikon garis)
-local MinimizeButton = Instance.new("ImageButton")
-MinimizeButton.Name = "MinimizeButton"
-MinimizeButton.Size = UDim2.new(0, 24, 0, 24)
-MinimizeButton.Position = UDim2.new(1, -60, 0, 6)
-MinimizeButton.BackgroundTransparency = 1
-MinimizeButton.Image = "rbxassetid://7072706622" -- ikon minimize
-MinimizeButton.Parent = Window.Window
+-- Masukkan ke StarterGui (playergui biar tampil di layar)
+restoreButton.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
 
--- Maximize Button (ikon kotak)
-local MaximizeButton = Instance.new("ImageButton")
-MaximizeButton.Name = "MaximizeButton"
-MaximizeButton.Size = UDim2.new(0, 24, 0, 24)
-MaximizeButton.Position = UDim2.new(1, -30, 0, 6)
-MaximizeButton.BackgroundTransparency = 1
-MaximizeButton.Image = "rbxassetid://7072711178" -- ikon maximize
-MaximizeButton.Visible = false -- disembunyikan dulu
-MaximizeButton.Parent = Window.Window
-
--- Simpan isi konten yang ingin disembunyikan
-local contentToToggle = {}
-for _, child in pairs(Window.Window:GetChildren()) do
-    if child:IsA("Frame") or child:IsA("ScrollingFrame") then
-        if child.Name ~= "MinimizeButton" and child.Name ~= "MaximizeButton" then
-            table.insert(contentToToggle, child)
-        end
-    end
+-- Saat tombol minimize ditekan
+local function minimizeWindow()
+    Window:Minimize()
+    restoreButton.Visible = true
 end
 
--- Fungsi untuk minimize
-MinimizeButton.MouseButton1Click:Connect(function()
-    for _, content in pairs(contentToToggle) do
-        content.Visible = false
-    end
-    MinimizeButton.Visible = false
-    MaximizeButton.Visible = true
+-- Saat tombol restore ditekan
+restoreButton.MouseButton1Click:Connect(function()
+    Window:Show()
+    restoreButton.Visible = false
 end)
 
--- Fungsi untuk maximize
-MaximizeButton.MouseButton1Click:Connect(function()
-    for _, content in pairs(contentToToggle) do
-        content.Visible = true
-    end
-    MinimizeButton.Visible = true
-    MaximizeButton.Visible = false
-end)
+-- Tambahkan tombol Minimize ke Tab Settings
+local SettingsTab = Window:AddTab({ Title = "Settings", Icon = "settings" })
+
+SettingsTab:AddButton({
+    Title = "Minimize Menu",
+    Description = "Sembunyikan menu sementara",
+    Callback = minimizeWindow
+})
 
 
 
