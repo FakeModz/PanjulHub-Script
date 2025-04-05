@@ -69,6 +69,36 @@ local Tabs = {
     Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
 }
 
+-- Ambil GUI utama dari Fluent
+local mainGui = Window.GUI
+
+-- ImageButton buat restore
+local restoreButton = Instance.new("ImageButton")
+restoreButton.Image = "rbxassetid://6031097225" -- Hamburger icon (bisa diganti)
+restoreButton.Size = UDim2.new(0, 36, 0, 36)
+restoreButton.Position = UDim2.new(0, 10, 0, 10)
+restoreButton.BackgroundTransparency = 1
+restoreButton.Visible = false
+restoreButton.ZIndex = 1000
+restoreButton.Name = "RestoreFluent"
+restoreButton.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+-- Saat ditekan, tampilkan Fluent kembali
+restoreButton.MouseButton1Click:Connect(function()
+    mainGui.Enabled = true
+    restoreButton.Visible = false
+end)
+
+-- Tambahkan tombol minimize di GUI Fluent
+Tabs.Settings:AddButton({
+    Title = "Minimize Fluent",
+    Callback = function()
+        mainGui.Enabled = false
+        restoreButton.Visible = true
+    end
+})
+
+
 local Options = Fluent.Options
 
 local teleportSpots = {
