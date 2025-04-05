@@ -55,7 +55,7 @@ local Window = Fluent:CreateWindow({
     Size = UDim2.fromOffset(600, 400),
     Acrylic = false,
     Theme = "Darker",
-    MinimizeKey = nil -- nonaktifkan minimize dengan keyboard
+    MinimizeKey = Enum.KeyCode.F10
 })
 
 -- Buat window utama
