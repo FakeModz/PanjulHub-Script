@@ -121,10 +121,9 @@ Fishing:AddToggle({
 						if safezone then
 						safezone.Size = UDim2.fromOffset(0, 0)
 			        	safezone.Position = UDim2.fromScale(0.5, 0.5)
-			        	safezone.AnchorPoint = Vector2.new(0.5, 0.5)
-			            local posuy = safezone.AbsolutePositon
-							VirtualInputManager:SendMouseButtonEvent(posuy.X, posuy.Y , 0, true, game:GetService("Players").LocalPlayer, 0)
-                             VirtualInputManager:SendMouseButtonEvent(posuy.X, posuy.Y , 0, false, game:GetService("Players").LocalPlayer, 0)
+			        	safezone.AnchorPoint = Vector2.new(0.5, 0.5) 
+						VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
+						VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
 							
 						end
 					end
