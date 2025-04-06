@@ -119,44 +119,7 @@ Fishing:AddToggle({
 
 
 
-local FastReelRunning = false
-local FastReelCoroutine
 
-Fishing:AddToggle({
-	Name = "Fast Auto Reel",
-	Default = false,
-	Callback = function(Value)
-		FastReelRunning = Value
-
-		if Value and not FastReelCoroutine then
-			FastReelCoroutine = coroutine.create(function()
-				while FastReelRunning do
-					RunService.RenderStepped:Wait()
-
-					local ReelUI = LocalPlayer.PlayerGui:FindFirstChild("reel")
-					if not ReelUI then continue end
-
-					local Bar = ReelUI:FindFirstChild("bar")
-					if not Bar then continue end
-
-					local PlayerBar = Bar:FindFirstChild("playerbar")
-					local TargetBar = Bar:FindFirstChild("fish")
-
-					if PlayerBar and TargetBar then
-						-- Langsung gerakkan ke posisi target dengan sangat cepat
-						PlayerBar.Position = TargetBar.Position
-					end
-				end
-
-				FastReelCoroutine = nil
-			end)
-
-			coroutine.resume(FastReelCoroutine)
-		elseif not Value and FastReelCoroutine then
-			FastReelCoroutine = nil
-		end
-	end
-})
 
 
 
@@ -280,10 +243,10 @@ Fishing:AddToggle({
 					local player = game.Players.LocalPlayer
 					local character = player.Character
 					local tool = character:FindFirstChildOfClass("Tool")
-					local castEvent = tool:FindFirstChild("events") and tool.events:FindFirstChild("cast")
-						ReelFinished:FireServer(100)
-						task.wait(0.3)
-						RepliStorage.events:WaitForChild("ResetFishing"):Fire()
+					local castEvent = tool:FindFirstChild("events") and tool.events:FindFirstChild("cast") 
+					game:GetService("Players").LocalPlayer.Character:FindFirstChild(tool).events.reset:FireServer()
+                     task.wait(0.3) 
+                     ReelFinished:FireServer(100)
 					end
 				end
 
