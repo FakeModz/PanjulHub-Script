@@ -12,8 +12,8 @@ local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jen
 
 local Window = OrionLib:MakeWindow({Name = "Panjul Hub | Fisch", HidePremium = false, SaveConfig = true, ConfigFolder = "PanjulHubZ"})
 
-
-
+local GuiService = game:GetService("GuiService")
+local VirtualInputManager = game:GetService("VirtualInputManager")
 local Fishing = Window:MakeTab({
 	Name = "Fishing",
 	Icon = "rbxassetid://4483345998",
@@ -86,62 +86,74 @@ Fishing:AddToggle({
 						end
 					end
 
-					task.wait(1) -- delay antar cast
+					task.wait(0.5) -- delay antar cast
 				end
 			end)
 		end
 	end
 })
 
-local AutoShake = false
-local ShakeLoop = false
-
-Items:AddToggle({
+local autoShake = false
+local shakeLoop = false
+local autoShakeDelay = 0.5
+Fishing:AddToggle({
 	Name = "Auto Shake",
 	Default = false,
 	Callback = function(Value)
-		AutoShake = Value
-
-		if Value and not ShakeLoop then
-			ShakeLoop = true
+		autoShake = Value
+		if autoShake and not shakeLoop then
+			shakeLoop = true
 			task.spawn(function()
-				local RunService = game:GetService("RunService")
-				local GuiService = game:GetService("GuiService")
-				local VirtualInputManager = game:GetService("VirtualInputManager")
-				local LocalPlayer = game:GetService("Players").LocalPlayer
-
-				local function HandleShake()
-					local Connection
-					Connection = SafeZone.ChildAdded:Connect(function(Child)
-						if not Child:IsA("ImageButton") then return end
-
-						if replicatesignal then
-							replicatesignal(Child.MouseButton1Click)
-							task.delay(0.05, function() Child:Destroy() end)
-						end
-					end)
-
-					while AutoShake and SafeZone:IsDescendantOf(LocalPlayer.PlayerGui) do
-						RunService.Heartbeat:Wait()
-						if GuiService.SelectedObject and GuiService.SelectedObject:IsDescendantOf(SafeZone) then
-							VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
-							VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
+				while autoShake do
+					task.wait(autoShakeDelay or 0.5)
+					local PlayerGUI = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+					local shakeUI = PlayerGUI:FindFirstChild("shakeui")
+					if shakeUI and shakeUI.Enabled then
+						local safezone = shakeUI:FindFirstChild("safezone")
+						if safezone then
+							local button = safezone:FindFirstChild("button")
+							if button and button:IsA("ImageButton") and button.Visible then
+								local pos = button.AbsolutePosition
+								local size = button.AbsoluteSize
+								VirtualInputManager:SendMouseButtonEvent(pos.X + size.X / 2, pos.Y + size.Y / 2, 0, true, game:GetService("Players").LocalPlayer, 0)
+                                VirtualInputManager:SendMouseButtonEvent(pos.X + size.X / 2, pos.Y + size.Y / 2, 0, false, game:GetService("Players").LocalPlayer, 0)
+							end
 						end
 					end
-
-					if Connection then Connection:Disconnect() end
-					GuiService.SelectedObject = nil
-					ShakeLoop = false
 				end
-
-				HandleShake()
+				shakeLoop = false
 			end)
-		elseif not Value then
-			ShakeLoop = false
 		end
 	end
 })
 
+
+
+Fishing:AddToggle({
+	Name = "Center Shake",
+	Default = false,
+	Callback = function(Value)
+		local Connect = SafeZone:WaitForChild("connect", 1)
+
+				if Connect then
+					Connect.Enabled = false -- this script locks the size of the safezone, so we disable it.
+				end
+
+				SafeZone.Size = UDim2.fromOffset(0, 0)
+				SafeZone.Position = UDim2.fromScale(0.5, 0.5)
+				SafeZone.AnchorPoint = Vector2.new(0.5, 0.5)
+			end
+	end    
+})
+
+
+Fishing:AddToggle({
+	Name = "Auto Reel",
+	Default = false,
+	Callback = function(Value)
+		print(Value)
+	end    
+})
 
 Fishing:AddToggle({
 	Name = "Auto Reel",
