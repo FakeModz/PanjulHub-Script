@@ -15,10 +15,25 @@ local Window = OrionLib:MakeWindow({Name = "Panjul Hub | Fisch", HidePremium = f
 local GuiService = game:GetService("GuiService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 local RepliStorage = game:GetService("ReplicatedStorage")
-local Players = game:GetService('Players')
+	local HttpService = game:GetService("HttpService")
+	local Players = game:GetService("Players")
+	local RunService = game:GetService("RunService")
+--	local ReplicatedStorage = game:GetService("ReplicatedStorage")
+	local TweenService = game:GetService("TweenService")
+	local VirtualInputManager = Instance.new("VirtualInputManager") -- fak u
+	local VirtualUser = game:GetService("VirtualUser")
+	local StarterGui = game:GetService("StarterGui")
+	local CoreGui = game:GetService("CoreGui")
+--	local GuiService = game:GetService("GuiService")
+	local CollectionService = game:GetService("CollectionService")
+	local UserInputService = game:GetService("UserInputService")
+	local Lighting = game:GetService("Lighting")
+	local CorePackages = game:GetService("CorePackages")
+	local VeryImportantPart = Instance.new("Part") -- fake zone for tricking temperature/oxygen scripts
 
-
-local LocalPlayers = Players.LocalPlayer
+local LocalPlayer = Players.LocalPlayer
+local Utils = {}
+	
 
 local Fishing = Window:MakeTab({
 	Name = "Fishing",
@@ -61,6 +76,87 @@ OrionLib:MakeNotification({
 	Time = 5
 })
 end
+
+local Done = false
+
+local AutoClickCoroutine = coroutine.create(function()
+		function Utils.MountShakeUI(ShakeUI: ScreenGui)
+			local SafeZone: Frame? = ShakeUI:WaitForChild("safezone", 5) :: Frame?
+
+			local function HandleButton(Button: ImageButton)
+				Button.Selectable = true -- For some reason this is false for the first 0.2 seconds.
+
+				if EnsureInstance(Button) then
+					GuiService.SelectedObject = Button
+				end
+			end
+
+			if not SafeZone then
+				print("Unable to mount shake UI.")
+				return
+			end
+
+			function CenterShaker()
+				local Connect = SafeZone:WaitForChild("connect", 1)
+
+				if Connect then
+					Connect.Enabled = false -- this script locks the size of the safezone, so we disable it.
+				end
+
+				SafeZone.Size = UDim2.fromOffset(0, 0)
+				SafeZone.Position = UDim2.fromScale(0.5, 0.5)
+				SafeZone.AnchorPoint = Vector2.new(0.5, 0.5)
+			end
+
+			function AutoShaker()
+				local Connection = SafeZone.ChildAdded:Connect(function(Child)
+					if not Child:IsA("ImageButton") then return end
+					
+					if replicatesignal then
+						replicatesignal(Child.MouseButton1Click)
+						task.delay(0.05, function() Child:Destroy() end) -- the shake ui is a q buggy if you click it this fast so to avoid the visual glitch we destroy it
+						return
+					end
+					
+					local Done = false
+
+					task.spawn(function()
+						repeat
+							RunService.Heartbeat:Wait()
+							HandleButton(Child)
+						until Done
+					end)
+
+					task.spawn(function()
+						repeat
+							RunService.Heartbeat:Wait()
+						until (not Child) or (not Child:IsDescendantOf(SafeZone))
+						Done = true
+					end)
+				end)
+
+				if replicatesignal then return end
+				
+				repeat
+					RunService.Heartbeat:Wait()
+					if GuiService.SelectedObject and GuiService.SelectedObject:IsDescendantOf(SafeZone) then
+						VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
+						VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
+					end
+					RunService.Heartbeat:Wait()
+				until not SafeZone:IsDescendantOf(LocalPlayer.PlayerGui)
+				Connection:Disconnect()
+				GuiService.SelectedObject = nil
+			end
+		end
+
+		Collect(LocalPlayer.PlayerGui.ChildAdded:Connect(function(Child: Instance)
+			if Child.Name == "shakeui" and Child:IsA("ScreenGui") then
+				Utils.MountShakeUI(Child)
+			end
+		end))
+	end)
+
 
 
 --Fishing
@@ -140,44 +236,10 @@ Fishing:AddToggle({
 
 
 Fishing:AddToggle({
-	Name = "Center Shake",
+	Name = "Auto Shake V2",
 	Default = false,
 	Callback = function(Value)
-print(value)    
-end
-})
-
-local AutoShakeV2 = false
-
-Items:AddToggle({
-    Name = "Auto Shake V2",
-    Default = false,
-    Callback = function(Value)
-        AutoShakeV2 = Value
-
-        if Value then
-            AutoShakeConnection = LocalPlayer.PlayerGui.DescendantAdded:Connect(function(Descendant)
-                if Descendant:IsA("ImageButton") and Descendant.Name == "button" and Descendant.Parent and Descendant.Parent.Name == "safezone" then
-                    task.wait(0.2) -- Tambah delay agar UI betul-betul muncul
-                    if not Descendant.Visible then return end
-
-                    local ButtonPosition = Descendant.AbsolutePosition
-                    local ButtonSize = Descendant.AbsoluteSize
-                    local Anchor = Descendant.AnchorPoint or Vector2.new(0.5, 0.5)
-
-                    local ClickX = ButtonPosition.X + (ButtonSize.X * Anchor.X)
-                    local ClickY = ButtonPosition.Y + (ButtonSize.Y * Anchor.Y)
-
-                    VirtualInputManager:SendMouseButtonEvent(ClickX, ClickY, Enum.UserInputType.MouseButton1.Value, true, game, 1)
-                    VirtualInputManager:SendMouseButtonEvent(ClickX, ClickY, Enum.UserInputType.MouseButton1.Value, false, game, 1)
-                end
-            end)
-        else
-            if AutoShakeConnection then
-                AutoShakeConnection:Disconnect()
-                AutoShakeConnection = nil
-            end
-        end
+    AutoShaker()
     end
 })
 
