@@ -102,7 +102,7 @@ Items:AddSlider({
 --Auto Sell Loop
 task.spawn(function()
 	while true do
-		task.wait(DelayAutoSelling)
+		task.wait(DelayAutoSell)
 		if AutoSelling then
 			pcall(function()
 			game:GetService("ReplicatedStorage").events:WaitForChild("SellAll"):InvokeServer()
