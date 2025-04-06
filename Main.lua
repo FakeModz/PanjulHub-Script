@@ -12,8 +12,8 @@ local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jen
 
 local Window = OrionLib:MakeWindow({Name = "Panjul Hub | Fisch", HidePremium = false, SaveConfig = true, ConfigFolder = "PanjulHubZ"})
 
-local GuiService = game:GetService("GuiService")
-local VirtualInputManager = game:GetService("VirtualInputManager")
+--local GuiService = game:GetService("GuiService")
+--local VirtualInputManager = game:GetService("VirtualInputManager")
 local Fishing = Window:MakeTab({
 	Name = "Fishing",
 	Icon = "rbxassetid://4483345998",
@@ -101,6 +101,7 @@ Fishing:AddToggle({
 	Default = false,
 	Callback = function(Value)
 		autoShake = Value
+		local VirtualInputManager = game:GetService("VirtualInputManager")
 		if autoShake and not shakeLoop then
 			shakeLoop = true
 			task.spawn(function()
