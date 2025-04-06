@@ -298,13 +298,14 @@ Fishing:AddToggle({
 	Callback = function(Value)
 
 local player = Players.LocalPlayer
+local character = player.Character
 local backpack = player:WaitForChild("Backpack")
-local equipEvent = RepliStorage.packages.Net:FindFirstChild("RE/Backpack/Equip")
+local equipEvent = ReplicatedStorage.packages.Net:FindFirstChild("RE/Backpack/Equip")
 
+-- Cari tool (rod) dari Backpack
 local tool = backpack:FindFirstChildOfClass("Tool")
-if tool and tool:FindFirstChild("events") and tool.events:FindFirstChild("reset") then
-    -- Lanjut equip rod setelah reset
-    equipEvent:FireServer(tool)
+if tool then
+	equipEvent:FireServer(tool)
 end
 
 	end    
@@ -354,9 +355,10 @@ local SliderAutoSell = Items:AddSlider({
 	ValueName = "Auto Sell Delay",
 	Callback = function(Value)
 	DelayAutoSell = Value
+	SliderAutoSell:Set(5) 
 	end    
 })
-SliderAutoSell:Set(1) 
+
 
 
 
