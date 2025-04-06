@@ -227,7 +227,6 @@ Fishing:AddToggle({
 	Name = "Instant Bobber",
 	Default = false,
 	Callback = function(Value)
-		if Value then
 			InstantBobConnection = RunService.PostSimulation:Connect(function()
 					if CurrentTool then
 						local Bobber = CurrentTool:FindFirstChild("bobber")
@@ -242,8 +241,6 @@ Fishing:AddToggle({
 								Bobber:PivotTo(CFrame.new(RaycastResult.Position))
 							end
 						end
-					end
-				
 			end)
 		else
 			if InstantBobConnection then
