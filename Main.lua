@@ -240,7 +240,7 @@ Fishing:AddToggle({
 							if RaycastResult and RaycastResult.Instance:IsA("Terrain") then
 								Bobber:PivotTo(CFrame.new(RaycastResult.Position))
 							end
-						end
+
 			end)
 		else
 			if InstantBobConnection then
