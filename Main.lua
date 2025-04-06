@@ -110,7 +110,7 @@ Fishing:AddToggle({
 						end
 					end
 
-					task.wait(0.3) -- delay antar cast
+					task.wait(0.1) -- delay antar cast
 				end
 			end)
 		end
@@ -270,7 +270,7 @@ Fishing:AddToggle({
 						Params.FilterType = Enum.RaycastFilterType.Include
 						Params.FilterDescendantsInstances = { workspace.Terrain }
 
-						local RayResult = workspace:Raycast(Bobber.Position, Vector3.new(0, -100, 0), Params)
+						local RayResult = workspace:Raycast(Bobber.Position, Vector3.new(0, -50, 0), Params)
 						if RayResult and RayResult.Instance:IsA("Terrain") then
 							Bobber:PivotTo(CFrame.new(RayResult.Position))
 						end
