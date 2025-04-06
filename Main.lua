@@ -33,7 +33,7 @@ local RepliStorage = game:GetService("ReplicatedStorage")
 
 local LocalPlayer = Players.LocalPlayer
 local Utils = {}
-local CurrentTool: Tool? 
+--local CurrentTool: Tool? 
 	
 
 local Fishing = Window:MakeTab({
@@ -228,6 +228,9 @@ Fishing:AddToggle({
 	Default = false,
 	Callback = function(Value)
 		if Value then
+		local player = game.Players.LocalPlayer
+		local character = player.Character
+		local CurrentTool = character:FindFirstChildOfClass("Tool")
 			InstantBobConnection = RunService.PostSimulation:Connect(function()
 				if CurrentTool then
 					local Bobber = CurrentTool:FindFirstChild("bobber")
