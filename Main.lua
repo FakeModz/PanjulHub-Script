@@ -133,17 +133,7 @@ Fishing:AddToggle({
 	Name = "Center Shake",
 	Default = false,
 	Callback = function(Value)
-		local Connect = SafeZone:WaitForChild("connect", 1)
-
-				if Connect then
-					Connect.Enabled = false -- this script locks the size of the safezone, so we disable it.
-				end
-
-				SafeZone.Size = UDim2.fromOffset(0, 0)
-				SafeZone.Position = UDim2.fromScale(0.5, 0.5)
-				SafeZone.AnchorPoint = Vector2.new(0.5, 0.5)
-			end
-	end    
+	print(value)    
 })
 
 
