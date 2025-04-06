@@ -114,7 +114,7 @@ Fishing:AddToggle({
 					local shakeUI = PlayerGUI:FindFirstChild("shakeui")
 					if shakeUI and shakeUI.Enabled then
 						local safezone = shakeUI:FindFirstChild("safezone")
-						local Connect = safezone:WaitForChild("connect", 3)
+						local Connect = safezone:WaitForChild("connect", 1)
                 	if Connect then
 					Connect.Enabled = false -- this script locks the size of the safezone, so we disable it.
 				end
@@ -122,11 +122,10 @@ Fishing:AddToggle({
 						safezone.Size = UDim2.fromOffset(0, 0)
 			        	safezone.Position = UDim2.fromScale(0.5, 0.5)
 			        	safezone.AnchorPoint = Vector2.new(0.5, 0.5)
+		             	local button = safezone:FindFirstChild("button")
 							if button and button:IsA("ImageButton") and button.Visible then
 								local pos = button.AbsolutePosition
 								local size = button.AbsoluteSize
-								
-							local button = safezone:FindFirstChild("button")
 								VirtualInputManager:SendMouseButtonEvent(pos.X + size.X / 2, pos.Y + size.Y / 2, 0, true, game:GetService("Players").LocalPlayer, 0)
                                 VirtualInputManager:SendMouseButtonEvent(pos.X + size.X / 2, pos.Y + size.Y / 2, 0, false, game:GetService("Players").LocalPlayer, 0)
 							end
