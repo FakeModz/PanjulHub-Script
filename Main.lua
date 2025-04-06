@@ -355,10 +355,10 @@ local SliderAutoSell = Items:AddSlider({
 	ValueName = "Auto Sell Delay",
 	Callback = function(Value)
 	DelayAutoSell = Value
-	SliderAutoSell:Set(5) 
+	
 	end    
 })
-
+SliderAutoSell:Set(5) 
 
 
 
