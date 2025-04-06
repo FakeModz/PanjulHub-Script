@@ -101,7 +101,8 @@ Fishing:AddToggle({
 	Name = "Center Shake",
 	Default = false,
 	Callback = function(Value)
-	print(value)    
+	print(value)  
+		end
 })
 
 
