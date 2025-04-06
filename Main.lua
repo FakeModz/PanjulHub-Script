@@ -229,8 +229,8 @@ Fishing:AddToggle({
 		if Value and not InstantReelCoroutine then
 			InstantReelCoroutine = coroutine.create(function()
 				while InstantReelRunning do
-					RunService.RenderStepped:Wait()
-
+					--RunService.RenderStepped:Wait()
+                    task.wait(1)
 					local ReelUI = LocalPlayer.PlayerGui:FindFirstChild("reel")
 					if not ReelUI then continue end
 
@@ -239,13 +239,7 @@ Fishing:AddToggle({
                     Bar.Visible = false
 					local ReelScript = Bar:FindFirstChild("reel")
 					if ReelScript and ReelScript.Enabled then
-					local player = game.Players.LocalPlayer
-					local character = player.Character
-					local tool = character:FindFirstChildOfClass("Tool")
-					local castEvent = tool:FindFirstChild("events") and tool.events:FindFirstChild("cast") 
-					game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Tool").events.reset:FireServer()
-                     task.wait(0.3) 
-                     ReelFinished:FireServer(100)
+                    ReelFinished:FireServer(100)
 					end
 				end
 
