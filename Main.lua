@@ -245,7 +245,7 @@ Fishing:AddToggle({
 					local castEvent = tool:FindFirstChild("events") and tool.events:FindFirstChild("cast")
 						ReelFinished:FireServer(100)
 						task.wait(0.3)
-						castEvent:FireServer(90)
+						RepliStorage.events:WaitForChild("ResetFishing")
 					end
 				end
 
@@ -278,7 +278,7 @@ Fishing:AddToggle({
 						Params.FilterType = Enum.RaycastFilterType.Include
 						Params.FilterDescendantsInstances = { workspace.Terrain }
 
-						local RayResult = workspace:Raycast(Bobber.Position, Vector3.new(0, -50, 0), Params)
+						local RayResult = workspace:Raycast(Bobber.Position, Vector3.new(0, -10, 0), Params)
 						if RayResult and RayResult.Instance:IsA("Terrain") then
 							Bobber:PivotTo(CFrame.new(RayResult.Position))
 						end
