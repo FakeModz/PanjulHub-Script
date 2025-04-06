@@ -150,37 +150,35 @@ end
 local AutoShakeV2 = false
 
 Items:AddToggle({
-	Name = "Auto Shake V2",
-	Default = false,
-	Callback = function(Value)
-		AutoShakeV2 = Value
+    Name = "Auto Shake V2",
+    Default = false,
+    Callback = function(Value)
+        AutoShakeV2 = Value
 
-		if AutoShakeV2 and not ShakeLoop then
-			ShakeLoop = true
+        if Value then
+            AutoShakeConnection = LocalPlayer.PlayerGui.DescendantAdded:Connect(function(Descendant)
+                if Descendant:IsA("ImageButton") and Descendant.Name == "button" and Descendant.Parent and Descendant.Parent.Name == "safezone" then
+                    task.wait(0.2) -- Tambah delay agar UI betul-betul muncul
+                    if not Descendant.Visible then return end
 
-			task.spawn(function()
-				local PlayerGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
-				
-				PlayerGui.DescendantAdded:Connect(function(Descendant)
-					if AutoShakeV2 and Descendant.Name == "button" and Descendant.Parent and Descendant.Parent.Name == "safezone" then
-						task.wait(0.1)
-						local ButtonPosition = Descendant.AbsolutePosition
-						local ButtonSize = Descendant.AbsoluteSize
+                    local ButtonPosition = Descendant.AbsolutePosition
+                    local ButtonSize = Descendant.AbsoluteSize
+                    local Anchor = Descendant.AnchorPoint or Vector2.new(0.5, 0.5)
 
-						local clickX = ButtonPosition.X + (ButtonSize.X / 2)
-						local clickY = ButtonPosition.Y + (ButtonSize.Y / 2)
+                    local ClickX = ButtonPosition.X + (ButtonSize.X * Anchor.X)
+                    local ClickY = ButtonPosition.Y + (ButtonSize.Y * Anchor.Y)
 
-						local VirtualInputManager = game:GetService("VirtualInputManager")
-						VirtualInputManager:SendMouseButtonEvent(clickX, clickY, Enum.UserInputType.MouseButton1.Value, true, game, 1)
-						VirtualInputManager:SendMouseButtonEvent(clickX, clickY, Enum.UserInputType.MouseButton1.Value, false, game, 1)
-					end
-				end)
-
-				repeat task.wait() until not AutoShakeV2
-				ShakeLoop = false
-			end)
-		end
-	end
+                    VirtualInputManager:SendMouseButtonEvent(ClickX, ClickY, Enum.UserInputType.MouseButton1.Value, true, game, 1)
+                    VirtualInputManager:SendMouseButtonEvent(ClickX, ClickY, Enum.UserInputType.MouseButton1.Value, false, game, 1)
+                end
+            end)
+        else
+            if AutoShakeConnection then
+                AutoShakeConnection:Disconnect()
+                AutoShakeConnection = nil
+            end
+        end
+    end
 })
 
 
