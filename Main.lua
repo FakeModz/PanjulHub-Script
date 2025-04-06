@@ -77,85 +77,6 @@ OrionLib:MakeNotification({
 })
 end
 
-local Done = false
-
-local AutoClickCoroutine = coroutine.create(function()
-		function Utils.MountShakeUI(ShakeUI: ScreenGui)
-			local SafeZone: Frame? = ShakeUI:WaitForChild("safezone", 5) :: Frame?
-
-			local function HandleButton(Button: ImageButton)
-				Button.Selectable = true -- For some reason this is false for the first 0.2 seconds.
-
-				if EnsureInstance(Button) then
-					GuiService.SelectedObject = Button
-				end
-			end
-
-			if not SafeZone then
-				print("Unable to mount shake UI.")
-				return
-			end
-
-			function CenterShaker()
-				local Connect = SafeZone:WaitForChild("connect", 1)
-
-				if Connect then
-					Connect.Enabled = false -- this script locks the size of the safezone, so we disable it.
-				end
-
-				SafeZone.Size = UDim2.fromOffset(0, 0)
-				SafeZone.Position = UDim2.fromScale(0.5, 0.5)
-				SafeZone.AnchorPoint = Vector2.new(0.5, 0.5)
-			end
-
-			function AutoShaker()
-				local Connection = SafeZone.ChildAdded:Connect(function(Child)
-					if not Child:IsA("ImageButton") then return end
-					
-					if replicatesignal then
-						replicatesignal(Child.MouseButton1Click)
-						task.delay(0.05, function() Child:Destroy() end) -- the shake ui is a q buggy if you click it this fast so to avoid the visual glitch we destroy it
-						return
-					end
-					
-					local Done = false
-
-					task.spawn(function()
-						repeat
-							RunService.Heartbeat:Wait()
-							HandleButton(Child)
-						until Done
-					end)
-
-					task.spawn(function()
-						repeat
-							RunService.Heartbeat:Wait()
-						until (not Child) or (not Child:IsDescendantOf(SafeZone))
-						Done = true
-					end)
-				end)
-
-				if replicatesignal then return end
-				
-				repeat
-					RunService.Heartbeat:Wait()
-					if GuiService.SelectedObject and GuiService.SelectedObject:IsDescendantOf(SafeZone) then
-						VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
-						VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
-					end
-					RunService.Heartbeat:Wait()
-				until not SafeZone:IsDescendantOf(LocalPlayer.PlayerGui)
-				Connection:Disconnect()
-				GuiService.SelectedObject = nil
-			end
-		end
-
-		Collect(LocalPlayer.PlayerGui.ChildAdded:Connect(function(Child: Instance)
-			if Child.Name == "shakeui" and Child:IsA("ScreenGui") then
-				Utils.MountShakeUI(Child)
-			end
-		end))
-	end)
 
 
 
@@ -239,7 +160,78 @@ Fishing:AddToggle({
 	Name = "Auto Shake V2",
 	Default = false,
 	Callback = function(Value)
-    AutoShaker()
+    
+    local Done = false
+
+local AutoClickCoroutine = coroutine.create(function()
+		function Utils.MountShakeUI(ShakeUI: ScreenGui)
+			local SafeZone: Frame? = ShakeUI:WaitForChild("safezone", 5) :: Frame?
+
+			local function HandleButton(Button: ImageButton)
+				Button.Selectable = true -- For some reason this is false for the first 0.2 seconds.
+
+				if EnsureInstance(Button) then
+					GuiService.SelectedObject = Button
+				end
+			end
+
+			if not SafeZone then
+				print("Unable to mount shake UI.")
+				return
+			end
+
+			if Value then
+				local Connection = SafeZone.ChildAdded:Connect(function(Child)
+					if not Child:IsA("ImageButton") then return end
+					
+					if replicatesignal then
+						replicatesignal(Child.MouseButton1Click)
+						task.delay(0.05, function() Child:Destroy() end) -- the shake ui is a q buggy if you click it this fast so to avoid the visual glitch we destroy it
+						return
+					end
+					
+					local Done = false
+
+					task.spawn(function()
+						repeat
+							RunService.Heartbeat:Wait()
+							HandleButton(Child)
+						until Done
+					end)
+
+					task.spawn(function()
+						repeat
+							RunService.Heartbeat:Wait()
+						until (not Child) or (not Child:IsDescendantOf(SafeZone))
+						Done = true
+					end)
+				end)
+
+				if replicatesignal then return end
+				
+				repeat
+					RunService.Heartbeat:Wait()
+					if GuiService.SelectedObject and GuiService.SelectedObject:IsDescendantOf(SafeZone) then
+						VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
+						VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
+					end
+					RunService.Heartbeat:Wait()
+				until not SafeZone:IsDescendantOf(LocalPlayer.PlayerGui)
+				Connection:Disconnect()
+				GuiService.SelectedObject = nil
+			end
+		end
+
+		Collect(LocalPlayer.PlayerGui.ChildAdded:Connect(function(Child: Instance)
+			if Child.Name == "shakeui" and Child:IsA("ScreenGui") then
+				Utils.MountShakeUI(Child)
+			end
+		end))
+	end)
+
+    
+    
+    
     end
 })
 
