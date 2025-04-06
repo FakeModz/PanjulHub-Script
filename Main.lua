@@ -93,6 +93,26 @@ Fishing:AddToggle({
 	end
 })
 
+local AutoShake = false
+
+Fishing:AddToggle({
+	Name = "Auto Shake",
+	Default = false,
+	Callback = function(Value)
+		AutoShake = Value
+		if AutoShake then
+			task.spawn(function()
+				while AutoShake do
+					task.wait(0.8) -- kamu bisa ubah speed delay shake di sini
+					pcall(function()
+						game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):InvokeServer("Shake")
+					end)
+				end
+			end)
+		end
+	end
+})
+
 
 Fishing:AddToggle({
 	Name = "Auto Reel",
