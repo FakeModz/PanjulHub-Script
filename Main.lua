@@ -305,20 +305,27 @@ Fishing:AddToggle({
 
 				while AutoEquipRodRunning do
 					local character = player.Character
-					if character then
-						local currentTool = character:FindFirstChildOfClass("Tool")
-						local toolInBackpack = backpack:FindFirstChildOfClass("Tool")
+					local currentTool = character and character:FindFirstChildOfClass("Tool")
 
-						if not currentTool and toolInBackpack and equipEvent then
-							equipEvent:FireServer(toolInBackpack)
+					local rodToEquip = nil
+
+					-- Cari tool di backpack yang punya "events" (biasanya itu rod)
+					for _, item in ipairs(backpack:GetChildren()) do
+						if item:IsA("Tool") and item:FindFirstChild("events") then
+							rodToEquip = item
+							break
 						end
 					end
 
-					task.wait(5) -- bisa disesuaikan delaynya
+					if not currentTool and rodToEquip and equipEvent then
+						equipEvent:FireServer(rodToEquip)
+					end
+
+					task.wait(0.1)
 				end
 			end)
 		end
-	end    
+	end
 })
 
 
