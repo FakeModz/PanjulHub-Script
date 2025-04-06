@@ -333,8 +333,26 @@ Fishing:AddToggle({
 
 
 --Items
-local DelayAutoSell = 5
+local DelayAutoSell = 1
 local SellLoop = false
+
+
+
+Items:AddTextbox({
+	Name = "Auto Sell Delay",
+	Default = "1",
+	TextDisappear = false,
+	Callback = function(Value)
+		local num = tonumber(Value)
+		if num then
+			DelayAutoSell = num
+			print("Delay Set To : " .. DelayAutoSell .. " Seconds")
+		else
+			print("Not valid number!")
+		end
+	end
+})
+
 
 Items:AddToggle({
 	Name = "Auto Sell",
@@ -359,23 +377,34 @@ Items:AddToggle({
 	NotifyHub("Auto Sell", "auto sell disable")
 end
 end
-})
 
 
-local SliderAutoSell = Items:AddSlider({
-	Name = "Auto Sell Delay",
-	Min = 0,
-	Max = 20,
-	Default = 5,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	ValueName = "Auto Sell Delay",
+---Trade Function---
+local PlayerNames = {}
+for _, plr in pairs(Players:GetPlayers()) do
+	if plr ~= Players.LocalPlayer then
+		table.insert(PlayerNames, plr.Name)
+	end
+end
+
+local SelectedPlayer
+
+Items:AddDropdown({
+	Name = "Player to Trade",
+	Default = "",
+	Options = PlayerNames,
 	Callback = function(Value)
-	DelayAutoSell = Value
-	print("aww") 
-	end    
+		SelectedPlayer = Value
+		print("Player dipilih: " .. Value)
+	end
 })
-SliderAutoSell:Set(5) 
+
+
+
+})
+
+
+
 
 
 
