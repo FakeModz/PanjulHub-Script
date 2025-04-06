@@ -224,24 +224,25 @@ Fishing:AddToggle({
 local InstantBobConnection
 
 Fishing:AddToggle({
-	Name = "Instant Bobber",
+	Name = "Instant Bob",
 	Default = false,
 	Callback = function(Value)
+		if Value then
 			InstantBobConnection = RunService.PostSimulation:Connect(function()
-					if CurrentTool then
-						local Bobber = CurrentTool:FindFirstChild("bobber")
-						if Bobber then
-							local Params = RaycastParams.new()
-							Params.FilterType = Enum.RaycastFilterType.Include
-							Params.FilterDescendantsInstances = { workspace.Terrain }
+				if CurrentTool then
+					local Bobber = CurrentTool:FindFirstChild("bobber")
+					if Bobber then
+						local Params = RaycastParams.new()
+						Params.FilterType = Enum.RaycastFilterType.Include
+						Params.FilterDescendantsInstances = { workspace.Terrain }
 
-							local RaycastResult = workspace:Raycast(Bobber.Position, -Vector3.yAxis * 100, Params)
+						local RaycastResult = workspace:Raycast(Bobber.Position, -Vector3.yAxis * 100, Params)
 
-							if RaycastResult and RaycastResult.Instance:IsA("Terrain") then
-								Bobber:PivotTo(CFrame.new(RaycastResult.Position))
-							end
+						if RaycastResult and RaycastResult.Instance:IsA("Terrain") then
+							Bobber:PivotTo(CFrame.new(RaycastResult.Position))
 						end
 					end
+				end
 			end)
 		else
 			if InstantBobConnection then
