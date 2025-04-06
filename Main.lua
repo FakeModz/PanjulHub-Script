@@ -213,13 +213,41 @@ Fishing:AddToggle({
 
 
 
+local InstantReelRunning = false
+local InstantReelCoroutine
+
 Fishing:AddToggle({
-	Name = "Auto Reel",
+	Name = "Instant Reel",
 	Default = false,
 	Callback = function(Value)
-		print(Value)
-	end    
+		InstantReelRunning = Value
+
+		if Value and not InstantReelCoroutine then
+			InstantReelCoroutine = coroutine.create(function()
+				while InstantReelRunning do
+					RunService.RenderStepped:Wait()
+
+					local ReelUI = LocalPlayer.PlayerGui:FindFirstChild("reel")
+					if not ReelUI then continue end
+
+					local Bar = ReelUI:FindFirstChild("bar")
+					if not Bar then continue end
+
+					local ReelScript = Bar:FindFirstChild("reel")
+					if ReelScript and ReelScript.Enabled then
+						Remotes.ReelFinished:FireServer(100)
+					end
+				end
+
+				-- Bersihkan saat loop selesai
+				InstantReelCoroutine = nil
+			end)
+
+			coroutine.resume(InstantReelCoroutine)
+		end
+	end
 })
+
 
 local InstantBobConnection
 
