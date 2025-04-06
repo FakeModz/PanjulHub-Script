@@ -124,8 +124,8 @@ Fishing:AddToggle({
 			        	safezone.AnchorPoint = Vector2.new(0.5, 0.5)
 		             	local button = safezone:FindFirstChild("button")
 							if button and button:IsA("ImageButton") and button.Visible then
-								local pos = button.AbsolutePosition
-								local size = button.AbsoluteSize
+								local pos = safezone.AbsolutePosition
+								local size = safezone.AbsoluteSize
 								VirtualInputManager:SendMouseButtonEvent(pos.X + size.X / 2, pos.Y + size.Y / 2, 0, true, game:GetService("Players").LocalPlayer, 0)
                                 VirtualInputManager:SendMouseButtonEvent(pos.X + size.X / 2, pos.Y + size.Y / 2, 0, false, game:GetService("Players").LocalPlayer, 0)
 							end
