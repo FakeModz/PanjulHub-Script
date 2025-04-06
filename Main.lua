@@ -47,6 +47,14 @@ local AutoReeling = false
 local InstantBob = false
 local AutoSelling = false
 
+function NotifyHub(judulx, juduly)
+OrionLib:MakeNotification({
+	Name = judulx,
+	Content = juduly,
+	Image = "rbxassetid://4483345998",
+	Time = 5
+})
+end
 
 
 --Fishing
@@ -76,40 +84,50 @@ Fishing:AddToggle({
 
 --Items
 local DelayAutoSell = 5
+local SellLoop = false
 
 Items:AddToggle({
 	Name = "Auto Sell",
 	Default = false,
 	Callback = function(Value)
-			print(Value) 
         AutoSelling = Value
-	end    
-})
-
-Items:AddSlider({
-	Name = "Auto Sell Delay",
-	Min = 1,
-	Max = 120,
-	Default = 5,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	ValueName = "bananas",
-	Callback = function(Value)
-	DelayAutoSell = Value
-	end    
-})
-
---Auto Sell Loop
-task.spawn(function()
-	while true do
+        if Value and not SellLoop then
+        NotifyHub(" Auto Sell", "auto sell enable")
+        SellLoop = true
+        task.spawn(function()
+	while SellLoop do
 		task.wait(DelayAutoSell)
 		if AutoSelling then
 			pcall(function()
 			game:GetService("ReplicatedStorage").events:WaitForChild("SellAll"):InvokeServer()
 			end)
 		end
-	end
-end)
+	   end
+	end) 
+	elseif not Value then
+	SellLoop = false
+	NotifyHub("Auto Sell", "auto sell disable")
+end
+end
+})
+
+
+local SliderAutoSell = Items:AddSlider({
+	Name = "Auto Sell Delay",
+	Min = 1,
+	Max = 120,
+	Default = 5,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	ValueName = "Auto Sell Delay",
+	Callback = function(Value)
+	DelayAutoSell = Value
+	end    
+})
+SliderAutoSell:Set(1) 
+
+
+
 
 
 
