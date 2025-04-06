@@ -230,7 +230,7 @@ Fishing:AddToggle({
 			InstantReelCoroutine = coroutine.create(function()
 				while InstantReelRunning do
 					--RunService.RenderStepped:Wait()
-                    task.wait(1)
+                    task.wait(0.3)
 					local ReelUI = LocalPlayer.PlayerGui:FindFirstChild("reel")
 					if not ReelUI then continue end
 
@@ -286,22 +286,38 @@ Fishing:AddToggle({
 	end
 })
 
+local AutoEquipRodRunning = false
+
 Fishing:AddToggle({
 	Name = "Auto Equip Rod",
 	Default = false,
 	Callback = function(Value)
+		AutoEquipRodRunning = Value
 
-local player = Players.LocalPlayer
-local character = player.Character
-local backpack = player:WaitForChild("Backpack")
-local equipEvent = RepliStorage.packages.Net:FindFirstChild("RE/Backpack/Equip")
+		if Value then
+			task.spawn(function()
+				local Players = game:GetService("Players")
+				local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
--- Cari tool (rod) dari Backpack
-local tool = backpack:FindFirstChildOfClass("Tool")
-if tool then
-	equipEvent:FireServer(tool)
-end
+				local player = Players.LocalPlayer
+				local backpack = player:WaitForChild("Backpack")
+				local equipEvent = ReplicatedStorage.packages.Net:FindFirstChild("RE/Backpack/Equip")
 
+				while AutoEquipRodRunning do
+					local character = player.Character
+					if character then
+						local currentTool = character:FindFirstChildOfClass("Tool")
+						local toolInBackpack = backpack:FindFirstChildOfClass("Tool")
+
+						if not currentTool and toolInBackpack and equipEvent then
+							equipEvent:FireServer(toolInBackpack)
+						end
+					end
+
+					task.wait(5) -- bisa disesuaikan delaynya
+				end
+			end)
+		end
 	end    
 })
 
