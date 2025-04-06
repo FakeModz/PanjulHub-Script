@@ -142,6 +142,15 @@ Fishing:AddToggle({
 					return
 				end
 
+				-- Pusatkan tombol shake
+				local Connect = SafeZone:WaitForChild("connect", 1)
+				if Connect then
+					Connect.Enabled = false
+				end
+				SafeZone.Size = UDim2.fromOffset(0, 0)
+				SafeZone.Position = UDim2.fromScale(0.5, 0.5)
+				SafeZone.AnchorPoint = Vector2.new(0.5, 0.5)
+
 				local function HandleButton(Button)
 					Button.Selectable = true
 					GuiService.SelectedObject = Button
@@ -186,7 +195,6 @@ Fishing:AddToggle({
 				end
 			end)
 
-			-- If already exists
 			local existing = LocalPlayer.PlayerGui:FindFirstChild("shakeui")
 			if existing then
 				MountShakeUI(existing)
@@ -276,22 +284,7 @@ Fishing:AddToggle({
 	end
 })
 
-Fishing:AddToggle({
-	Name = "Center Shake",
-	Default = false,
-	Callback = function(Value)
-		local Connect = SafeZone:WaitForChild("connect", 1)
 
-				if Connect then
-					Connect.Enabled = false -- this script locks the size of the safezone, so we disable it.
-				end
-
-				SafeZone.Size = UDim2.fromOffset(0, 0)
-				SafeZone.Position = UDim2.fromScale(0.5, 0.5)
-				SafeZone.AnchorPoint = Vector2.new(0.5, 0.5)
-			end
-	end    
-})
 
 
 
