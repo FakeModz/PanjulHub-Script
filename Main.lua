@@ -292,6 +292,24 @@ Fishing:AddToggle({
 	end
 })
 
+Fishing:AddToggle({
+	Name = "Auto Equip Rod",
+	Default = false,
+	Callback = function(Value)
+
+local player = Players.LocalPlayer
+local backpack = player:WaitForChild("Backpack")
+local equipEvent = RepliStorage.packages.Net:FindFirstChild("RE/Backpack/Equip")
+
+local tool = backpack:FindFirstChildOfClass("Tool")
+if tool and tool:FindFirstChild("events") and tool.events:FindFirstChild("reset") then
+    -- Lanjut equip rod setelah reset
+    equipEvent:FireServer(tool)
+end
+
+	end    
+})
+
 
 
 
