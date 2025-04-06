@@ -245,7 +245,7 @@ Fishing:AddToggle({
 					local castEvent = tool:FindFirstChild("events") and tool.events:FindFirstChild("cast")
 						ReelFinished:FireServer(100)
 						task.wait(0.3)
-						RepliStorage.events:WaitForChild("ResetFishing")
+						RepliStorage.events:WaitForChild("ResetFishing"):Fire()
 					end
 				end
 
