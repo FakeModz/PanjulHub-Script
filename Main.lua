@@ -1,5 +1,5 @@
---local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/FakeModz/PanjulHub-Script/refs/heads/main/UI')))()
-local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/FakeModz/PanjulHub-Script/refs/heads/main/UI')))()
+--local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
 --Roblox Client
 --ReplicatedStorage = game:GetService("ReplicatedStorage")
 
@@ -42,10 +42,10 @@ local Teleport = Window:MakeTab({
 
 
 --Variable
---local AutoCasting = false
---local AutoReeling = false
---local InstantBob = false
---local AutoSelling = false
+local AutoCasting = false
+local AutoReeling = false
+local InstantBob = false
+local AutoSelling = false
 
 
 
@@ -75,15 +75,41 @@ Fishing:AddToggle({
 })
 
 --Items
+DelayAutoSell = 5
 
 Items:AddToggle({
 	Name = "Auto Sell",
 	Default = false,
 	Callback = function(Value)
 			print(Value) 
-        game:GetService("ReplicatedStorage").events:WaitForChild("SellAll"):InvokeServer()
+        AutoSelling = Value
 	end    
 })
+
+Items:AddSlider({
+	Name = "Auto Sell Delay",
+	Min = 1,
+	Max = 120,
+	Default = 5,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	ValueName = "bananas",
+	Callback = function(Value)
+	DelayAutoSell = Value
+	end    
+})
+
+--Auto Sell Loop
+task.spawn(function()
+	while true do
+		task.wait(DelayAutoSelling)
+		if AutoSelling then
+			pcall(function()
+			game:GetService("ReplicatedStorage").events:WaitForChild("SellAll"):InvokeServer()
+			end)
+		end
+	end
+end)
 
 
 
