@@ -234,17 +234,16 @@ Fishing:AddToggle({
 					local ReelUI = LocalPlayer.PlayerGui:FindFirstChild("reel")
 					if not ReelUI then continue end
 
-					local Bar = ReelUI:FindFirstChild("bar")
-					Bar.Visible = false
+					local Bar = ReelUI:FindFirstChild("bar") 
 					if not Bar then continue end
-
+                    Bar.Visible = false
 					local ReelScript = Bar:FindFirstChild("reel")
 					if ReelScript and ReelScript.Enabled then
 					local player = game.Players.LocalPlayer
 					local character = player.Character
 					local tool = character:FindFirstChildOfClass("Tool")
 					local castEvent = tool:FindFirstChild("events") and tool.events:FindFirstChild("cast") 
-					game:GetService("Players").LocalPlayer.Character:FindFirstChild(tool).events.reset:FireServer()
+					game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Tool").events.reset:FireServer()
                      task.wait(0.3) 
                      ReelFinished:FireServer(100)
 					end
