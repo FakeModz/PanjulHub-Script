@@ -15,7 +15,10 @@ local Window = OrionLib:MakeWindow({Name = "Panjul Hub | Fisch", HidePremium = f
 local GuiService = game:GetService("GuiService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 local RepliStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService('Players')
 
+
+local LocalPlayers = Players.LocalPlayer
 
 local Fishing = Window:MakeTab({
 	Name = "Fishing",
@@ -144,14 +147,44 @@ print(value)
 end
 })
 
+local AutoShakeV2 = false
 
-Fishing:AddToggle({
-	Name = "Auto Reel",
+Items:AddToggle({
+	Name = "Auto Shake V2",
 	Default = false,
 	Callback = function(Value)
-		print(Value)
-	end    
+		AutoShakeV2 = Value
+
+		if AutoShakeV2 and not ShakeLoop then
+			ShakeLoop = true
+
+			task.spawn(function()
+				local PlayerGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+				
+				PlayerGui.DescendantAdded:Connect(function(Descendant)
+					if AutoShakeV2 and Descendant.Name == "button" and Descendant.Parent and Descendant.Parent.Name == "safezone" then
+						task.wait(0.1)
+						local ButtonPosition = Descendant.AbsolutePosition
+						local ButtonSize = Descendant.AbsoluteSize
+
+						local clickX = ButtonPosition.X + (ButtonSize.X / 2)
+						local clickY = ButtonPosition.Y + (ButtonSize.Y / 2)
+
+						local VirtualInputManager = game:GetService("VirtualInputManager")
+						VirtualInputManager:SendMouseButtonEvent(clickX, clickY, Enum.UserInputType.MouseButton1.Value, true, game, 1)
+						VirtualInputManager:SendMouseButtonEvent(clickX, clickY, Enum.UserInputType.MouseButton1.Value, false, game, 1)
+					end
+				end)
+
+				repeat task.wait() until not AutoShakeV2
+				ShakeLoop = false
+			end)
+		end
+	end
 })
+
+
+
 
 Fishing:AddToggle({
 	Name = "Auto Reel",
