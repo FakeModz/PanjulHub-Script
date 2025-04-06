@@ -13,7 +13,8 @@ local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jen
 local Window = OrionLib:MakeWindow({Name = "Panjul Hub | Fisch", HidePremium = false, SaveConfig = true, ConfigFolder = "PanjulHubZ"})
 
 --local GuiService = game:GetService("GuiService")
---local VirtualInputManager = game:GetService("VirtualInputManager")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+
 local Fishing = Window:MakeTab({
 	Name = "Fishing",
 	Icon = "rbxassetid://4483345998",
@@ -93,7 +94,40 @@ Fishing:AddToggle({
 	end
 })
 
+local autoShake = false
+local shakeLoop = false
 
+Fishing:AddToggle({
+	Name = "Auto Shake",
+	Default = false,
+	Callback = function(Value)
+		autoShake = Value
+		--local VirtualInputManager = game:GetService("VirtualInputManager")
+		if autoShake and not shakeLoop then
+			shakeLoop = true
+			task.spawn(function()
+				while autoShake do
+					task.wait(autoShakeDelay or 0.5)
+					local PlayerGUI = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+					local shakeUI = PlayerGUI:FindFirstChild("shakeui")
+					if shakeUI and shakeUI.Enabled then
+						local safezone = shakeUI:FindFirstChild("safezone")
+						if safezone then
+							local button = safezone:FindFirstChild("button")
+							if button and button:IsA("ImageButton") and button.Visible then
+								local pos = button.AbsolutePosition
+								local size = button.AbsoluteSize
+								VirtualInputManager:SendMouseButtonEvent(pos.X + size.X / 2, pos.Y + size.Y / 2, 0, true, game:GetService("Players").LocalPlayer, 0)
+                                VirtualInputManager:SendMouseButtonEvent(pos.X + size.X / 2, pos.Y + size.Y / 2, 0, false, game:GetService("Players").LocalPlayer, 0)
+							end
+						end
+					end
+				end
+				shakeLoop = false
+			end)
+		end
+	end
+})
 
 
 
@@ -101,8 +135,8 @@ Fishing:AddToggle({
 	Name = "Center Shake",
 	Default = false,
 	Callback = function(Value)
-	print(value)  
-		end
+print(value)    
+end
 })
 
 
