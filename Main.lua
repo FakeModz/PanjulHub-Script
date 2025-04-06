@@ -118,62 +118,8 @@ Fishing:AddToggle({
 })
 
 
-local AutoCastEnabled = false
-local InstantReelEnabled = false
-local InstantReelCoroutiner
 
-local ReelFinisher = ReplicatedStorage.events:WaitForChild("reelfinished") -- remote sesuai dengan kamu
 
-Fishing:AddToggle({
-	Name = "Instant Reel + Auto Cast",
-	Default = false,
-	Callback = function(Value)
-		AutoCastEnabled = Value
-		InstantReelEnabled = Value
-
-		if Value and not InstantReelCoroutiner then
-			InstantReelCoroutiner = coroutine.create(function()
-				while InstantReelEnabled do
-					RunService.RenderStepped:Wait()
-
-					local ReelUI = LocalPlayer.PlayerGui:FindFirstChild("reel")
-					if not ReelUI then continue end
-
-					local Bar = ReelUI:FindFirstChild("bar")
-					if not Bar then continue end
-
-					local ReelScript = Bar:FindFirstChild("reel")
-					if ReelScript and ReelScript.Enabled then
-						-- Trigger Instant Reel
-						ReelFinisher:FireServer(100)
-
-						-- Delay kecil agar animasi sempat terproses
-						task.wait(0.1)
-
-						-- Auto Cast setelah ikan ditarik
-						local Character = LocalPlayer.Character
-						if Character then
-							local Tool = Character:FindFirstChildOfClass("Tool")
-							if Tool then
-								local CastEvent = Tool:FindFirstChild("events") and Tool.events:FindFirstChild("cast")
-								if CastEvent then
-									CastEvent:FireServer(math.random(90, 99))
-									local Root = Character:FindFirstChild("HumanoidRootPart")
-									if Root then
-										Root.Anchored = false
-									end
-								end
-							end
-						end
-					end
-				end
-
-				InstantReelCoroutiner = nil
-			end)
-			coroutine.resume(InstantReelCoroutiner)
-		end
-	end
-})
 
 
 
@@ -293,7 +239,13 @@ Fishing:AddToggle({
 
 					local ReelScript = Bar:FindFirstChild("reel")
 					if ReelScript and ReelScript.Enabled then
+					local player = game.Players.LocalPlayer
+					local character = player.Character
+					local tool = character:FindFirstChildOfClass("Tool")
+					local castEvent = tool:FindFirstChild("events") and tool.events:FindFirstChild("cast")
 						ReelFinished:FireServer(100)
+						task.wait(0.3)
+						castEvent:FireServer(90)
 					end
 				end
 
