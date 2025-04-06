@@ -33,6 +33,7 @@ local RepliStorage = game:GetService("ReplicatedStorage")
 
 local LocalPlayer = Players.LocalPlayer
 local Utils = {}
+local CurrentTool: Tool? 
 	
 
 local Fishing = Window:MakeTab({
@@ -120,37 +121,10 @@ local autoShake = false
 local shakeLoop = false
 
 Fishing:AddToggle({
-	Name = "Auto Shake",
+	Name = "Auto Reel",
 	Default = false,
 	Callback = function(Value)
-		autoShake = Value
-		--local VirtualInputManager = game:GetService("VirtualInputManager")
-		if autoShake and not shakeLoop then
-			shakeLoop = true
-			task.spawn(function()
-				while autoShake do
-					task.wait(autoShakeDelay or 0.5)
-					local PlayerGUI = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
-					local shakeUI = PlayerGUI:FindFirstChild("shakeui")
-					if shakeUI and shakeUI.Enabled then
-						local safezone = shakeUI:FindFirstChild("safezone")
-						local Connect = safezone:WaitForChild("connect", 1)
-                	if Connect then
-					Connect.Enabled = false -- this script locks the size of the safezone, so we disable it.
-				end
-						if safezone then
-						safezone.Size = UDim2.fromOffset(0, 0)
-			        	safezone.Position = UDim2.fromScale(0.5, 0.5)
-			        	safezone.AnchorPoint = Vector2.new(0.5, 0.5) 
-						VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
-						VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
-							
-						end
-					end
-				end
-				shakeLoop = false
-			end)
-		end
+	print(" Hello world ") 
 	end
 })
 
@@ -162,7 +136,7 @@ local AutoShakeV2 = false
 local AutoShakeConnection
 
 Fishing:AddToggle({
-	Name = "Auto Shake V2",
+	Name = "Auto Shake",
 	Default = false,
 	Callback = function(Value)
 		AutoShakeV2 = Value
@@ -247,13 +221,39 @@ Fishing:AddToggle({
 	end    
 })
 
+local InstantBobConnection
+
 Fishing:AddToggle({
 	Name = "Instant Bobber",
 	Default = false,
 	Callback = function(Value)
-		print(Value)
-	end    
+		if Value then
+			InstantBobConnection = RunService.PostSimulation:Connect(function()
+					if CurrentTool then
+						local Bobber = CurrentTool:FindFirstChild("bobber")
+						if Bobber then
+							local Params = RaycastParams.new()
+							Params.FilterType = Enum.RaycastFilterType.Include
+							Params.FilterDescendantsInstances = { workspace.Terrain }
+
+							local RaycastResult = workspace:Raycast(Bobber.Position, -Vector3.yAxis * 100, Params)
+
+							if RaycastResult and RaycastResult.Instance:IsA("Terrain") then
+								Bobber:PivotTo(CFrame.new(RaycastResult.Position))
+							end
+						end
+					end
+				
+			end)
+		else
+			if InstantBobConnection then
+				InstantBobConnection:Disconnect()
+				InstantBobConnection = nil
+			end
+		end
+	end
 })
+
 
 --Items
 local DelayAutoSell = 5
