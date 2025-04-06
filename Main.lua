@@ -156,40 +156,36 @@ Fishing:AddToggle({
 
 
 
+
+
+local AutoShakeV2 = false
+local AutoShakeConnection
+
 Fishing:AddToggle({
 	Name = "Auto Shake V2",
 	Default = false,
 	Callback = function(Value)
-    
-    local Done = false
+		AutoShakeV2 = Value
 
-local AutoClickCoroutine = coroutine.create(function()
-		function Utils.MountShakeUI(ShakeUI: ScreenGui)
-			local SafeZone: Frame? = ShakeUI:WaitForChild("safezone", 5) :: Frame?
+		if Value then
+			if AutoShakeConnection then AutoShakeConnection:Disconnect() end
 
-			local function HandleButton(Button: ImageButton)
-				Button.Selectable = true -- For some reason this is false for the first 0.2 seconds.
+			local function MountShakeUI(ShakeUI)
+				local SafeZone = ShakeUI:WaitForChild("safezone", 5)
+				if not SafeZone then
+					warn("Unable to mount shake UI.")
+					return
+				end
 
-				if EnsureInstance(Button) then
+				local function HandleButton(Button)
+					Button.Selectable = true
 					GuiService.SelectedObject = Button
 				end
-			end
 
-			if not SafeZone then
-				print("Unable to mount shake UI.")
-				return
-			end
-
-			if Value then
-				local Connection = SafeZone.ChildAdded:Connect(function(Child)
+				local Connection
+				Connection = SafeZone.ChildAdded:Connect(function(Child)
 					if not Child:IsA("ImageButton") then return end
-					
-					if replicatesignal then
-						replicatesignal(Child.MouseButton1Click)
-						task.delay(0.05, function() Child:Destroy() end) -- the shake ui is a q buggy if you click it this fast so to avoid the visual glitch we destroy it
-						return
-					end
-					
+
 					local Done = false
 
 					task.spawn(function()
@@ -200,39 +196,44 @@ local AutoClickCoroutine = coroutine.create(function()
 					end)
 
 					task.spawn(function()
-						repeat
-							RunService.Heartbeat:Wait()
-						until (not Child) or (not Child:IsDescendantOf(SafeZone))
+						repeat RunService.Heartbeat:Wait()
+						until not Child:IsDescendantOf(SafeZone)
 						Done = true
 					end)
 				end)
 
-				if replicatesignal then return end
-				
-				repeat
-					RunService.Heartbeat:Wait()
-					if GuiService.SelectedObject and GuiService.SelectedObject:IsDescendantOf(SafeZone) then
-						VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
-						VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
-					end
-					RunService.Heartbeat:Wait()
-				until not SafeZone:IsDescendantOf(LocalPlayer.PlayerGui)
-				Connection:Disconnect()
-				GuiService.SelectedObject = nil
+				task.spawn(function()
+					repeat
+						RunService.Heartbeat:Wait()
+						if GuiService.SelectedObject and GuiService.SelectedObject:IsDescendantOf(SafeZone) then
+							VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
+							VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
+						end
+					until not SafeZone:IsDescendantOf(LocalPlayer.PlayerGui) or not AutoShakeV2
+					Connection:Disconnect()
+					GuiService.SelectedObject = nil
+				end)
 			end
+
+			AutoShakeConnection = LocalPlayer.PlayerGui.ChildAdded:Connect(function(Child)
+				if Child.Name == "shakeui" and Child:IsA("ScreenGui") then
+					MountShakeUI(Child)
+				end
+			end)
+
+			-- If already exists
+			local existing = LocalPlayer.PlayerGui:FindFirstChild("shakeui")
+			if existing then
+				MountShakeUI(existing)
+			end
+		else
+			if AutoShakeConnection then
+				AutoShakeConnection:Disconnect()
+				AutoShakeConnection = nil
+			end
+			GuiService.SelectedObject = nil
 		end
-
-		Collect(LocalPlayer.PlayerGui.ChildAdded:Connect(function(Child: Instance)
-			if Child.Name == "shakeui" and Child:IsA("ScreenGui") then
-				Utils.MountShakeUI(Child)
-			end
-		end))
-	end)
-
-    
-    
-    
-    end
+	end
 })
 
 
