@@ -216,6 +216,8 @@ Fishing:AddToggle({
 local InstantReelRunning = false
 local InstantReelCoroutine
 
+local ReelFinished = game:GetService("ReplicatedStorage"):WaitForChild("events"):WaitForChild("reelfinished ")
+
 Fishing:AddToggle({
 	Name = "Instant Reel",
 	Default = false,
@@ -235,7 +237,7 @@ Fishing:AddToggle({
 
 					local ReelScript = Bar:FindFirstChild("reel")
 					if ReelScript and ReelScript.Enabled then
-						Remotes.ReelFinished:FireServer(100)
+						ReelFinished:FireServer(100)
 					end
 				end
 
