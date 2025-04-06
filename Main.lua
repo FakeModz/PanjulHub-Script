@@ -14,6 +14,8 @@ local Window = OrionLib:MakeWindow({Name = "Panjul Hub | Fisch", HidePremium = f
 
 local GuiService = game:GetService("GuiService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
+local RepliStorage = game:GetService("ReplicatedStorage")
+
 
 local Fishing = Window:MakeTab({
 	Name = "Fishing",
@@ -112,14 +114,21 @@ Fishing:AddToggle({
 					local shakeUI = PlayerGUI:FindFirstChild("shakeui")
 					if shakeUI and shakeUI.Enabled then
 						local safezone = shakeUI:FindFirstChild("safezone")
+						local Connect = safezone:WaitForChild("connect", 3)
+                	if Connect then
+					Connect.Enabled = false -- this script locks the size of the safezone, so we disable it.
+				end
 						if safezone then
-							local button = safezone:FindFirstChild("button")
+						safezone.Size = UDim2.fromOffset(0, 0)
+			        	safezone.Position = UDim2.fromScale(0.5, 0.5)
+			        	safezone.AnchorPoint = Vector2.new(0.5, 0.5)
 							if button and button:IsA("ImageButton") and button.Visible then
 								local pos = button.AbsolutePosition
 								local size = button.AbsoluteSize
-								GuiService.SelectedObject = button
-                                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
-                                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
+								
+							local button = safezone:FindFirstChild("button")
+								VirtualInputManager:SendMouseButtonEvent(pos.X + size.X / 2, pos.Y + size.Y / 2, 0, true, game:GetService("Players").LocalPlayer, 0)
+                                VirtualInputManager:SendMouseButtonEvent(pos.X + size.X / 2, pos.Y + size.Y / 2, 0, false, game:GetService("Players").LocalPlayer, 0)
 							end
 						end
 					end
