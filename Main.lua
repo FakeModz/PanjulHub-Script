@@ -94,21 +94,50 @@ Fishing:AddToggle({
 })
 
 local AutoShake = false
+local ShakeLoop = false
 
-Fishing:AddToggle({
+Items:AddToggle({
 	Name = "Auto Shake",
 	Default = false,
 	Callback = function(Value)
 		AutoShake = Value
-		if AutoShake then
+
+		if Value and not ShakeLoop then
+			ShakeLoop = true
 			task.spawn(function()
-				while AutoShake do
-					task.wait(0.8) -- kamu bisa ubah speed delay shake di sini
-					pcall(function()
-						game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):InvokeServer("Shake")
+				local RunService = game:GetService("RunService")
+				local GuiService = game:GetService("GuiService")
+				local VirtualInputManager = game:GetService("VirtualInputManager")
+				local LocalPlayer = game:GetService("Players").LocalPlayer
+
+				local function HandleShake()
+					local Connection
+					Connection = SafeZone.ChildAdded:Connect(function(Child)
+						if not Child:IsA("ImageButton") then return end
+
+						if replicatesignal then
+							replicatesignal(Child.MouseButton1Click)
+							task.delay(0.05, function() Child:Destroy() end)
+						end
 					end)
+
+					while AutoShake and SafeZone:IsDescendantOf(LocalPlayer.PlayerGui) do
+						RunService.Heartbeat:Wait()
+						if GuiService.SelectedObject and GuiService.SelectedObject:IsDescendantOf(SafeZone) then
+							VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
+							VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
+						end
+					end
+
+					if Connection then Connection:Disconnect() end
+					GuiService.SelectedObject = nil
+					ShakeLoop = false
 				end
+
+				HandleShake()
 			end)
+		elseif not Value then
+			ShakeLoop = false
 		end
 	end
 })
