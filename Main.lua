@@ -110,23 +110,14 @@ Fishing:AddToggle({
 						end
 					end
 
-					task.wait(0.5) -- delay antar cast
+					task.wait(0.3) -- delay antar cast
 				end
 			end)
 		end
 	end
 })
 
-local autoShake = false
-local shakeLoop = false
 
-Fishing:AddToggle({
-	Name = "Auto Reel",
-	Default = false,
-	Callback = function(Value)
-	print(" Hello world ") 
-	end
-})
 
 
 
@@ -233,6 +224,7 @@ Fishing:AddToggle({
 					if not ReelUI then continue end
 
 					local Bar = ReelUI:FindFirstChild("bar")
+					Bar.Visible = false
 					if not Bar then continue end
 
 					local ReelScript = Bar:FindFirstChild("reel")
@@ -282,6 +274,23 @@ Fishing:AddToggle({
 			InstantBobConnection = nil
 		end
 	end
+})
+
+Fishing:AddToggle({
+	Name = "Center Shake",
+	Default = false,
+	Callback = function(Value)
+		local Connect = SafeZone:WaitForChild("connect", 1)
+
+				if Connect then
+					Connect.Enabled = false -- this script locks the size of the safezone, so we disable it.
+				end
+
+				SafeZone.Size = UDim2.fromOffset(0, 0)
+				SafeZone.Position = UDim2.fromScale(0.5, 0.5)
+				SafeZone.AnchorPoint = Vector2.new(0.5, 0.5)
+			end
+	end    
 })
 
 
