@@ -75,7 +75,7 @@ Fishing:AddToggle({
 })
 
 --Items
-DelayAutoSell = 5
+local DelayAutoSell = 5
 
 Items:AddToggle({
 	Name = "Auto Sell",
