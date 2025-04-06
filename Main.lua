@@ -62,9 +62,37 @@ Fishing:AddToggle({
 	Name = "Auto Cast",
 	Default = false,
 	Callback = function(Value)
-		print(Value)
-	end    
+		AutoCasting = Value -- boolean global
+
+		if AutoCasting then
+			task.spawn(function()
+				while AutoCasting do
+					local player = game.Players.LocalPlayer
+					local character = player.Character
+
+					if character then
+						local tool = character:FindFirstChildOfClass("Tool")
+						if tool and not tool:FindFirstChild("bobber") then
+							local castEvent = tool:FindFirstChild("events") and tool.events:FindFirstChild("cast")
+							if castEvent then
+								local power = math.random(90, 99)
+								castEvent:FireServer(power)
+
+								local root = character:FindFirstChild("HumanoidRootPart")
+								if root then
+									root.Anchored = false
+								end
+							end
+						end
+					end
+
+					task.wait(1) -- delay antar cast
+				end
+			end)
+		end
+	end
 })
+
 
 Fishing:AddToggle({
 	Name = "Auto Reel",
@@ -114,8 +142,8 @@ end
 
 local SliderAutoSell = Items:AddSlider({
 	Name = "Auto Sell Delay",
-	Min = 1,
-	Max = 120,
+	Min = 0,
+	Max = 20,
 	Default = 5,
 	Color = Color3.fromRGB(255,255,255),
 	Increment = 1,
