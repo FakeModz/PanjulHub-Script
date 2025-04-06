@@ -300,7 +300,7 @@ Fishing:AddToggle({
 local player = Players.LocalPlayer
 local character = player.Character
 local backpack = player:WaitForChild("Backpack")
-local equipEvent = ReplicatedStorage.packages.Net:FindFirstChild("RE/Backpack/Equip")
+local equipEvent = RepliStorage.packages.Net:FindFirstChild("RE/Backpack/Equip")
 
 -- Cari tool (rod) dari Backpack
 local tool = backpack:FindFirstChildOfClass("Tool")
@@ -355,7 +355,7 @@ local SliderAutoSell = Items:AddSlider({
 	ValueName = "Auto Sell Delay",
 	Callback = function(Value)
 	DelayAutoSell = Value
-	
+	print("aww") 
 	end    
 })
 SliderAutoSell:Set(5) 
