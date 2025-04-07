@@ -251,8 +251,7 @@ Fishing:AddToggle({
 					local ReelScript = Bar:FindFirstChild("reel")
 					if ReelScript and ReelScript.Enabled then
                     
-                    ReelBind:Fire()
-                    ReelFinished:FireServer(100)
+                    
                     ReelFinished:FireServer(100)
                    
                
