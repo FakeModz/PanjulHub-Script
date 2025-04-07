@@ -368,13 +368,11 @@ Fishing:AddToggle({
 					local values = tool:FindFirstChild("values")
 					if values and values:FindFirstChild("bite") and values:FindFirstChild("casted") then
 						if values.bite.Value == true and values.casted.Value == true then
+							-- Hindari spam requip
 							if tick() - lastRecastTime > 0.8 then
-								-- Tunggu proses reel benar-benar selesai
-								task.wait(0.2)
-
 								local toolName = tool.Name
 								tool.Parent = backpack
-								task.wait(0.2)
+								task.wait(0.15)
 
 								local toolInBackpack
 								for _, item in pairs(backpack:GetChildren()) do
@@ -399,7 +397,6 @@ Fishing:AddToggle({
 		end
 	end
 })
-
 
 
 
