@@ -250,9 +250,6 @@ Fishing:AddToggle({
                   
 					local ReelScript = Bar:FindFirstChild("reel")
 					if ReelScript and ReelScript.Enabled then
-                    
-                    
-                    
                     ReelFinished:FireServer(100)
                     --Bar:Destroy()
                
@@ -391,8 +388,7 @@ Fishing:AddToggle({
 
 								if toolInBackpack then
 									equipEvent:FireServer(toolInBackpack)
-								  Values.bite:Destroy()
-								Values.casted:Destroy()
+								  
 									lastRecastTime = tick()
 								end
 							end
