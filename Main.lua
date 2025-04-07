@@ -167,7 +167,8 @@ Fishing:AddToggle({
 
 					task.spawn(function()
 						repeat
-							RunService.Heartbeat:Wait()
+						RunService.RenderStepped:Wait()
+						--	RunService.Heartbeat:Wait()
 						--	task.wait(0.3)
 							HandleButton(Child)
 						until Done
@@ -175,7 +176,8 @@ Fishing:AddToggle({
 
 					task.spawn(function()
 						repeat 
-                        RunService.Heartbeat:Wait()
+						RunService.RenderStepped:Wait()
+                        --RunService.Heartbeat:Wait()
 						--task.wait(0.3) 
 						until not Child:IsDescendantOf(SafeZone)
 						Done = true
@@ -184,7 +186,8 @@ Fishing:AddToggle({
 
 				task.spawn(function()
 					repeat
-					RunService.Heartbeat:Wait()
+					RunService.RenderStepped:Wait()
+					--RunService.Heartbeat:Wait()
 					--task.wait(0.3) 
 						if GuiService.SelectedObject and GuiService.SelectedObject:IsDescendantOf(SafeZone) then
 							VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
