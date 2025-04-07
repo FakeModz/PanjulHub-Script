@@ -334,6 +334,7 @@ Fishing:AddToggle({
 
 
 
+
 local InstantCatchRunning = false
 local InstantCatchCoroutine
 
@@ -342,34 +343,34 @@ Fishing:AddToggle({
 	Default = false,
 	Callback = function(Value)
 		InstantCatchRunning = Value
-local player = Players.LocalPlayer
-local backpack = player:WaitForChild("Backpack")
-local equipEvent = RepliStorage.packages.Net:FindFirstChild("RE/Backpack/Equip")
+
+		local player = Players.LocalPlayer
+		local backpack = player:WaitForChild("Backpack")
+		local equipEvent = RepliStorage.packages.Net:FindFirstChild("RE/Backpack/Equip")
+
 		if Value and not InstantCatchCoroutine then
 			InstantCatchCoroutine = coroutine.create(function()
-
 				while InstantCatchRunning do
 					RunService.RenderStepped:Wait()
-						local tool = player.Character:FindFirstChildOfClass("Tool")
-						local biten = tool:FindFirstChild("values")
-	if biten
-		and biten:FindFirstChild("bite")
-		and biten.bite.Value == true
-		and biten:FindFirstChild("casted")
-		and biten.casted.Value == true
-	then
-						
-							local toolName = tool.Name
-							tool.Parent = backpack
-							task.wait(0.1)
-							local toolInBackpack = backpack:FindFirstChild(toolName)
-							if toolInBackpack then
-								equipEvent:FireServer(toolInBackpack)
-							end
+
+					local tool = player.Character:FindFirstChildOfClass("Tool")
+					if not tool then continue end
+
+					local biten = tool:FindFirstChild("values")
+					if biten
+						and biten:FindFirstChild("bite")
+						and biten.bite.Value == true
+						and biten:FindFirstChild("casted")
+						and biten.casted.Value == true
+					then
+						local toolName = tool.Name
+						tool.Parent = backpack
+						task.wait(0.1)
+						local toolInBackpack = backpack:FindFirstChild(toolName)
+						if toolInBackpack then
+							equipEvent:FireServer(toolInBackpack)
 						end
 					end
-
-					
 				end
 
 				InstantCatchCoroutine = nil
@@ -378,6 +379,8 @@ local equipEvent = RepliStorage.packages.Net:FindFirstChild("RE/Backpack/Equip")
 		end
 	end
 })
+
+
 
 
 
