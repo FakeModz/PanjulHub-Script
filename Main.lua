@@ -257,7 +257,7 @@ Fishing:AddToggle({
                    task.wait(0.3)
                    -- Bar.Visible = false
                     Bar:Destroy()
-                    Values:Destroy()
+                    --Values:Destroy()
                     
 					end
 				end
