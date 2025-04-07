@@ -1,4 +1,4 @@
---local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/FakeModz/PanjulHub-Script/refs/heads/main/UI')))()
+ --local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/FakeModz/PanjulHub-Script/refs/heads/main/UI')))()
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
 --Roblox Client
 --ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -110,7 +110,7 @@ Fishing:AddToggle({
 						end
 					end
 
-					task.wait(0.3) -- delay antar cast
+					task.wait(0.03) -- delay antar cast
 				end
 			end)
 		end
@@ -119,6 +119,98 @@ Fishing:AddToggle({
 
 
 
+local AutoShakeV1 = false
+local AutoShakeConnection1
+
+Fishing:AddToggle({
+	Name = "Auto Shake V1",
+	Default = false,
+	Callback = function(Value)
+		AutoShakeV1 = Value
+
+		if Value then
+			if AutoShakeConnection1 then AutoShakeConnection1:Disconnect() end
+
+			local function MountShakeUI(ShakeUI)
+				local SafeZone = ShakeUI:WaitForChild("safezone", 5)
+				if not SafeZone then
+					warn("Unable to mount shake UI.")
+					return
+				end
+
+				-- Pusatkan tombol shake
+				--local Connect = SafeZone:WaitForChild("connect", 1)
+			--	if Connect then
+			--	Connect.Enabled = false
+		--		end
+			--	SafeZone.Size = UDim2.fromOffset(0, 0)
+			--	SafeZone.Position = UDim2.fromScale(0.5, 0.5)
+			--	SafeZone.AnchorPoint = Vector2.new(0.5, 0.5)
+
+				local function HandleButton(Button)
+					Button.Selectable = true
+					GuiService.SelectedObject = Button
+				end
+
+				local Connection
+				Connection = SafeZone.ChildAdded:Connect(function(Child)
+					if not Child:IsA("ImageButton") then return end
+
+					local Done = false
+
+					task.spawn(function()
+						repeat
+						--RunService.RenderStepped:Wait()
+						--RunService.Heartbeat:Wait()
+							task.wait(0.03)
+							HandleButton(Child)
+						until Done
+					end)
+
+					task.spawn(function()
+						repeat 
+						--RunService.RenderStepped:Wait()
+                        --RunService.Heartbeat:Wait()
+						task.wait(0.03) 
+						until not Child:IsDescendantOf(SafeZone)
+						Done = true
+					end)
+				end)
+
+				task.spawn(function()
+					repeat
+					--RunService.RenderStepped:Wait()
+					--RunService.Heartbeat:Wait()
+					task.wait(0.03) 
+						if GuiService.SelectedObject and GuiService.SelectedObject:IsDescendantOf(SafeZone) then
+							VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
+							VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
+						end
+					until not SafeZone:IsDescendantOf(LocalPlayer.PlayerGui) or not AutoShakeV2
+					Connection:Disconnect()
+					GuiService.SelectedObject = nil
+				end)
+			end
+
+			AutoShakeConnection1 = LocalPlayer.PlayerGui.ChildAdded:Connect(function(Child)
+				if Child.Name == "shakeui" and Child:IsA("ScreenGui") then
+					MountShakeUI(Child)
+				end
+			end)
+
+			local existing = LocalPlayer.PlayerGui:FindFirstChild("shakeui")
+			if existing then
+				MountShakeUI(existing)
+			end
+		else
+			if AutoShakeConnection1 then
+				AutoShakeConnection1:Disconnect()
+				AutoShakeConnection1 = nil
+			end
+			GuiService.SelectedObject = nil
+		end
+	end
+})
 
 
 
@@ -130,7 +222,7 @@ local AutoShakeV2 = false
 local AutoShakeConnection
 
 Fishing:AddToggle({
-	Name = "Auto Shake",
+	Name = "Auto Shake V2",
 	Default = false,
 	Callback = function(Value)
 		AutoShakeV2 = Value
@@ -167,18 +259,18 @@ Fishing:AddToggle({
 
 					task.spawn(function()
 						repeat
-						--RunService.RenderStepped:Wait()
+						RunService.RenderStepped:Wait()
 						--	RunService.Heartbeat:Wait()
-							task.wait(0.03)
+							--task.wait(0.03)
 							HandleButton(Child)
 						until Done
 					end)
 
 					task.spawn(function()
 						repeat 
-						--RunService.RenderStepped:Wait()
+						RunService.RenderStepped:Wait()
                         --RunService.Heartbeat:Wait()
-						task.wait(0.03) 
+						---task.wait(0.03) 
 						until not Child:IsDescendantOf(SafeZone)
 						Done = true
 					end)
@@ -186,9 +278,9 @@ Fishing:AddToggle({
 
 				task.spawn(function()
 					repeat
-					--RunService.RenderStepped:Wait()
+					RunService.RenderStepped:Wait()
 					--RunService.Heartbeat:Wait()
-					task.wait(0.03) 
+					--task.wait(0.03) 
 						if GuiService.SelectedObject and GuiService.SelectedObject:IsDescendantOf(SafeZone) then
 							VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
 							VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
