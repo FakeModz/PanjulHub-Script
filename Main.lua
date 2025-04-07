@@ -1,4 +1,4 @@
---local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/FakeModz/PanjulHub-Script/refs/heads/main/UI')))()
+ --local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/FakeModz/PanjulHub-Script/refs/heads/main/UI')))()
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
 --Roblox Client
 --ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -241,7 +241,10 @@ Fishing:AddToggle({
                     task.wait(0.1)
 					local ReelUI = LocalPlayer.PlayerGui:FindFirstChild("reel")
 					if not ReelUI then continue end
+                   local tool = player.Character and player.Character:FindFirstChildOfClass("Tool")
+					if not tool then continue end
 
+					local values = tool:FindFirstChild("values")
 					local Bar = ReelUI:FindFirstChild("bar") 
 					if not Bar then continue end
                     Bar.Visible = false
@@ -253,6 +256,7 @@ Fishing:AddToggle({
                     --RunService.RenderStepped:Wait()
                     task.wait(0.3)
                     Bar:Destroy()
+                    Values:Destroy()
                     
 					end
 				end
@@ -377,7 +381,7 @@ Fishing:AddToggle({
 								local toolName = tool.Name
 								tool.Parent = backpack
 								task.wait(0.15)
-
+                                
 								local toolInBackpack
 								for _, item in pairs(backpack:GetChildren()) do
 									if item:IsA("Tool") and item.Name:lower():find("rod") then
