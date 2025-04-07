@@ -245,7 +245,7 @@ Fishing:AddToggle({
 					if not Bar then continue end
 
 					-- Hapus bar dari UI
-					Bar:Destroy()
+					Bar.Visible = false
 
 					-- Coba akses reel script sebelum dihancurkan (kalau perlu)
 					local ReelScript = Bar:FindFirstChild("reel")
@@ -253,6 +253,8 @@ Fishing:AddToggle({
 						ReelBind:Fire()
 						ReelFinished:FireServer(100)
 						ReelFinished:FireServer(100)
+						task.wait(0.1)
+						Bar:Destroy()
 					end
 				end
 
