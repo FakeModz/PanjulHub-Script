@@ -1,3 +1,4 @@
+
 --local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/FakeModz/PanjulHub-Script/refs/heads/main/UI')))()
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
 --Roblox Client
@@ -251,8 +252,8 @@ local player = Players.LocalPlayer
                     ReelFinished:FireServer(100)
                     ReelFinished:FireServer(100)
                     ----RunService.RenderStepped:Wait()
-                    task.wait(0.1)
-                    ReelScript:Destroy()
+                    
+                   -- ReelScript:Destroy()
                     
 					end
 				end
