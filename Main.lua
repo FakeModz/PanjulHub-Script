@@ -99,7 +99,7 @@ Fishing:AddToggle({
 						if tool and not tool:FindFirstChild("bobber") then
 							local castEvent = tool:FindFirstChild("events") and tool.events:FindFirstChild("cast")
 							if castEvent then
-								local power = math.random(90, 100)
+								local power = math.random(90, 99)
 								castEvent:FireServer(power)
 
 								local root = character:FindFirstChild("HumanoidRootPart")
@@ -167,16 +167,16 @@ Fishing:AddToggle({
 
 					task.spawn(function()
 						repeat
-							--RunService.Heartbeat:Wait()
-							task.wait(0.3)
+							RunService.Heartbeat:Wait()
+						--	task.wait(0.3)
 							HandleButton(Child)
 						until Done
 					end)
 
 					task.spawn(function()
 						repeat 
-                        ---RunService.Heartbeat:Wait()
-						task.wait(0.3) 
+                        RunService.Heartbeat:Wait()
+						--task.wait(0.3) 
 						until not Child:IsDescendantOf(SafeZone)
 						Done = true
 					end)
@@ -184,8 +184,8 @@ Fishing:AddToggle({
 
 				task.spawn(function()
 					repeat
-					----	RunService.Heartbeat:Wait()
-					task.wait(0.3)
+					RunService.Heartbeat:Wait()
+					--task.wait(0.3) 
 						if GuiService.SelectedObject and GuiService.SelectedObject:IsDescendantOf(SafeZone) then
 							VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
 							VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
@@ -279,7 +279,7 @@ Fishing:AddToggle({
 						Params.FilterType = Enum.RaycastFilterType.Include
 						Params.FilterDescendantsInstances = { workspace.Terrain }
 
-						local RayResult = workspace:Raycast(Bobber.Position, Vector3.new(0, -1, 0), Params)
+						local RayResult = workspace:Raycast(Bobber.Position, Vector3.new(0, -10, 0), Params)
 						if RayResult and RayResult.Instance:IsA("Terrain") then
 							Bobber:PivotTo(CFrame.new(RayResult.Position))
 						end
