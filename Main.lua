@@ -346,7 +346,7 @@ local InstantCatchRunning = false
 local InstantCatchCoroutine
 
 Fishing:AddToggle({
-	Name = "Instant Catch [BETA]",
+	Name = "Instant Catch [IMPROVED]",
 	Default = false,
 	Callback = function(Value)
 		InstantCatchRunning = Value
@@ -357,36 +357,40 @@ Fishing:AddToggle({
 
 		if Value and not InstantCatchCoroutine then
 			InstantCatchCoroutine = coroutine.create(function()
-				local lastRecastTime = 0
+				local lastCatchTime = tick()
+				local function isRod(tool)
+					return tool and tool:IsA("Tool") and tool:FindFirstChild("reel") and tool:FindFirstChild("cast")
+				end
 
 				while InstantCatchRunning do
 					RunService.RenderStepped:Wait()
-
 					local tool = player.Character and player.Character:FindFirstChildOfClass("Tool")
-					if not tool then continue end
-
-					local values = tool:FindFirstChild("values")
-					if values and values:FindFirstChild("bite") and values:FindFirstChild("casted") then
-						if values.bite.Value == true and values.casted.Value == true then
-							-- Hindari spam requip
-							if tick() - lastRecastTime > 0.8 then
-								local toolName = tool.Name
-								tool.Parent = backpack
-								task.wait(0.15)
-
-								local toolInBackpack
-								for _, item in pairs(backpack:GetChildren()) do
-									if item:IsA("Tool") and item.Name:lower():find("rod") then
-										toolInBackpack = item
-										break
-									end
-								end
-
-								if toolInBackpack then
-									equipEvent:FireServer(toolInBackpack)
-									lastRecastTime = tick()
-								end
+					if tool and isRod(tool) then
+						local values = tool:FindFirstChild("values")
+						if values
+							and values:FindFirstChild("bite")
+							and values.bite.Value == true
+							and values:FindFirstChild("casted")
+							and values.casted.Value == true
+						then
+							-- Catch detected
+							local toolName = tool.Name
+							tool.Parent = backpack
+							task.wait(0.1)
+							local toolInBackpack = backpack:FindFirstChild(toolName)
+							if toolInBackpack and isRod(toolInBackpack) then
+								equipEvent:FireServer(toolInBackpack)
+								lastCatchTime = tick()
 							end
+						end
+					end
+
+					-- Auto recast if idle more than 4 seconds
+					if tick() - lastCatchTime > 4 then
+						local tool = backpack:FindFirstChildWhichIsA("Tool")
+						if tool and isRod(tool) then
+							equipEvent:FireServer(tool)
+							lastCatchTime = tick()
 						end
 					end
 				end
@@ -397,7 +401,6 @@ Fishing:AddToggle({
 		end
 	end
 })
-
 
 
 
