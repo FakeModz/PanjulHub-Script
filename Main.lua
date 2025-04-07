@@ -252,7 +252,7 @@ Fishing:AddToggle({
 					if ReelScript and ReelScript.Enabled then
                     
                     
-                    Bar.Visible = false
+                    
                     ReelFinished:FireServer(100)
                     Bar:Destroy()
                
