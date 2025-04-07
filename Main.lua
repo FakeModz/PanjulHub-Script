@@ -222,43 +222,42 @@ Fishing:AddToggle({
 local InstantReelRunning = false
 local InstantReelCoroutine
 
-local ReelFinished = RepliStorage:WaitForChild("events"):WaitForChild("reelfinished")
-local ReelBind = RepliStorage:WaitForChild("events"):WaitForChild("bindable_reel_finished")
+local ReelFinished = game:GetService("ReplicatedStorage"):WaitForChild("events"):WaitForChild("reelfinished")
+local ReelBind = game:GetService("ReplicatedStorage"):WaitForChild("events"):WaitForChild("bindable_reel_finished")
 
 Fishing:AddToggle({
 	Name = "Instant Reel",
 	Default = false,
 	Callback = function(Value)
 		InstantReelRunning = Value
-		local player = LocalPlayer
+local player = Players.LocalPlayer
 		local backpack = player:WaitForChild("Backpack")
 		local equipEvent = RepliStorage.packages.Net:FindFirstChild("RE/Backpack/Equip")
 
 		if Value and not InstantReelCoroutine then
 			InstantReelCoroutine = coroutine.create(function()
 				while InstantReelRunning do
-					task.wait(0.1)
+					--RunService.RenderStepped:Wait()
+                    task.wait(0.1)
 					local ReelUI = LocalPlayer.PlayerGui:FindFirstChild("reel")
 					if not ReelUI then continue end
 
-					local Bar = ReelUI:FindFirstChild("bar")
+					local Bar = ReelUI:FindFirstChild("bar") 
 					if not Bar then continue end
-
-					-- Hapus bar dari UI
-					Bar.Visible = false
-
-					-- Coba akses reel script sebelum dihancurkan (kalau perlu)
+                    Bar.Visible = false
 					local ReelScript = Bar:FindFirstChild("reel")
 					if ReelScript and ReelScript.Enabled then
-						ReelBind:Fire()
-						ReelFinished:FireServer(100)
-						ReelFinished:FireServer(100)
-						task.wait(0.1)
-						Bar:Destroy()
+                    ReelBind:Fire()
+                    ReelFinished:FireServer(100)
+                    ReelFinished:FireServer(100)
+                    ----RunService.RenderStepped:Wait()
+                    task.wait(0.1)
+                    ReelScript:Destroy()
+                    
 					end
 				end
 
-				-- Reset coroutine saat toggle mati
+				-- Bersihkan saat loop selesai
 				InstantReelCoroutine = nil
 			end)
 
@@ -266,7 +265,6 @@ Fishing:AddToggle({
 		end
 	end
 })
-
 
 
 local InstantBobConnection
