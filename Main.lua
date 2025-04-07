@@ -343,12 +343,10 @@ Items:AddTextbox({
 	Default = "1",
 	TextDisappear = false,
 	Callback = function(Value)
-		local num = tonumber(Value)
-		if num then
-			DelayAutoSell = num
+		local numnum = tonumber(Value)
+		if nummum then
+			DelayAutoSell = numnum
 			print("Delay Set To : " .. DelayAutoSell .. " Seconds")
-		else
-			print("Not valid number!")
 		end
 	end
 })
@@ -382,17 +380,11 @@ end
 
 ---Trade Function---
 local PlayerNames = {}
-for _, plr in pairs(Players:GetPlayers()) do
-	if plr ~= Players.LocalPlayer then
-		table.insert(PlayerNames, plr.Name)
-	end
-end
-
 local SelectedPlayer
 
 Items:AddDropdown({
 	Name = "Player to Trade",
-	Default = "",
+	Default = "None",
 	Options = PlayerNames,
 	Callback = function(Value)
 		SelectedPlayer = Value
