@@ -231,7 +231,7 @@ Fishing:AddToggle({
 			InstantReelCoroutine = coroutine.create(function()
 				while InstantReelRunning do
 					--RunService.RenderStepped:Wait()
-                    task.wait(0.7)
+                    task.wait(0.03)
 					local ReelUI = LocalPlayer.PlayerGui:FindFirstChild("reel")
 					if not ReelUI then continue end
 
@@ -368,7 +368,7 @@ Fishing:AddToggle({
 					then
 						local toolName = tool.Name
 						tool.Parent = backpack
-						task.wait(1)
+						task.wait(0.05)
 						local toolInBackpack = backpack:FindFirstChild(toolName)
 						if toolInBackpack then
 							equipEvent:FireServer(toolInBackpack)
