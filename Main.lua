@@ -222,38 +222,41 @@ Fishing:AddToggle({
 local InstantReelRunning = false
 local InstantReelCoroutine
 
-local ReelFinished = game:GetService("ReplicatedStorage"):WaitForChild("events"):WaitForChild("reelfinished")
-local ReelBind = game:GetService("ReplicatedStorage"):WaitForChild("events"):WaitForChild("bindable_reel_finished")
+local ReelFinished = RepliStorage:WaitForChild("events"):WaitForChild("reelfinished")
+local ReelBind = RepliStorage:WaitForChild("events"):WaitForChild("bindable_reel_finished")
 
 Fishing:AddToggle({
 	Name = "Instant Reel",
 	Default = false,
 	Callback = function(Value)
 		InstantReelRunning = Value
-local player = Players.LocalPlayer
+		local player = LocalPlayer
 		local backpack = player:WaitForChild("Backpack")
 		local equipEvent = RepliStorage.packages.Net:FindFirstChild("RE/Backpack/Equip")
 
 		if Value and not InstantReelCoroutine then
 			InstantReelCoroutine = coroutine.create(function()
 				while InstantReelRunning do
-					--RunService.RenderStepped:Wait()
-                    task.wait(0.1)
+					task.wait(0.1)
 					local ReelUI = LocalPlayer.PlayerGui:FindFirstChild("reel")
 					if not ReelUI then continue end
 
-					local Bar = ReelUI:FindFirstChild("bar") 
+					local Bar = ReelUI:FindFirstChild("bar")
 					if not Bar then continue end
-                    Bar.Visible = false
+
+					-- Hapus bar dari UI
+					Bar:Destroy()
+
+					-- Coba akses reel script sebelum dihancurkan (kalau perlu)
 					local ReelScript = Bar:FindFirstChild("reel")
 					if ReelScript and ReelScript.Enabled then
-                    ReelBind:Fire()
-                    ReelFinished:FireServer(100)
-                    ReelFinished:FireServer(100)
+						ReelBind:Fire()
+						ReelFinished:FireServer(100)
+						ReelFinished:FireServer(100)
 					end
 				end
 
-				-- Bersihkan saat loop selesai
+				-- Reset coroutine saat toggle mati
 				InstantReelCoroutine = nil
 			end)
 
@@ -261,6 +264,7 @@ local player = Players.LocalPlayer
 		end
 	end
 })
+
 
 
 local InstantBobConnection
