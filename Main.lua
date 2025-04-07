@@ -312,6 +312,65 @@ Fishing:AddToggle({
 })
 
 
+local InstantCatchRunning = false
+local InstantCatchCoroutine
+
+local player = game.Players.LocalPlayer
+local backpack = player:WaitForChild("Backpack")
+local rs = game:GetService("ReplicatedStorage")
+local equipEvent = rs.packages.Net:WaitForChild("RE/Backpack/Equip")
+local reelfinished = rs.events:WaitForChild("reelfinished")
+
+Fishing:AddToggle({
+	Name = "Instant Catch",
+	Default = false,
+	Callback = function(Value)
+		InstantCatchRunning = Value
+
+		if Value and not InstantCatchCoroutine then
+			InstantCatchCoroutine = coroutine.create(function()
+				while InstantCatchRunning do
+					game:GetService("RunService").RenderStepped:Wait()
+
+					-- Cek Reel UI
+					local reelUI = player.PlayerGui:FindFirstChild("reel")
+					if reelUI and reelUI:FindFirstChild("bar") and reelUI.bar:FindFirstChild("reel") then
+						local scriptReel = reelUI.bar.reel
+						if scriptReel.Enabled then
+							-- Instant Reel
+							reelfinished:FireServer(100)
+							task.wait(0.05)
+							reelfinished:FireServer(100)
+							
+							-- Tunggu sebentar sebelum Requip Rod
+							task.wait(0.3)
+
+							-- Instant Catch via Requip Rod
+							local tool = player.Character and player.Character:FindFirstChildOfClass("Tool")
+							if tool and tool:FindFirstChild("values") then
+								local values = tool.values
+								if values:FindFirstChild("bite") and values:FindFirstChild("casted")
+								   and values.bite.Value and values.casted.Value then
+									local toolName = tool.Name
+									tool.Parent = backpack
+									task.wait(0.15)
+									local toolInBackpack = backpack:FindFirstChild(toolName)
+									if toolInBackpack then
+										equipEvent:FireServer(toolInBackpack)
+									end
+								end
+							end
+						end
+					end
+				end
+
+				InstantCatchCoroutine = nil
+			end)
+
+			coroutine.resume(InstantCatchCoroutine)
+		end
+	end
+})
 
 
 local InstantReelRunning = false
