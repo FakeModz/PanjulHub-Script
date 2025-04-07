@@ -253,7 +253,7 @@ Fishing:AddToggle({
                     
                     
                     ReelFinished:FireServer(100)
-                   
+                   Bar:Destroy()
                
                     
 					end
@@ -390,7 +390,8 @@ Fishing:AddToggle({
 
 								if toolInBackpack then
 									equipEvent:FireServer(toolInBackpack)
-								
+								  Values.bite:Destroy()
+								Values.casted:Destroy()
 									lastRecastTime = tick()
 								end
 							end
