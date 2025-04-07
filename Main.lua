@@ -1,4 +1,4 @@
- --local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/FakeModz/PanjulHub-Script/refs/heads/main/UI')))()
+  --local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/FakeModz/PanjulHub-Script/refs/heads/main/UI')))()
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
 --Roblox Client
 --ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -393,7 +393,8 @@ Fishing:AddToggle({
 
 								if toolInBackpack then
 									equipEvent:FireServer(toolInBackpack)
-									Values:Destroy()
+									Values.bite:Destroy()
+									Values.casted:Destroy()
 									lastRecastTime = tick()
 								end
 							end
