@@ -1,4 +1,4 @@
- --local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/FakeModz/PanjulHub-Script/refs/heads/main/UI')))()
+--local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/FakeModz/PanjulHub-Script/refs/heads/main/UI')))()
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
 --Roblox Client
 --ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -110,7 +110,7 @@ Fishing:AddToggle({
 						end
 					end
 
-					task.wait(0.1) -- delay antar cast
+					task.wait(0.3) -- delay antar cast
 				end
 			end)
 		end
@@ -167,18 +167,18 @@ Fishing:AddToggle({
 
 					task.spawn(function()
 						repeat
-						RunService.RenderStepped:Wait()
+						--RunService.RenderStepped:Wait()
 						--	RunService.Heartbeat:Wait()
-						--	task.wait(0.3)
+							task.wait(0.03)
 							HandleButton(Child)
 						until Done
 					end)
 
 					task.spawn(function()
 						repeat 
-						RunService.RenderStepped:Wait()
+						--RunService.RenderStepped:Wait()
                         --RunService.Heartbeat:Wait()
-						--task.wait(0.3) 
+						task.wait(0.03) 
 						until not Child:IsDescendantOf(SafeZone)
 						Done = true
 					end)
@@ -186,9 +186,9 @@ Fishing:AddToggle({
 
 				task.spawn(function()
 					repeat
-					RunService.RenderStepped:Wait()
+					--RunService.RenderStepped:Wait()
 					--RunService.Heartbeat:Wait()
-					--task.wait(0.3) 
+					task.wait(0.03) 
 						if GuiService.SelectedObject and GuiService.SelectedObject:IsDescendantOf(SafeZone) then
 							VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
 							VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
