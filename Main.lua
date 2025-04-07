@@ -349,13 +349,13 @@ Fishing:AddToggle({
 
 local InstantCatchRunning = false
 local InstantCatchCoroutine
+local IsRequipping = false
 
 Fishing:AddToggle({
-	Name = "Instant Catch [Improved]",
+	Name = "Instant Catch [IMPROVED]",
 	Default = false,
 	Callback = function(Value)
 		InstantCatchRunning = Value
-
 		local player = Players.LocalPlayer
 		local backpack = player:WaitForChild("Backpack")
 		local equipEvent = RepliStorage.packages.Net:FindFirstChild("RE/Backpack/Equip")
@@ -365,51 +365,39 @@ Fishing:AddToggle({
 				while InstantCatchRunning do
 					RunService.RenderStepped:Wait()
 
-					local character = player.Character
-					local tool = character and character:FindFirstChildOfClass("Tool")
-					local hasTool = tool ~= nil
-					
-					if hasTool then
-						local values = tool:FindFirstChild("values")
-						if values and values:FindFirstChild("bite") and values:FindFirstChild("casted") then
-							local bite = values.bite.Value
-							local casted = values.casted.Value
-							
-							-- Jika ikan menggigit dan sedang dilempar, segera tarik dan equip ulang
-							if bite and casted then
-								local toolName = tool.Name
-								tool.Parent = backpack
-								task.wait(0.2)
-								local toolInBackpack = backpack:FindFirstChild(toolName)
-								if toolInBackpack and equipEvent then
-									equipEvent:FireServer(toolInBackpack)
-								end
-							end
-						end
-					else
-						-- Jika tidak pegang tool, coba equip dari backpack
-						for _, item in ipairs(backpack:GetChildren()) do
-							if item:IsA("Tool") and item:FindFirstChild("events") then
-								if equipEvent then
-									equipEvent:FireServer(item)
-								end
-								break
-							end
-						end
-					end
+					local tool = player.Character and player.Character:FindFirstChildOfClass("Tool")
+					if not tool or IsRequipping then continue end
 
-					-- Auto cast jika tidak ada bobber
-					local currentTool = character and character:FindFirstChildOfClass("Tool")
-					if currentTool and not currentTool:FindFirstChild("bobber") then
-						local castEvent = currentTool:FindFirstChild("events") and currentTool.events:FindFirstChild("cast")
-						if castEvent then
-							castEvent:FireServer(math.random(90, 99))
+					local biten = tool:FindFirstChild("values")
+					if biten
+						and biten:FindFirstChild("bite") and biten.bite.Value == true
+						and biten:FindFirstChild("casted") and biten.casted.Value == true
+					then
+						IsRequipping = true
+
+						local toolName = tool.Name
+						tool.Parent = backpack
+						task.wait(0.1)
+
+						local toolInBackpack = backpack:FindFirstChild(toolName)
+						if toolInBackpack then
+							equipEvent:FireServer(toolInBackpack)
+
+							-- Verifikasi rod sudah kembali ke tangan
+							repeat
+								task.wait(0.1)
+							until player.Character:FindFirstChild(toolName) or not InstantCatchRunning
 						end
+
+						-- Delay anti-spam
+						task.wait(0.5)
+						IsRequipping = false
 					end
 				end
 
 				InstantCatchCoroutine = nil
 			end)
+
 			coroutine.resume(InstantCatchCoroutine)
 		end
 	end
