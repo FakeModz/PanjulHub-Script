@@ -345,6 +345,10 @@ Fishing:AddToggle({
 
 
 
+local Players = game:GetService("Players")
+local RepliStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+
 local InstantCatchRunning = false
 local InstantCatchCoroutine
 
@@ -362,9 +366,10 @@ Fishing:AddToggle({
 			InstantCatchCoroutine = coroutine.create(function()
 				while InstantCatchRunning do
 					RunService.RenderStepped:Wait()
-                     ---task.wait(0.3) 
+
 					local tool = player.Character:FindFirstChildOfClass("Tool")
 					if not tool then continue end
+
 					local biten = tool:FindFirstChild("values")
 					if biten
 						and biten:FindFirstChild("bite")
@@ -372,16 +377,15 @@ Fishing:AddToggle({
 						and biten:FindFirstChild("casted")
 						and biten.casted.Value == true
 					then
-					
-                    local toolName = tool.Name
+						local toolName = tool.Name
 						tool.Parent = backpack
 						task.wait(0.1)
 						local toolInBackpack = backpack:FindFirstChild(toolName)
-						-----equipEvent:FireServer(toolInBackpack)
 						if toolInBackpack then
 							equipEvent:FireServer(toolInBackpack)
-							task.wait(0.1)
+							task.wait(0.5)
 							equipEvent:FireServer(toolInBackpack)
+			
 						end
 					end
 				end
@@ -392,7 +396,6 @@ Fishing:AddToggle({
 		end
 	end
 })
-
 
 
 
