@@ -363,7 +363,8 @@ Fishing:AddToggle({
 				while InstantCatchRunning do
 					RunService.RenderStepped:Wait()
                      ---task.wait(0.3) 
-					
+					local tool = player.Character:FindFirstChildOfClass("Tool")
+					if not tool then continue end
 					local biten = tool:FindFirstChild("values")
 					if biten
 						and biten:FindFirstChild("bite")
@@ -371,14 +372,15 @@ Fishing:AddToggle({
 						and biten:FindFirstChild("casted")
 						and biten.casted.Value == true
 					then
-					local tool = player.Character:FindFirstChildOfClass("Tool")
-					if not tool then continue end
+					
                     local toolName = tool.Name
 						tool.Parent = backpack
 						task.wait(0.1)
 						local toolInBackpack = backpack:FindFirstChild(toolName)
-						--equipEvent:FireServer(toolInBackpack)
+						-----equipEvent:FireServer(toolInBackpack)
 						if toolInBackpack then
+							equipEvent:FireServer(toolInBackpack)
+							task.wait(0.1)
 							equipEvent:FireServer(toolInBackpack)
 						end
 					end
