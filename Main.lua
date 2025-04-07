@@ -311,6 +311,47 @@ Fishing:AddToggle({
 	end
 })
 
+local InstantCatchRunning = false
+local InstantCatchCoroutine
+
+Fishing:AddToggle({
+	Name = "Instant Catch (Final Test)",
+	Default = false,
+	Callback = function(Value)
+		InstantCatchRunning = Value
+
+		if Value and not InstantCatchCoroutine then
+			local lastAction = 0
+			local cooldown = 1 -- jangan spam terlalu cepat
+
+			InstantCatchCoroutine = coroutine.create(function()
+				while InstantCatchRunning do
+					task.wait(0.1)
+					local tool = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Tool")
+					if tool and tool:FindFirstChild("values") then
+						local values = tool.values
+						local bite = values:FindFirstChild("bite")
+						local casted = values:FindFirstChild("casted")
+
+						if bite and casted and bite.Value and casted.Value and tick() - lastAction > cooldown then
+							local toolName = tool.Name
+							tool.Parent = LocalPlayer.Backpack
+							task.wait(0.1)
+							local toolInBackpack = LocalPlayer.Backpack:FindFirstChild(toolName)
+							if toolInBackpack then
+								RepliStorage.packages.Net["RE/Backpack/Equip"]:FireServer(toolInBackpack)
+								lastAction = tick()
+							end
+						end
+					end
+				end
+				InstantCatchCoroutine = nil
+			end)
+			coroutine.resume(InstantCatchCoroutine)
+		end
+	end
+})
+
 
 local InstantCatchRunning = false
 local InstantCatchCoroutine
