@@ -251,7 +251,7 @@ Fishing:AddToggle({
 					local ReelScript = Bar:FindFirstChild("reel")
 					if ReelScript and ReelScript.Enabled then
                     
-                    
+                    Bar.Visible = false
                     ReelFinished:FireServer(100)
                    Bar:Destroy()
                
@@ -356,7 +356,7 @@ Fishing:AddToggle({
 	Default = false,
 	Callback = function(Value)
 		InstantCatchRunning = Value
-
+        ReelBind:Fire()
 		local player = Players.LocalPlayer
 		local backpack = player:WaitForChild("Backpack")
 		local equipEvent = RepliStorage.packages.Net:FindFirstChild("RE/Backpack/Equip")
