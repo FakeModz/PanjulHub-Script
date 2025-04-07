@@ -409,7 +409,6 @@ local InstantComboCoroutine
 local player = Players.LocalPlayer
 local backpack = player:WaitForChild("Backpack")
 local equipEvent = RepliStorage.packages.Net:FindFirstChild("RE/Backpack/Equip")
-
 local ReelFinished = game:GetService("ReplicatedStorage"):WaitForChild("events"):WaitForChild("reelfinished")
 
 Fishing:AddToggle({
@@ -420,33 +419,42 @@ Fishing:AddToggle({
 
 		if Value and not InstantComboCoroutine then
 			InstantComboCoroutine = coroutine.create(function()
+				local lastToolName = nil
+				local lastReel = tick()
+
 				while InstantComboRunning do
 					RunService.RenderStepped:Wait()
-					local tool = player.Character and player.Character:FindFirstChildOfClass("Tool")
 
+					-- Instant Catch logic
+					local tool = player.Character and player.Character:FindFirstChildOfClass("Tool")
 					if tool and tool:FindFirstChild("values") then
 						local values = tool.values
-						if values:FindFirstChild("bite") and values.bite.Value
-							and values:FindFirstChild("casted") and values.casted.Value
-						then
-							-- Requip for auto catch
+						local bite = values:FindFirstChild("bite")
+						local casted = values:FindFirstChild("casted")
+						
+						if bite and casted and bite.Value and casted.Value then
 							local toolName = tool.Name
-							tool.Parent = backpack
-							task.wait(0.1)
-							local toolInBackpack = backpack:FindFirstChild(toolName)
-							if toolInBackpack and toolName:lower():find("rod") then
-								equipEvent:FireServer(toolInBackpack)
+							
+							-- Hindari spam jika baru saja requip
+							if lastToolName ~= toolName or tick() - lastReel > 1 then
+								tool.Parent = backpack
+								task.wait(0.1)
+								local toolInBackpack = backpack:FindFirstChild(toolName)
+								if toolInBackpack and toolName:lower():find("rod") then
+									equipEvent:FireServer(toolInBackpack)
+									lastToolName = toolName
+									lastReel = tick()
+								end
 							end
 						end
 					end
 
-					-- Instant Reel Part
+					-- Instant Reel logic
 					local ReelUI = player.PlayerGui:FindFirstChild("reel")
-					if ReelUI and ReelUI:FindFirstChild("bar") then
-						local Bar = ReelUI.bar
-						local ReelScript = Bar:FindFirstChild("reel")
-						if ReelScript and ReelScript.Enabled then
-							-- Skip animation and complete reel
+					if ReelUI then
+						local Bar = ReelUI:FindFirstChild("bar")
+						if Bar and Bar:FindFirstChild("reel") and Bar.reel.Enabled then
+							-- Skip the animation
 							ReelFinished:FireServer(100)
 							task.wait(0.05)
 							ReelFinished:FireServer(100)
@@ -456,7 +464,6 @@ Fishing:AddToggle({
 
 				InstantComboCoroutine = nil
 			end)
-
 			coroutine.resume(InstantComboCoroutine)
 		end
 	end
