@@ -252,9 +252,9 @@ Fishing:AddToggle({
 					if ReelScript and ReelScript.Enabled then
                     
                     ReelFinished:FireServer(100)
-                    RunService.RenderStepped:Wait()
+                   -- RunService.RenderStepped:Wait()
                     --task.wait(0.3)
-                    Bar:Destroy()
+                    --Bar:Destroy()
                     --Values:Destroy()
                     
 					end
