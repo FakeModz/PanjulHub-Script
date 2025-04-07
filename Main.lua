@@ -230,6 +230,9 @@ Fishing:AddToggle({
 	Default = false,
 	Callback = function(Value)
 		InstantReelRunning = Value
+local player = Players.LocalPlayer
+		local backpack = player:WaitForChild("Backpack")
+		local equipEvent = RepliStorage.packages.Net:FindFirstChild("RE/Backpack/Equip")
 
 		if Value and not InstantReelCoroutine then
 			InstantReelCoroutine = coroutine.create(function()
@@ -362,7 +365,11 @@ Fishing:AddToggle({
                      ---task.wait(0.3) 
 					local tool = player.Character:FindFirstChildOfClass("Tool")
 					if not tool then continue end
-
+                    local toolName = tool.Name
+						tool.Parent = backpack
+						task.wait(0.1)
+						local toolInBackpack = backpack:FindFirstChild(toolName)
+						equipEvent:FireServer(toolInBackpack)
 					local biten = tool:FindFirstChild("values")
 					if biten
 						and biten:FindFirstChild("bite")
@@ -370,10 +377,6 @@ Fishing:AddToggle({
 						and biten:FindFirstChild("casted")
 						and biten.casted.Value == true
 					then
-						local toolName = tool.Name
-						tool.Parent = backpack
-						task.wait(0.1)
-						local toolInBackpack = backpack:FindFirstChild(toolName)
 						if toolInBackpack then
 							equipEvent:FireServer(toolInBackpack)
 						end
