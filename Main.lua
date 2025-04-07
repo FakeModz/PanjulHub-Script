@@ -421,22 +421,43 @@ Fishing:AddToggle({
 			InstantComboCoroutine = coroutine.create(function()
 				local lastToolName = nil
 				local lastReel = tick()
+				local justReeled = false
 
 				while InstantComboRunning do
 					RunService.RenderStepped:Wait()
 
-					-- Instant Reel dulu biar UI gak stuck
+					-- Instant Reel + Auto Cast
 					local ReelUI = player.PlayerGui:FindFirstChild("reel")
 					if ReelUI then
 						local Bar = ReelUI:FindFirstChild("bar")
-						if Bar and Bar:FindFirstChild("reel") and Bar.reel.Enabled then
-							ReelFinished:FireServer(100)
-							task.wait(0.05)
-							ReelFinished:FireServer(100)
+						if Bar and Bar:FindFirstChild("reel") and Bar.reel.Enabled and not justReeled then
+							local tool = player.Character and player.Character:FindFirstChildOfClass("Tool")
+							if tool then
+								local toolName = tool.Name
+								justReeled = true
+
+								ReelFinished:FireServer(100)
+								task.wait(0.05)
+								ReelFinished:FireServer(100)
+
+								-- Requip setelah reel selesai
+								tool.Parent = backpack
+								task.wait(0.1)
+								local toolInBackpack = backpack:FindFirstChild(toolName)
+								if toolInBackpack then
+									equipEvent:FireServer(toolInBackpack)
+									lastToolName = toolName
+									lastReel = tick()
+								end
+
+								task.delay(0.8, function()
+									justReeled = false
+								end)
+							end
 						end
 					end
 
-					-- Instant Catch logic setelah reel selesai
+					-- Instant Catch
 					local tool = player.Character and player.Character:FindFirstChildOfClass("Tool")
 					if tool and tool:FindFirstChild("values") then
 						local values = tool.values
@@ -446,7 +467,7 @@ Fishing:AddToggle({
 						if bite and casted and bite.Value and casted.Value then
 							local toolName = tool.Name
 
-							if lastToolName ~= toolName or tick() - lastReel > 1 then
+							if (lastToolName ~= toolName or tick() - lastReel > 1) and not justReeled then
 								tool.Parent = backpack
 								task.wait(0.1)
 								local toolInBackpack = backpack:FindFirstChild(toolName)
@@ -467,7 +488,6 @@ Fishing:AddToggle({
 		end
 	end
 })
-
 
 
 
