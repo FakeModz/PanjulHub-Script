@@ -403,6 +403,65 @@ Fishing:AddToggle({
 	end
 })
 
+local InstantComboRunning = false
+local InstantComboCoroutine
+
+local player = Players.LocalPlayer
+local backpack = player:WaitForChild("Backpack")
+local equipEvent = RepliStorage.packages.Net:FindFirstChild("RE/Backpack/Equip")
+
+local ReelFinished = game:GetService("ReplicatedStorage"):WaitForChild("events"):WaitForChild("reelfinished")
+
+Fishing:AddToggle({
+	Name = "Instant Combo (Catch + Reel)",
+	Default = false,
+	Callback = function(Value)
+		InstantComboRunning = Value
+
+		if Value and not InstantComboCoroutine then
+			InstantComboCoroutine = coroutine.create(function()
+				while InstantComboRunning do
+					RunService.RenderStepped:Wait()
+					local tool = player.Character and player.Character:FindFirstChildOfClass("Tool")
+
+					if tool and tool:FindFirstChild("values") then
+						local values = tool.values
+						if values:FindFirstChild("bite") and values.bite.Value
+							and values:FindFirstChild("casted") and values.casted.Value
+						then
+							-- Requip for auto catch
+							local toolName = tool.Name
+							tool.Parent = backpack
+							task.wait(0.1)
+							local toolInBackpack = backpack:FindFirstChild(toolName)
+							if toolInBackpack and toolName:lower():find("rod") then
+								equipEvent:FireServer(toolInBackpack)
+							end
+						end
+					end
+
+					-- Instant Reel Part
+					local ReelUI = player.PlayerGui:FindFirstChild("reel")
+					if ReelUI and ReelUI:FindFirstChild("bar") then
+						local Bar = ReelUI.bar
+						local ReelScript = Bar:FindFirstChild("reel")
+						if ReelScript and ReelScript.Enabled then
+							-- Skip animation and complete reel
+							ReelFinished:FireServer(100)
+							task.wait(0.05)
+							ReelFinished:FireServer(100)
+						end
+					end
+				end
+
+				InstantComboCoroutine = nil
+			end)
+
+			coroutine.resume(InstantComboCoroutine)
+		end
+	end
+})
+
 
 
 
