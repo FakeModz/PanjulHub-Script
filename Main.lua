@@ -328,7 +328,7 @@ Fishing:AddToggle({
 						equipEvent:FireServer(rodToEquip)
 					end
 
-					task.wait(5)
+					task.wait(1)
 				end
 			end)
 		end
@@ -358,8 +358,8 @@ Fishing:AddToggle({
 		if Value and not InstantCatchCoroutine then
 			InstantCatchCoroutine = coroutine.create(function()
 				while InstantCatchRunning do
-					--RunService.RenderStepped:Wait()
-                     task.wait(0.3) 
+					RunService.RenderStepped:Wait()
+                     ---task.wait(0.3) 
 					local tool = player.Character:FindFirstChildOfClass("Tool")
 					if not tool then continue end
 
