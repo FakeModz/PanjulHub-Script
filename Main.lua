@@ -1,4 +1,4 @@
- --local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/FakeModz/PanjulHub-Script/refs/heads/main/UI')))()
+  --local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/FakeModz/PanjulHub-Script/refs/heads/main/UI')))()
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
 --Roblox Client
 --ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -250,8 +250,7 @@ Fishing:AddToggle({
                     Bar.Visible = false
 					local ReelScript = Bar:FindFirstChild("reel")
 					if ReelScript and ReelScript.Enabled then
-                    ReelBind:Fire()
-                    ReelFinished:FireServer(100)
+                    
                     ReelFinished:FireServer(100)
                     --RunService.RenderStepped:Wait()
                     task.wait(0.3)
