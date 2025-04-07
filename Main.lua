@@ -321,7 +321,7 @@ Fishing:AddToggle({
 						equipEvent:FireServer(rodToEquip)
 					end
 
-					task.wait(0.1)
+					task.wait(5)
 				end
 			end)
 		end
@@ -365,7 +365,7 @@ Fishing:AddToggle({
 					then
 						local toolName = tool.Name
 						tool.Parent = backpack
-						task.wait(0.1)
+						task.wait(1)
 						local toolInBackpack = backpack:FindFirstChild(toolName)
 						if toolInBackpack then
 							equipEvent:FireServer(toolInBackpack)
