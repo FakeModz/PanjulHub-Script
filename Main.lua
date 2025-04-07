@@ -1,4 +1,4 @@
- --local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/FakeModz/PanjulHub-Script/refs/heads/main/UI')))()
+  --local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/FakeModz/PanjulHub-Script/refs/heads/main/UI')))()
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
 --Roblox Client
 --ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -251,9 +251,10 @@ Fishing:AddToggle({
 					local ReelScript = Bar:FindFirstChild("reel")
 					if ReelScript and ReelScript.Enabled then
                     
+                    valued.Destroy()
                     Bar.Visible = false
                     ReelFinished:FireServer(100)
-                   Bar:Destroy()
+                    Bar:Destroy()
                
                     
 					end
@@ -356,7 +357,7 @@ Fishing:AddToggle({
 	Default = false,
 	Callback = function(Value)
 		InstantCatchRunning = Value
-        ReelBind:Fire()
+        
 		local player = Players.LocalPlayer
 		local backpack = player:WaitForChild("Backpack")
 		local equipEvent = RepliStorage.packages.Net:FindFirstChild("RE/Backpack/Equip")
