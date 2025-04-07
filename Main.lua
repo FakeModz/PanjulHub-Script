@@ -339,7 +339,6 @@ Fishing:AddToggle({
 					local bite = values:FindFirstChild("bite")
 					local casted = values:FindFirstChild("casted")
 
-					-- Instant Catch (Re-equip Rod if fish bite)
 					if bite and bite.Value and casted and casted.Value then
 						if tick() - lastEquip > 1 then
 							local toolName = tool.Name
@@ -353,14 +352,17 @@ Fishing:AddToggle({
 						end
 					end
 
-					-- Instant Reel (Skip the bar)
 					local reelUI = player.PlayerGui:FindFirstChild("reel")
 					if reelUI and reelUI:FindFirstChild("bar") then
-						local reel = reelUI.bar:FindFirstChild("reel")
+						local bar = reelUI.bar
+						local reel = bar:FindFirstChild("reel")
+
 						if reel and reel.Enabled then
-							ReelFinished:FireServer(100)
-							task.wait(0.05)
-							ReelFinished:FireServer(100)
+							-- Terus-menerus spam ReelFinished sampai bar hilang
+							for i = 1, 5 do
+								ReelFinished:FireServer(100)
+								task.wait(0.05)
+							end
 						end
 					end
 				end
@@ -371,6 +373,7 @@ Fishing:AddToggle({
 		end
 	end
 })
+
 
 
 
