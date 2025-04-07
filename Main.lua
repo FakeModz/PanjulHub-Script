@@ -379,13 +379,11 @@ Fishing:AddToggle({
 					then
 						local toolName = tool.Name
 						tool.Parent = backpack
-						task.wait(0.1)
+						task.wait(0.5)
 						local toolInBackpack = backpack:FindFirstChild(toolName)
 						if toolInBackpack then
 							equipEvent:FireServer(toolInBackpack)
-							task.wait(0.5)
-							equipEvent:FireServer(toolInBackpack)
-			
+							
 						end
 					end
 				end
