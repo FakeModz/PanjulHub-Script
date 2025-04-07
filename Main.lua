@@ -342,69 +342,55 @@ Fishing:AddToggle({
 
 
 
-
-
-
-
-
 local InstantCatchRunning = false
 local InstantCatchCoroutine
-local IsRequipping = false
 
 Fishing:AddToggle({
-	Name = "Instant Catch [FIXED+]",
+	Name = "Instant Catch [IMPROVED]",
 	Default = false,
 	Callback = function(Value)
 		InstantCatchRunning = Value
+
 		local player = Players.LocalPlayer
 		local backpack = player:WaitForChild("Backpack")
 		local equipEvent = RepliStorage.packages.Net:FindFirstChild("RE/Backpack/Equip")
 
 		if Value and not InstantCatchCoroutine then
 			InstantCatchCoroutine = coroutine.create(function()
-				local lastRodTime = tick()
+				local lastRecastTime = tick()
 
 				while InstantCatchRunning do
 					RunService.RenderStepped:Wait()
 
-					local tool = player.Character and player.Character:FindFirstChildOfClass("Tool")
+					local tool = player.Character:FindFirstChildOfClass("Tool")
 
-					if tool and tool:IsA("Tool") and string.find(tool.Name, "Rod") then
-						lastRodTime = tick()
-					end
-
-					-- Fallback auto-equip jika terlalu lama tidak memegang rod
-					if (not tool or not string.find(tool.Name, "Rod")) and (tick() - lastRodTime > 2.5) then
-						local toolInBackpack = backpack:FindFirstChildWhichIsA("Tool")
-						if toolInBackpack and string.find(toolInBackpack.Name, "Rod") then
-							equipEvent:FireServer(toolInBackpack)
-							lastRodTime = tick()
+					-- Jika memegang rod
+					if tool then
+						local values = tool:FindFirstChild("values")
+						if values
+							and values:FindFirstChild("bite")
+							and values.bite.Value == true
+							and values:FindFirstChild("casted")
+							and values.casted.Value == true
+						then
+							local toolName = tool.Name
+							tool.Parent = backpack
+							task.wait(0.15)
+							local toolInBackpack = backpack:FindFirstChild(toolName)
+							if toolInBackpack then
+								equipEvent:FireServer(toolInBackpack)
+								lastRecastTime = tick()
+							end
 						end
-					end
-
-					if not tool or not string.find(tool.Name, "Rod") or IsRequipping then continue end
-
-					local biten = tool:FindFirstChild("values")
-					if biten
-						and biten:FindFirstChild("bite") and biten.bite.Value == true
-						and biten:FindFirstChild("casted") and biten.casted.Value == true
-					then
-						IsRequipping = true
-						local toolName = tool.Name
-
-						tool.Parent = backpack
-						task.wait(0.1)
-
-						local toolInBackpack = backpack:FindFirstChild(toolName)
-						if toolInBackpack then
-							equipEvent:FireServer(toolInBackpack)
-							repeat task.wait(0.1)
-							until (player.Character:FindFirstChild(toolName) and string.find(toolName, "Rod")) or not InstantCatchRunning
+					else
+						-- Jika idle lebih dari 3 detik, anggap butuh recast
+						if tick() - lastRecastTime > 3 then
+							local toolInBackpack = backpack:FindFirstChildOfClass("Tool")
+							if toolInBackpack then
+								equipEvent:FireServer(toolInBackpack)
+								lastRecastTime = tick()
+							end
 						end
-
-						task.wait(0.5)
-						IsRequipping = false
-						lastRodTime = tick()
 					end
 				end
 
@@ -415,6 +401,11 @@ Fishing:AddToggle({
 		end
 	end
 })
+
+
+
+
+
 
 
 
