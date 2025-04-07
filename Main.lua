@@ -370,7 +370,7 @@ Fishing:AddToggle({
 						if values.bite.Value == true and values.casted.Value == true then
 							if tick() - lastRecastTime > 0.8 then
 								-- Tunggu proses reel benar-benar selesai
-								task.wait(0.4)
+								task.wait(0.1)
 
 								local toolName = tool.Name
 								tool.Parent = backpack
