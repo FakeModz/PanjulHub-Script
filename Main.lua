@@ -254,7 +254,7 @@ Fishing:AddToggle({
                     
                     
                     ReelFinished:FireServer(100)
-                    Bar:Destroy()
+                    --Bar:Destroy()
                
                     
 					end
