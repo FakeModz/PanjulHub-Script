@@ -425,7 +425,18 @@ Fishing:AddToggle({
 				while InstantComboRunning do
 					RunService.RenderStepped:Wait()
 
-					-- Instant Catch logic
+					-- Instant Reel dulu biar UI gak stuck
+					local ReelUI = player.PlayerGui:FindFirstChild("reel")
+					if ReelUI then
+						local Bar = ReelUI:FindFirstChild("bar")
+						if Bar and Bar:FindFirstChild("reel") and Bar.reel.Enabled then
+							ReelFinished:FireServer(100)
+							task.wait(0.05)
+							ReelFinished:FireServer(100)
+						end
+					end
+
+					-- Instant Catch logic setelah reel selesai
 					local tool = player.Character and player.Character:FindFirstChildOfClass("Tool")
 					if tool and tool:FindFirstChild("values") then
 						local values = tool.values
@@ -434,8 +445,7 @@ Fishing:AddToggle({
 						
 						if bite and casted and bite.Value and casted.Value then
 							local toolName = tool.Name
-							
-							-- Hindari spam jika baru saja requip
+
 							if lastToolName ~= toolName or tick() - lastReel > 1 then
 								tool.Parent = backpack
 								task.wait(0.1)
@@ -448,27 +458,15 @@ Fishing:AddToggle({
 							end
 						end
 					end
-
-					-- Instant Reel logic
-					local ReelUI = player.PlayerGui:FindFirstChild("reel")
-					if ReelUI then
-						local Bar = ReelUI:FindFirstChild("bar")
-						if Bar and Bar:FindFirstChild("reel") and Bar.reel.Enabled then
-							-- Skip the animation
-							ReelFinished:FireServer(100)
-							task.wait(0.05)
-							ReelFinished:FireServer(100)
-						end
-					end
 				end
 
 				InstantComboCoroutine = nil
 			end)
+
 			coroutine.resume(InstantComboCoroutine)
 		end
 	end
 })
-
 
 
 
