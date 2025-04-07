@@ -218,7 +218,8 @@ Fishing:AddToggle({
 local InstantReelRunning = false
 local InstantReelCoroutine
 
-local ReelFinished = game:GetService("ReplicatedStorage"):WaitForChild("events"):WaitForChild("reelfinished ")
+local ReelFinished = game:GetService("ReplicatedStorage"):WaitForChild("events"):WaitForChild("reelfinished")
+local ReelBind = game:GetService("ReplicatedStorage"):WaitForChild("events"):WaitForChild("bindable_reel_finished")
 
 Fishing:AddToggle({
 	Name = "Instant Reel",
@@ -230,7 +231,7 @@ Fishing:AddToggle({
 			InstantReelCoroutine = coroutine.create(function()
 				while InstantReelRunning do
 					--RunService.RenderStepped:Wait()
-                    task.wait(0.3)
+                    task.wait(0.7)
 					local ReelUI = LocalPlayer.PlayerGui:FindFirstChild("reel")
 					if not ReelUI then continue end
 
@@ -239,6 +240,8 @@ Fishing:AddToggle({
                     Bar.Visible = false
 					local ReelScript = Bar:FindFirstChild("reel")
 					if ReelScript and ReelScript.Enabled then
+                    ReelBind:Fire()
+                    ReelFinished:FireServer(100)
                     ReelFinished:FireServer(100)
 					end
 				end
