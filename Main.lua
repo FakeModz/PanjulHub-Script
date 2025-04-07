@@ -314,6 +314,69 @@ Fishing:AddToggle({
 local InstantCatchRunning = false
 local InstantCatchCoroutine
 
+local player = game.Players.LocalPlayer
+local backpack = player:WaitForChild("Backpack")
+local equipEvent = game:GetService("ReplicatedStorage").packages.Net:FindFirstChild("RE/Backpack/Equip")
+local ReelFinished = game:GetService("ReplicatedStorage"):WaitForChild("events"):WaitForChild("reelfinished")
+
+Fishing:AddToggle({
+	Name = "Instant Catch",
+	Default = false,
+	Callback = function(state)
+		InstantCatchRunning = state
+
+		if state and not InstantCatchCoroutine then
+			InstantCatchCoroutine = coroutine.create(function()
+				local lastEquip = 0
+
+				while InstantCatchRunning do
+					task.wait()
+
+					local tool = player.Character and player.Character:FindFirstChildOfClass("Tool")
+					if not tool or not tool:FindFirstChild("values") then continue end
+
+					local values = tool.values
+					local bite = values:FindFirstChild("bite")
+					local casted = values:FindFirstChild("casted")
+
+					-- Instant Catch (Re-equip Rod if fish bite)
+					if bite and bite.Value and casted and casted.Value then
+						if tick() - lastEquip > 1 then
+							local toolName = tool.Name
+							tool.Parent = backpack
+							task.wait(0.1)
+							local rod = backpack:FindFirstChild(toolName)
+							if rod then
+								equipEvent:FireServer(rod)
+								lastEquip = tick()
+							end
+						end
+					end
+
+					-- Instant Reel (Skip the bar)
+					local reelUI = player.PlayerGui:FindFirstChild("reel")
+					if reelUI and reelUI:FindFirstChild("bar") then
+						local reel = reelUI.bar:FindFirstChild("reel")
+						if reel and reel.Enabled then
+							ReelFinished:FireServer(100)
+							task.wait(0.05)
+							ReelFinished:FireServer(100)
+						end
+					end
+				end
+
+				InstantCatchCoroutine = nil
+			end)
+			coroutine.resume(InstantCatchCoroutine)
+		end
+	end
+})
+
+
+
+local InstantCatchRunning = false
+local InstantCatchCoroutine
+
 Fishing:AddToggle({
 	Name = "Instant Catch (Final Test)",
 	Default = false,
