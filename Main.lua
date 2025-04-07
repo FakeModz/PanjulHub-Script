@@ -250,15 +250,14 @@ Fishing:AddToggle({
                    --- --Bar.Visible = false
 					local ReelScript = Bar:FindFirstChild("reel")
 					if ReelScript and ReelScript.Enabled then
-                    Bar:Destroy()
                     Values:Destroy()
                     ReelBind:Fire()
                     ReelFinished:FireServer(100)
                     ReelFinished:FireServer(100)
                    -- task.wait(0.1)
-                    --Bar.Visible = false
-                    --Bar:Destroy()
-                    --Values:Destroy()
+                   -- Bar.Visible = false
+                    Bar:Destroy()
+                    
 					end
 				end
 
