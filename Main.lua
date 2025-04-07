@@ -99,7 +99,7 @@ Fishing:AddToggle({
 						if tool and not tool:FindFirstChild("bobber") then
 							local castEvent = tool:FindFirstChild("events") and tool.events:FindFirstChild("cast")
 							if castEvent then
-								local power = math.random(90, 99)
+								local power = math.random(90, 100)
 								castEvent:FireServer(power)
 
 								local root = character:FindFirstChild("HumanoidRootPart")
@@ -167,13 +167,16 @@ Fishing:AddToggle({
 
 					task.spawn(function()
 						repeat
-							RunService.Heartbeat:Wait()
+							--RunService.Heartbeat:Wait()
+							task.wait(0.3)
 							HandleButton(Child)
 						until Done
 					end)
 
 					task.spawn(function()
-						repeat RunService.Heartbeat:Wait()
+						repeat 
+                        ---RunService.Heartbeat:Wait()
+						task.wait(0.3) 
 						until not Child:IsDescendantOf(SafeZone)
 						Done = true
 					end)
@@ -181,7 +184,8 @@ Fishing:AddToggle({
 
 				task.spawn(function()
 					repeat
-						RunService.Heartbeat:Wait()
+					----	RunService.Heartbeat:Wait()
+					task.wait(0.3)
 						if GuiService.SelectedObject and GuiService.SelectedObject:IsDescendantOf(SafeZone) then
 							VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
 							VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
@@ -231,7 +235,7 @@ Fishing:AddToggle({
 			InstantReelCoroutine = coroutine.create(function()
 				while InstantReelRunning do
 					--RunService.RenderStepped:Wait()
-                    task.wait(0.03)
+                    task.wait(0.1)
 					local ReelUI = LocalPlayer.PlayerGui:FindFirstChild("reel")
 					if not ReelUI then continue end
 
@@ -275,7 +279,7 @@ Fishing:AddToggle({
 						Params.FilterType = Enum.RaycastFilterType.Include
 						Params.FilterDescendantsInstances = { workspace.Terrain }
 
-						local RayResult = workspace:Raycast(Bobber.Position, Vector3.new(0, -10, 0), Params)
+						local RayResult = workspace:Raycast(Bobber.Position, Vector3.new(0, -1, 0), Params)
 						if RayResult and RayResult.Instance:IsA("Terrain") then
 							Bobber:PivotTo(CFrame.new(RayResult.Position))
 						end
@@ -354,8 +358,8 @@ Fishing:AddToggle({
 		if Value and not InstantCatchCoroutine then
 			InstantCatchCoroutine = coroutine.create(function()
 				while InstantCatchRunning do
-					RunService.RenderStepped:Wait()
-
+					--RunService.RenderStepped:Wait()
+                     task.wait(0.3) 
 					local tool = player.Character:FindFirstChildOfClass("Tool")
 					if not tool then continue end
 
@@ -368,7 +372,7 @@ Fishing:AddToggle({
 					then
 						local toolName = tool.Name
 						tool.Parent = backpack
-						task.wait(0.05)
+						task.wait(0.1)
 						local toolInBackpack = backpack:FindFirstChild(toolName)
 						if toolInBackpack then
 							equipEvent:FireServer(toolInBackpack)
