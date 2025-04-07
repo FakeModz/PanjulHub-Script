@@ -257,7 +257,7 @@ Fishing:AddToggle({
                    task.wait(0.3)
                    -- Bar.Visible = false
                     --ReelScript:Destroy()
-                   
+                   Bar:Destroy()
                     --Values:Destroy()
                     
 					end
@@ -394,8 +394,8 @@ Fishing:AddToggle({
 
 								if toolInBackpack then
 									equipEvent:FireServer(toolInBackpack)
-									Values.bite:Destroy()
-									Values.casted:Destroy()
+								-----	Values.bite:Destroy()
+								--	--Values.casted:Destroy()
 									lastRecastTime = tick()
 								end
 							end
