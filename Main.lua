@@ -256,8 +256,8 @@ Fishing:AddToggle({
                     ReelFinished:FireServer(100)
                    task.wait(0.3)
                    -- Bar.Visible = false
-                    --ReelScript:Destroy()
-                   Bar:Destroy()
+                    ReelScript:Destroy()
+                   --Bar:Destroy()
                     --Values:Destroy()
                     
 					end
