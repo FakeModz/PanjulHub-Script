@@ -331,6 +331,9 @@ Fishing:AddToggle({
 
 
 
+
+
+
 local InstantCatchRunning = false
 local InstantCatchCoroutine
 
@@ -342,31 +345,37 @@ Fishing:AddToggle({
 local player = Players.LocalPlayer
 local backpack = player:WaitForChild("Backpack")
 local equipEvent = RepliStorage.packages.Net:FindFirstChild("RE/Backpack/Equip")
+local toolInBackpack = backpack:FindFirstChild(toolName)
+
 		if Value and not InstantCatchCoroutine then
 			InstantCatchCoroutine = coroutine.create(function()
-				local lastHadShake = false
-
 				while InstantCatchRunning do
 					RunService.RenderStepped:Wait()
 
-					local shakeUI = player.PlayerGui:FindFirstChild("shakeui")
-					local isShaking = shakeUI and shakeUI:FindFirstChild("safezone") and shakeUI.safezone:FindFirstChild("button")
+					local character = player.Character
+					if not character then continue end
 
-					if lastHadShake and not isShaking then
-						-- Shake bar selesai dan artinya ikan sudah menggigit
-						local tool = player.Character and player.Character:FindFirstChildOfClass("Tool")
-						if tool then
-							local toolName = tool.Name
-							tool.Parent = backpack
-							task.wait(0.1)
-							local toolInBackpack = backpack:FindFirstChild(toolName)
-							if toolInBackpack then
-								equipEvent:FireServer(toolInBackpack)
-							end
+					local tool = character:FindFirstChildOfClass("Tool")
+					if not tool then continue end
+
+					local values = tool:FindFirstChild("values")
+					if values 
+						and values:FindFirstChild("bite") 
+						and values:FindFirstChild("casted")
+						and values.bite.Value == true 
+						and values.casted.Value == true then
+
+						-- Unequip
+						
+						tool.Parent = backpack
+						task.wait(0.1)
+
+						-- Equip kembali
+						
+						if toolInBackpack then
+							equipEvent:FireServer(toolInBackpack)
 						end
 					end
-
-					lastHadShake = isShaking ~= nil
 				end
 
 				InstantCatchCoroutine = nil
@@ -375,6 +384,7 @@ local equipEvent = RepliStorage.packages.Net:FindFirstChild("RE/Backpack/Equip")
 		end
 	end
 })
+
 
 
 
