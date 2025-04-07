@@ -375,7 +375,7 @@ Fishing:AddToggle({
 						then
 							local toolName = tool.Name
 							tool.Parent = backpack
-							task.wait(0.15)
+							task.wait(0.3)
 							local toolInBackpack = backpack:FindFirstChild(toolName)
 							if toolInBackpack then
 								equipEvent:FireServer(toolInBackpack)
@@ -384,7 +384,7 @@ Fishing:AddToggle({
 						end
 					else
 						-- Jika idle lebih dari 3 detik, anggap butuh recast
-						if tick() - lastRecastTime > 3 then
+						if tick() - lastRecastTime > 0 then
 							local toolInBackpack = backpack:FindFirstChildOfClass("Tool")
 							if toolInBackpack then
 								equipEvent:FireServer(toolInBackpack)
