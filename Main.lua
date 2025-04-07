@@ -346,7 +346,7 @@ local InstantCatchRunning = false
 local InstantCatchCoroutine
 
 Fishing:AddToggle({
-	Name = "Instant Catch [SAFE]",
+	Name = "Instant Catch [BETA]",
 	Default = false,
 	Callback = function(Value)
 		InstantCatchRunning = Value
@@ -357,51 +357,35 @@ Fishing:AddToggle({
 
 		if Value and not InstantCatchCoroutine then
 			InstantCatchCoroutine = coroutine.create(function()
-				local lastRecastTime = tick()
+				local lastRecastTime = 0
 
 				while InstantCatchRunning do
 					RunService.RenderStepped:Wait()
 
-					local tool = player.Character:FindFirstChildOfClass("Tool")
+					local tool = player.Character and player.Character:FindFirstChildOfClass("Tool")
+					if not tool then continue end
 
-					if tool then
-						local values = tool:FindFirstChild("values")
-						if values
-							and values:FindFirstChild("bite")
-							and values.bite.Value == true
-							and values:FindFirstChild("casted")
-							and values.casted.Value == true
-						then
-							local toolName = tool.Name
+					local values = tool:FindFirstChild("values")
+					if values and values:FindFirstChild("bite") and values:FindFirstChild("casted") then
+						if values.bite.Value == true and values.casted.Value == true then
+							-- Hindari spam requip
+							if tick() - lastRecastTime > 0.8 then
+								local toolName = tool.Name
+								tool.Parent = backpack
+								task.wait(0.15)
 
-							-- Tunggu sampai rod hilang (ikan tertangkap)
-							local unequipped = false
-							tool:Destroy() -- paksa hilangkan dari tangan
-							task.wait(0.25)
-
-							for i = 1, 30 do -- max 3 detik
-								if not player.Character:FindFirstChild(toolName) then
-									unequipped = true
-									break
+								local toolInBackpack
+								for _, item in pairs(backpack:GetChildren()) do
+									if item:IsA("Tool") and item.Name:lower():find("rod") then
+										toolInBackpack = item
+										break
+									end
 								end
-								RunService.RenderStepped:Wait()
-							end
 
-							if unequipped then
-								local toolInBackpack = backpack:FindFirstChild(toolName)
 								if toolInBackpack then
 									equipEvent:FireServer(toolInBackpack)
 									lastRecastTime = tick()
 								end
-							end
-						end
-					else
-						-- Recast jika idle
-						if tick() - lastRecastTime > 3 then
-							local toolInBackpack = backpack:FindFirstChildOfClass("Tool")
-							if toolInBackpack then
-								equipEvent:FireServer(toolInBackpack)
-								lastRecastTime = tick()
 							end
 						end
 					end
@@ -409,7 +393,6 @@ Fishing:AddToggle({
 
 				InstantCatchCoroutine = nil
 			end)
-
 			coroutine.resume(InstantCatchCoroutine)
 		end
 	end
