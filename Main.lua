@@ -345,37 +345,31 @@ Fishing:AddToggle({
 local player = Players.LocalPlayer
 local backpack = player:WaitForChild("Backpack")
 local equipEvent = RepliStorage.packages.Net:FindFirstChild("RE/Backpack/Equip")
-local toolInBackpack = backpack:FindFirstChild(toolName)
-
 		if Value and not InstantCatchCoroutine then
 			InstantCatchCoroutine = coroutine.create(function()
+
 				while InstantCatchRunning do
 					RunService.RenderStepped:Wait()
-
-					local character = player.Character
-					if not character then continue end
-
-					local tool = character:FindFirstChildOfClass("Tool")
-					if not tool then continue end
-
-					local values = tool:FindFirstChild("values")
-					if values 
-						and values:FindFirstChild("bite") 
-						and values:FindFirstChild("casted")
-						and values.bite.Value == true 
-						and values.casted.Value == true then
-
-						-- Unequip
+						local tool = player.Character:FindFirstChildOfClass("Tool")
+						local biten = tool:FindFirstChild("values")
+	if biten
+		and biten:FindFirstChild("bite")
+		and biten.bite.Value == true
+		and biten:FindFirstChild("casted")
+		and biten.casted.Value == true
+	then
 						
-						tool.Parent = backpack
-						task.wait(0.1)
-
-						-- Equip kembali
-						
-						if toolInBackpack then
-							equipEvent:FireServer(toolInBackpack)
+							local toolName = tool.Name
+							tool.Parent = backpack
+							task.wait(0.1)
+							local toolInBackpack = backpack:FindFirstChild(toolName)
+							if toolInBackpack then
+								equipEvent:FireServer(toolInBackpack)
+							end
 						end
 					end
+
+					
 				end
 
 				InstantCatchCoroutine = nil
