@@ -352,7 +352,7 @@ local InstantCatchCoroutine
 local IsRequipping = false
 
 Fishing:AddToggle({
-	Name = "Instant Catch [IMPROVED]",
+	Name = "Instant Catch [IMPROVED+]",
 	Default = false,
 	Callback = function(Value)
 		InstantCatchRunning = Value
@@ -362,10 +362,26 @@ Fishing:AddToggle({
 
 		if Value and not InstantCatchCoroutine then
 			InstantCatchCoroutine = coroutine.create(function()
+				local lastRodTime = tick()
+
 				while InstantCatchRunning do
 					RunService.RenderStepped:Wait()
 
 					local tool = player.Character and player.Character:FindFirstChildOfClass("Tool")
+					if tool then
+						lastRodTime = tick()
+					end
+
+					-- Fallback auto-equip jika rod hilang lebih dari 2.5 detik
+					if not tool and (tick() - lastRodTime > 2.5) then
+						local toolInBackpack = backpack:FindFirstChildOfClass("Tool")
+						if toolInBackpack then
+							equipEvent:FireServer(toolInBackpack)
+							lastRodTime = tick()
+						end
+					end
+
+					-- Jika sedang requip, skip
 					if not tool or IsRequipping then continue end
 
 					local biten = tool:FindFirstChild("values")
@@ -374,8 +390,8 @@ Fishing:AddToggle({
 						and biten:FindFirstChild("casted") and biten.casted.Value == true
 					then
 						IsRequipping = true
-
 						local toolName = tool.Name
+
 						tool.Parent = backpack
 						task.wait(0.1)
 
@@ -383,15 +399,14 @@ Fishing:AddToggle({
 						if toolInBackpack then
 							equipEvent:FireServer(toolInBackpack)
 
-							-- Verifikasi rod sudah kembali ke tangan
 							repeat
 								task.wait(0.1)
 							until player.Character:FindFirstChild(toolName) or not InstantCatchRunning
 						end
 
-						-- Delay anti-spam
 						task.wait(0.5)
 						IsRequipping = false
+						lastRodTime = tick()
 					end
 				end
 
