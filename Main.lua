@@ -420,9 +420,8 @@ Fishing:AddToggle({
 		if Value and not InstantComboCoroutine then
 			InstantComboCoroutine = coroutine.create(function()
 				local lastToolName = nil
-				local lastReel = tick()
-				local justReeled = false
-				local pendingRequip = false
+				local hasReeled = false
+				local justCaught = false
 
 				while InstantComboRunning do
 					RunService.RenderStepped:Wait()
@@ -430,54 +429,49 @@ Fishing:AddToggle({
 					local tool = player.Character and player.Character:FindFirstChildOfClass("Tool")
 					local toolName = tool and tool.Name
 
-					-- Instant Reel
+					-- Reel UI detection
 					local ReelUI = player.PlayerGui:FindFirstChild("reel")
-					if ReelUI then
-						local Bar = ReelUI:FindFirstChild("bar")
-						if Bar and Bar:FindFirstChild("reel") and Bar.reel.Enabled and not justReeled then
-							ReelFinished:FireServer(100)
-							task.wait(0.05)
-							ReelFinished:FireServer(100)
-							
-							pendingRequip = true
-							justReeled = true
+					local Bar = ReelUI and ReelUI:FindFirstChild("bar")
+					local ReelScript = Bar and Bar:FindFirstChild("reel")
 
-							-- Kasih delay agar sistem selesai mengangkat ikan
-							task.delay(0.7, function()
-								justReeled = false
-							end)
-						end
+					-- 1. Instant Reel
+					if ReelScript and ReelScript.Enabled and not hasReeled then
+						ReelFinished:FireServer(100)
+						task.wait(0.05)
+						ReelFinished:FireServer(100)
+
+						hasReeled = true
+						justCaught = true
+
+						task.delay(1, function()
+							hasReeled = false
+						end)
 					end
 
-					-- Requip setelah reel sukses (hanya sekali)
-					if pendingRequip and tool and toolName and toolName:lower():find("rod") then
+					-- 2. Requip after catching
+					if justCaught and tool and toolName and toolName:lower():find("rod") then
 						tool.Parent = backpack
 						task.wait(0.1)
 						local toolInBackpack = backpack:FindFirstChild(toolName)
 						if toolInBackpack then
 							equipEvent:FireServer(toolInBackpack)
-							lastToolName = toolName
-							lastReel = tick()
 						end
-						pendingRequip = false
+						justCaught = false
 					end
 
-					-- Instant Catch
+					-- 3. Instant Catch
 					if tool and tool:FindFirstChild("values") then
 						local values = tool.values
 						local bite = values:FindFirstChild("bite")
 						local casted = values:FindFirstChild("casted")
 
-						if bite and casted and bite.Value and casted.Value and not justReeled then
-							if (lastToolName ~= toolName or tick() - lastReel > 1) then
-								tool.Parent = backpack
-								task.wait(0.1)
-								local toolInBackpack = backpack:FindFirstChild(toolName)
-								if toolInBackpack and toolName:lower():find("rod") then
-									equipEvent:FireServer(toolInBackpack)
-									lastToolName = toolName
-									lastReel = tick()
-								end
+						if bite and casted and bite.Value and casted.Value then
+							-- Requip to trigger instant catch
+							tool.Parent = backpack
+							task.wait(0.1)
+							local toolInBackpack = backpack:FindFirstChild(toolName)
+							if toolInBackpack then
+								equipEvent:FireServer(toolInBackpack)
 							end
 						end
 					end
@@ -490,7 +484,6 @@ Fishing:AddToggle({
 		end
 	end
 })
-
 
 
 
