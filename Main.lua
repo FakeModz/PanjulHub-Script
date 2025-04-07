@@ -331,6 +331,54 @@ Fishing:AddToggle({
 
 
 
+local InstantCatchRunning = false
+local InstantCatchCoroutine
+
+Fishing:AddToggle({
+	Name = "Instant Catch [BETA]",
+	Default = false,
+	Callback = function(Value)
+		InstantCatchRunning = Value
+local player = Players.LocalPlayer
+local backpack = player:WaitForChild("Backpack")
+local equipEvent = RepliStorage.packages.Net:FindFirstChild("RE/Backpack/Equip")
+		if Value and not InstantCatchCoroutine then
+			InstantCatchCoroutine = coroutine.create(function()
+				local lastHadShake = false
+
+				while InstantCatchRunning do
+					RunService.RenderStepped:Wait()
+
+					local shakeUI = player.PlayerGui:FindFirstChild("shakeui")
+					local isShaking = shakeUI and shakeUI:FindFirstChild("safezone") and shakeUI.safezone:FindFirstChild("button")
+
+					if lastHadShake and not isShaking then
+						-- Shake bar selesai dan artinya ikan sudah menggigit
+						local tool = player.Character and player.Character:FindFirstChildOfClass("Tool")
+						if tool then
+							local toolName = tool.Name
+							tool.Parent = backpack
+							task.wait(0.1)
+							local toolInBackpack = backpack:FindFirstChild(toolName)
+							if toolInBackpack then
+								equipEvent:FireServer(toolInBackpack)
+							end
+						end
+					end
+
+					lastHadShake = isShaking ~= nil
+				end
+
+				InstantCatchCoroutine = nil
+			end)
+			coroutine.resume(InstantCatchCoroutine)
+		end
+	end
+})
+
+
+
+
 
 --Items
 local DelayAutoSell = 1
