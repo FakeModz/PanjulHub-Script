@@ -377,6 +377,7 @@ Items:AddToggle({
 	NotifyHub("Auto Sell", "auto sell disable")
 end
 end
+}) 
 
 
 ---Trade Function---
@@ -401,7 +402,7 @@ Items:AddDropdown({
 
 
 
-})
+
 
 
 
