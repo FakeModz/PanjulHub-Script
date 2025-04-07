@@ -346,7 +346,7 @@ local InstantCatchRunning = false
 local InstantCatchCoroutine
 
 Fishing:AddToggle({
-	Name = "Instant Catch [IMPROVED]",
+	Name = "Instant Catch [SAFE]",
 	Default = false,
 	Callback = function(Value)
 		InstantCatchRunning = Value
@@ -364,7 +364,6 @@ Fishing:AddToggle({
 
 					local tool = player.Character:FindFirstChildOfClass("Tool")
 
-					-- Jika memegang rod
 					if tool then
 						local values = tool:FindFirstChild("values")
 						if values
@@ -374,17 +373,31 @@ Fishing:AddToggle({
 							and values.casted.Value == true
 						then
 							local toolName = tool.Name
-							tool.Parent = backpack
-							task.wait(0.3)
-							local toolInBackpack = backpack:FindFirstChild(toolName)
-							if toolInBackpack then
-								equipEvent:FireServer(toolInBackpack)
-								lastRecastTime = tick()
+
+							-- Tunggu sampai rod hilang (ikan tertangkap)
+							local unequipped = false
+							tool:Destroy() -- paksa hilangkan dari tangan
+							task.wait(0.25)
+
+							for i = 1, 30 do -- max 3 detik
+								if not player.Character:FindFirstChild(toolName) then
+									unequipped = true
+									break
+								end
+								RunService.RenderStepped:Wait()
+							end
+
+							if unequipped then
+								local toolInBackpack = backpack:FindFirstChild(toolName)
+								if toolInBackpack then
+									equipEvent:FireServer(toolInBackpack)
+									lastRecastTime = tick()
+								end
 							end
 						end
 					else
-						-- Jika idle lebih dari 3 detik, anggap butuh recast
-						if tick() - lastRecastTime > 0 then
+						-- Recast jika idle
+						if tick() - lastRecastTime > 3 then
 							local toolInBackpack = backpack:FindFirstChildOfClass("Tool")
 							if toolInBackpack then
 								equipEvent:FireServer(toolInBackpack)
