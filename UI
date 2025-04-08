@@ -1095,9 +1095,16 @@ function OrionLib:MakeWindow(WindowConfig)
 	DropdownConfig.Flag = DropdownConfig.Flag or nil
 	DropdownConfig.Save = DropdownConfig.Save or false
 
-	local Dropdown = {Value = DropdownConfig.Default, Options = DropdownConfig.Options, AllOptions = DropdownConfig.Options, Buttons = {}, Toggled = false, Type = "Dropdown", Save = DropdownConfig.Save}
+	local Dropdown = {
+		Value = DropdownConfig.Default,
+		Options = DropdownConfig.Options,
+		AllOptions = DropdownConfig.Options,
+		Buttons = {},
+		Toggled = false,
+		Type = "Dropdown",
+		Save = DropdownConfig.Save
+	}
 	local MaxElements = 5
-
 	if not table.find(Dropdown.Options, Dropdown.Value) then
 		Dropdown.Value = "..."
 	end
@@ -1107,9 +1114,9 @@ function OrionLib:MakeWindow(WindowConfig)
 	local DropdownContainer = AddThemeObject(SetProps(SetChildren(MakeElement("ScrollFrame", Color3.fromRGB(40, 40, 40), 4), {
 		DropdownList
 	}), {
-		Parent = nil, -- akan diset setelah SearchBox dibuat
-		Position = UDim2.new(0, 0, 0, 28),
-		Size = UDim2.new(1, 0, 1, -28),
+		Parent = nil,
+		Position = UDim2.new(0, 0, 0, 56),
+		Size = UDim2.new(1, 0, 1, -56),
 		ClipsDescendants = true
 	}), "Divider")
 
@@ -1117,20 +1124,10 @@ function OrionLib:MakeWindow(WindowConfig)
 		Size = UDim2.new(1, 0, 0, 28),
 		BackgroundColor3 = Color3.fromRGB(35, 35, 35),
 		TextColor3 = Color3.new(1, 1, 1),
-		ClearTextOnFocus = true,
-		Parent = nil -- akan diset di bawah
+		ClearTextOnFocus = true
 	})
 	MakeElement("Corner", 0, 6).Parent = SearchBox
-
-	local ContainerWrapper = SetProps(MakeElement("TFrame"), {
-		Parent = nil, -- akan diset di bawah
-		Size = UDim2.new(1, 0, 1, -38),
-		Position = UDim2.new(0, 0, 0, 38),
-		Name = "DropdownContent"
-	})
-
-	SearchBox.Parent = ContainerWrapper
-	DropdownContainer.Parent = ContainerWrapper
+	SearchBox.Parent = DropdownContainer
 
 	local Click = SetProps(MakeElement("Button"), {
 		Size = UDim2.new(1, 0, 1, 0)
@@ -1141,7 +1138,7 @@ function OrionLib:MakeWindow(WindowConfig)
 		Parent = ItemParent,
 		ClipsDescendants = true
 	}), {
-		ContainerWrapper,
+		DropdownContainer,
 		SetProps(SetChildren(MakeElement("TFrame"), {
 			AddThemeObject(SetProps(MakeElement("Label", DropdownConfig.Name, 15), {
 				Size = UDim2.new(1, -12, 1, 0),
@@ -1167,7 +1164,7 @@ function OrionLib:MakeWindow(WindowConfig)
 				Position = UDim2.new(0, 0, 1, -1),
 				Name = "Line",
 				Visible = false
-			}), "Stroke"), 
+			}), "Stroke"),
 			Click
 		}), {
 			Size = UDim2.new(1, 0, 0, 38),
@@ -1179,7 +1176,7 @@ function OrionLib:MakeWindow(WindowConfig)
 	}), "Second")
 
 	AddConnection(DropdownList:GetPropertyChangedSignal("AbsoluteContentSize"), function()
-		DropdownContainer.CanvasSize = UDim2.new(0, 0, 0, DropdownList.AbsoluteContentSize.Y)
+		DropdownContainer.CanvasSize = UDim2.new(0, 0, 0, DropdownList.AbsoluteContentSize.Y + 8)
 	end)
 
 	local function AddOptions(Options)
@@ -1192,7 +1189,7 @@ function OrionLib:MakeWindow(WindowConfig)
 					Name = "Title"
 				}), "Text")
 			}), {
-				Parent = DropdownContainer,
+				Parent = DropdownList,
 				Size = UDim2.new(1, 0, 0, 28),
 				BackgroundTransparency = 1,
 				ClipsDescendants = true
@@ -1205,18 +1202,18 @@ function OrionLib:MakeWindow(WindowConfig)
 
 			Dropdown.Buttons[Option] = OptionBtn
 		end
-	end	
+	end
 
 	function Dropdown:Refresh(Options, Delete)
 		if Delete then
-			for _,v in pairs(Dropdown.Buttons) do
+			for _, v in pairs(Dropdown.Buttons) do
 				v:Destroy()
-			end    
+			end
 			table.clear(Dropdown.Buttons)
 		end
 		Dropdown.Options = Options
 		AddOptions(Dropdown.Options)
-	end  
+	end
 
 	function Dropdown:Set(Value)
 		if not table.find(Dropdown.AllOptions, Value) then
@@ -1229,12 +1226,12 @@ function OrionLib:MakeWindow(WindowConfig)
 		DropdownFrame.F.Selected.Text = Dropdown.Value
 
 		for _, v in pairs(Dropdown.Buttons) do
-			TweenService:Create(v,TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{BackgroundTransparency = 1}):Play()
-			TweenService:Create(v.Title,TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{TextTransparency = 0.4}):Play()
-		end	
+			TweenService:Create(v, TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = 1}):Play()
+			TweenService:Create(v.Title, TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 0.4}):Play()
+		end
 		if Dropdown.Buttons[Value] then
-			TweenService:Create(Dropdown.Buttons[Value],TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{BackgroundTransparency = 0}):Play()
-			TweenService:Create(Dropdown.Buttons[Value].Title,TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{TextTransparency = 0}):Play()
+			TweenService:Create(Dropdown.Buttons[Value], TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = 0}):Play()
+			TweenService:Create(Dropdown.Buttons[Value].Title, TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 0}):Play()
 		end
 		return DropdownConfig.Callback(Dropdown.Value)
 	end
@@ -1253,21 +1250,22 @@ function OrionLib:MakeWindow(WindowConfig)
 	AddConnection(Click.MouseButton1Click, function()
 		Dropdown.Toggled = not Dropdown.Toggled
 		DropdownFrame.F.Line.Visible = Dropdown.Toggled
-		TweenService:Create(DropdownFrame.F.Ico,TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{Rotation = Dropdown.Toggled and 180 or 0}):Play()
+		TweenService:Create(DropdownFrame.F.Ico, TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Rotation = Dropdown.Toggled and 180 or 0}):Play()
 		if #Dropdown.Options > MaxElements then
-			TweenService:Create(DropdownFrame,TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{Size = Dropdown.Toggled and UDim2.new(1, 0, 0, 38 + (MaxElements * 28) + 28) or UDim2.new(1, 0, 0, 38)}):Play()
+			TweenService:Create(DropdownFrame, TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = Dropdown.Toggled and UDim2.new(1, 0, 0, 38 + (MaxElements * 28) + 28) or UDim2.new(1, 0, 0, 38)}):Play()
 		else
-			TweenService:Create(DropdownFrame,TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{Size = Dropdown.Toggled and UDim2.new(1, 0, 0, DropdownList.AbsoluteContentSize.Y + 38 + 28) or UDim2.new(1, 0, 0, 38)}):Play()
+			TweenService:Create(DropdownFrame, TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = Dropdown.Toggled and UDim2.new(1, 0, 0, DropdownList.AbsoluteContentSize.Y + 38 + 28) or UDim2.new(1, 0, 0, 38)}):Play()
 		end
 	end)
 
 	Dropdown:Refresh(Dropdown.Options, false)
 	Dropdown:Set(Dropdown.Value)
-	if DropdownConfig.Flag then				
+	if DropdownConfig.Flag then
 		OrionLib.Flags[DropdownConfig.Flag] = Dropdown
 	end
 	return Dropdown
 end
+
 
 			function ElementFunction:AddBind(BindConfig)
 				BindConfig.Name = BindConfig.Name or "Bind"
