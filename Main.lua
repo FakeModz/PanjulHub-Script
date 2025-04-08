@@ -1,4 +1,4 @@
-  --local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/FakeModz/PanjulHub-Script/refs/heads/main/UI')))()
+ --local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/FakeModz/PanjulHub-Script/refs/heads/main/UI')))()
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
 --Roblox Client
 --ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -345,7 +345,9 @@ Fishing:AddToggle({
                   
 					local ReelScript = Bar:FindFirstChild("reel")
 					if ReelScript and ReelScript.Enabled then
-                    ReelFinished:FireServer(100, false)
+                    ReelFinished:FireServer(100)
+                    task.wait(0.1)
+                    ReelFinished:FireServer(100)
                     --Bar:Destroy()
                
                     
@@ -468,6 +470,9 @@ Fishing:AddToggle({
 					if values and values:FindFirstChild("bite") and values:FindFirstChild("casted") then
 						if values.bite.Value == true and values.casted.Value == true then
 							-- Hindari spam requip
+							ReelBind:Fire()
+							task.wait(0.3)
+							ReelBind:Destroy()
 							if tick() - lastRecastTime > 0.8 then
 								local toolName = tool.Name
 								tool.Parent = backpack
