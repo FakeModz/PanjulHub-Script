@@ -1,4 +1,4 @@
- --local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/FakeModz/PanjulHub-Script/refs/heads/main/UI')))()
+  --local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/FakeModz/PanjulHub-Script/refs/heads/main/UI')))()
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
 --Roblox Client
 --ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -451,7 +451,7 @@ Fishing:AddToggle({
 	Default = false,
 	Callback = function(Value)
 		InstantCatchRunning = Value
-        
+
 		local player = Players.LocalPlayer
 		local backpack = player:WaitForChild("Backpack")
 		local equipEvent = RepliStorage.packages.Net:FindFirstChild("RE/Backpack/Equip")
@@ -459,6 +459,7 @@ Fishing:AddToggle({
 		if Value and not InstantCatchCoroutine then
 			InstantCatchCoroutine = coroutine.create(function()
 				local lastRecastTime = 0
+				local reelFired = false -- Hanya trigger sekali
 
 				while InstantCatchRunning do
 					RunService.RenderStepped:Wait()
@@ -468,16 +469,19 @@ Fishing:AddToggle({
 
 					local values = tool:FindFirstChild("values")
 					if values and values:FindFirstChild("bite") and values:FindFirstChild("casted") then
-						if values.bite.Value == true and values.casted.Value == true then
-							-- Hindari spam requip
+						if values.bite.Value == true and values.casted.Value == true and not reelFired then
+							-- Fire once
 							ReelBind:Fire()
+							reelFired = true
+
 							task.wait(0.3)
 							ReelBind:Destroy()
+
 							if tick() - lastRecastTime > 0.8 then
 								local toolName = tool.Name
 								tool.Parent = backpack
 								task.wait(0.15)
-                                
+
 								local toolInBackpack
 								for _, item in pairs(backpack:GetChildren()) do
 									if item:IsA("Tool") and item.Name:lower():find("rod") then
@@ -488,7 +492,6 @@ Fishing:AddToggle({
 
 								if toolInBackpack then
 									equipEvent:FireServer(toolInBackpack)
-								  
 									lastRecastTime = tick()
 								end
 							end
@@ -502,6 +505,11 @@ Fishing:AddToggle({
 		end
 	end
 })
+
+
+
+
+
 
 local InstantComboRunning = false
 local InstantComboCoroutine
