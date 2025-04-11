@@ -5795,7 +5795,7 @@ function Library:CreateWindow(...)
             Position = UDim2.new(0.008, 0, 0.075, 0);
             Size = UDim2.new(0, 77, 0, 30);
             ZIndex = 200;
-            Visible = false;
+          --  Visible = false;
             Parent = ScreenGui;
         });
     
@@ -5805,7 +5805,7 @@ function Library:CreateWindow(...)
             BorderMode = Enum.BorderMode.Inset;
             Size = UDim2.new(1, 0, 1, 0);
             ZIndex = 201!;
-            Visible = false;
+           -- Visible = false;
             Parent = LockUIOuter;
         });
     
@@ -5819,7 +5819,7 @@ function Library:CreateWindow(...)
             Position = UDim2.new(0, 1, 0, 1);
             Size = UDim2.new(1, -2, 1, -2);
             ZIndex = 202;
-            Visible = false;                                                                                                                                                                                                       
+           -- Visible = false;                                                                                                                                                                                                       
             Parent = LockUIInner;
         });
     
