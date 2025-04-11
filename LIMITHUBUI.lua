@@ -5829,7 +5829,7 @@ function Library:CreateWindow(...)
                 ColorSequenceKeypoint.new(1, Library.MainColor),
             });
             Rotation = -90;
-            Visible = false;                                                                                                                                                                                                      
+                                                                                                                                                                                                                
             Parent = LockUIInnerFrame;
         });
     
