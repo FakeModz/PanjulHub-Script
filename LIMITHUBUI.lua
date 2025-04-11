@@ -1,4 +1,4 @@
-local cloneref = (cloneref or clonereference or function(instance: any) return instance end)
+ local cloneref = (cloneref or clonereference or function(instance: any) return instance end)
 local InputService: UserInputService = cloneref(game:GetService('UserInputService'));
 local TextService: TextService = cloneref(game:GetService('TextService'));
 local CoreGui: CoreGui = cloneref(game:GetService('CoreGui'));
@@ -4800,9 +4800,9 @@ function Library:CreateWindow(...)
     end
 
     if Config.Center then
-  --      Config.AnchorPoint = Vector2.new(0.5, 0.5)
+        -- Config.AnchorPoint = Vector2.new(0.5, 0.5)
         Config.Position = UDim2.new(0.5, -Config.Size.X.Offset/2, 0.5, -Config.Size.Y.Offset/2)
-         end                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+    end
 
     local Window = {
         Tabs = {};
@@ -5774,7 +5774,7 @@ function Library:CreateWindow(...)
             Size = UDim2.new(1, -4, 1, 0);
             BackgroundTransparency = 1;
             Font = Library.Font;
-            Text = "LimitHub";
+            Text = "Toggle UI";
             TextColor3 = Library.FontColor;
             TextSize = 14;
             TextXAlignment = Enum.TextXAlignment.Left;
@@ -5795,7 +5795,7 @@ function Library:CreateWindow(...)
             Position = UDim2.new(0.008, 0, 0.075, 0);
             Size = UDim2.new(0, 77, 0, 30);
             ZIndex = 200;
-          --  Visible = false;
+            Visible = true;
             Parent = ScreenGui;
         });
     
@@ -5804,8 +5804,7 @@ function Library:CreateWindow(...)
             BorderColor3 = Library.AccentColor;
             BorderMode = Enum.BorderMode.Inset;
             Size = UDim2.new(1, 0, 1, 0);
-            ZIndex = 201!;
-           -- Visible = false;
+            ZIndex = 201;
             Parent = LockUIOuter;
         });
     
@@ -5819,7 +5818,6 @@ function Library:CreateWindow(...)
             Position = UDim2.new(0, 1, 0, 1);
             Size = UDim2.new(1, -2, 1, -2);
             ZIndex = 202;
-           -- Visible = false;                                                                                                                                                                                                       
             Parent = LockUIInner;
         });
     
@@ -5829,7 +5827,6 @@ function Library:CreateWindow(...)
                 ColorSequenceKeypoint.new(1, Library.MainColor),
             });
             Rotation = -90;
-                                                                                                                                                                                                                
             Parent = LockUIInnerFrame;
         });
     
@@ -5842,7 +5839,7 @@ function Library:CreateWindow(...)
             end
         });
     
-local LockUIButton = Library:Create('TextButton', {
+        local LockUIButton = Library:Create('TextButton', {
             Position = UDim2.new(0, 5, 0, 0);
             Size = UDim2.new(1, -4, 1, 0);
             BackgroundTransparency = 1;
@@ -5853,7 +5850,7 @@ local LockUIButton = Library:Create('TextButton', {
             TextXAlignment = Enum.TextXAlignment.Left;
             TextStrokeTransparency = 0;
             ZIndex = 203;
-            Visible = false;                                                                                                                                                                                                      
+            Visible = false;
             Parent = LockUIInnerFrame;
         });
     
@@ -5864,8 +5861,6 @@ local LockUIButton = Library:Create('TextButton', {
             LockUIButton.Text = Library.CantDragForced and "Unlock UI" or "Lock UI";
         end)
     end;
-
-
 
     if Config.AutoShow then task.spawn(Library.Toggle) end
 
