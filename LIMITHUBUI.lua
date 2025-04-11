@@ -85,7 +85,7 @@ local Library = {
     DevicePlatform = Enum.Platform.None;
 
     CanDrag = true;
-    CantDragForced = false;
+    CantDragForced = true;
 
     NotifySide = "Left";
     ShowCustomCursor = true;
