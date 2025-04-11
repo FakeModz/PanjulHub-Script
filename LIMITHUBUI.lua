@@ -4800,9 +4800,10 @@ function Library:CreateWindow(...)
     end
 
     if Config.Center then
-        Config.AnchorPoint = Vector2.new(0.5, 0.5)
-        Config.Position = UDim2.new(0.5, -Config.Size.X.Offset/2, 0.5, -Config.Size.Y.Offset/2)
-    end
+    Config.AnchorPoint = Vector2.new(0.5, 0.5)
+    Config.Position = UDim2.new(0.5, 0, 0.5, 0)
+end
+
 
     local Window = {
         Tabs = {};
@@ -5795,7 +5796,7 @@ function Library:CreateWindow(...)
             Position = UDim2.new(0.008, 0, 0.075, 0);
             Size = UDim2.new(0, 77, 0, 30);
             ZIndex = 200;
-            Visible = true;
+            Visible = false;
             Parent = ScreenGui;
         });
     
@@ -5804,7 +5805,8 @@ function Library:CreateWindow(...)
             BorderColor3 = Library.AccentColor;
             BorderMode = Enum.BorderMode.Inset;
             Size = UDim2.new(1, 0, 1, 0);
-            ZIndex = 201;
+            ZIndex = 201!;
+            Visible = false;
             Parent = LockUIOuter;
         });
     
@@ -5818,6 +5820,7 @@ function Library:CreateWindow(...)
             Position = UDim2.new(0, 1, 0, 1);
             Size = UDim2.new(1, -2, 1, -2);
             ZIndex = 202;
+            Visible = false;                                                                                                                                                                                                       
             Parent = LockUIInner;
         });
     
@@ -5827,6 +5830,7 @@ function Library:CreateWindow(...)
                 ColorSequenceKeypoint.new(1, Library.MainColor),
             });
             Rotation = -90;
+            Visible = false;                                                                                                                                                                                                      
             Parent = LockUIInnerFrame;
         });
     
