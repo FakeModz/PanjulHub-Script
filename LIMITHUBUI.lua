@@ -5839,22 +5839,28 @@ function Library:CreateWindow(...)
             end
         });
     
-        -- Auto Lock UI to center (tanpa tombol)
-task.defer(function()
-    local Holder = Library.Window and Library.Window.Holder
-    if Holder then
-        -- Set ke tengah dan kunci drag
-        Holder.AnchorPoint = Vector2.new(0.5, 0.5)
-        Holder.Position = UDim2.new(0.5, 0, 0.5, 0)
-        Library.CantDragForced = true
-        Library.CanDrag = false
-
-        -- Recenter saat screen size berubah
-        RunService:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
-            Holder.Position = UDim2.new(0.5, 0, 0.5, 0)
+local LockUIButton = Library:Create('TextButton', {
+            Position = UDim2.new(0, 5, 0, 0);
+            Size = UDim2.new(1, -4, 1, 0);
+            BackgroundTransparency = 1;
+            Font = Library.Font;
+            Text = "Lock UI";
+            TextColor3 = Library.FontColor;
+            TextSize = 14;
+            TextXAlignment = Enum.TextXAlignment.Left;
+            TextStrokeTransparency = 0;
+            ZIndex = 203;
+            Parent = LockUIInnerFrame;
+        });
+    
+        Library:MakeDraggableUsingParent(LockUIButton, LockUIOuter);
+        
+        LockUIButton.MouseButton1Down:Connect(function()
+            Library.CantDragForced = not Library.CantDragForced;
+            LockUIButton.Text = Library.CantDragForced and "Unlock UI" or "Lock UI";
         end)
-    end
-end)
+    end;
+
 
     if Config.AutoShow then task.spawn(Library.Toggle) end
 
