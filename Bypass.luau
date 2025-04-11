@@ -28,7 +28,7 @@ if getreg and hookfunction and isexecutorclosure and getgc then
 		if AssertFunction(Object) then
 			local Source = debug.info(Object, "s")
 			if Source:find(NaughtyNaughty) then
-				--warn("Cleared AC function", Object, "@", Source)
+				warn("Cleared AC function", Object, "@", Source)
 				ACFlags += 1
 				hookfunction(Object, LPH_NO_UPVALUES(function() end))
 			end
@@ -39,7 +39,7 @@ if getreg and hookfunction and isexecutorclosure and getgc then
 		if type(Object) == "thread" then
 			local Source = debug.info(Object, 1, "s")
 			if Source and Source:find(NaughtyNaughty) then
-				--warn("Killed AC thread", Object, "@", Source)
+				warn("Killed AC thread", Object, "@", Source)
 				ACFlags += 1
 				coroutine.close(Object)
 			end
@@ -81,4 +81,4 @@ local Handshake =
 	game:GetService("ReplicatedStorage"):WaitForChild("events"):WaitForChild("getsettings") :: RemoteFunction
 Handshake.OnClientInvoke = HandshakeEmulated
 
--- print("Loaded SasGuard v2 (", BYPASS_SUBVERSION, ")", "Flagged:", ACFlags)
+print("Loaded SasGuard v3 (", BYPASS_SUBVERSION, ")", "Flagged:", ACFlags)
