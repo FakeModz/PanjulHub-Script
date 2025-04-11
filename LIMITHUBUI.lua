@@ -4800,10 +4800,9 @@ function Library:CreateWindow(...)
     end
 
     if Config.Center then
-    Config.AnchorPoint = Vector2.new(0.5, 0.5)
-    Config.Position = UDim2.new(0.5, 0, 0.5, 0)
-end
-
+  --      Config.AnchorPoint = Vector2.new(0.5, 0.5)
+        Config.Position = UDim2.new(0.5, -Config.Size.X.Offset/2, 0.5, -Config.Size.Y.Offset/2)
+         end                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
 
     local Window = {
         Tabs = {};
