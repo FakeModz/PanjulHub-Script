@@ -5727,7 +5727,7 @@ function Library:CreateWindow(...)
             Position = UDim2.new(0.008, 0, 0.018, 0);
             Size = UDim2.new(0, 77, 0, 30);
             ZIndex = 200;
-            Visible = false;
+            Visible = true;
             Parent = ScreenGui;
         });
     
@@ -5737,7 +5737,7 @@ function Library:CreateWindow(...)
             BorderMode = Enum.BorderMode.Inset;
             Size = UDim2.new(1, 0, 1, 0);
             ZIndex = 201;
-            Visible = false;                                     
+            Visible = true;                                     
             Parent = ToggleUIOuter;
         });
     
@@ -5751,7 +5751,7 @@ function Library:CreateWindow(...)
             Position = UDim2.new(0, 1, 0, 1);
             Size = UDim2.new(1, -2, 1, -2);
             ZIndex = 202;
-            Visible = false;                                      
+            Visible = true;                                      
             Parent = ToggleUIInner;
         });
     
@@ -5775,7 +5775,7 @@ function Library:CreateWindow(...)
     
         local ToggleUIButton = Library:Create('TextButton', {
             Position = UDim2.new(0, 5, 0, 0);
-            Size = UDim2.new(1, -4, 1, 0);
+            Size = UDim2.new(0, 15, 0, 15);
             BackgroundTransparency = 1;
             Font = Library.Font;
             Text = "";
@@ -5790,7 +5790,7 @@ function Library:CreateWindow(...)
     local ToggleLogo = Library:Create('ImageLabel', {
     BackgroundTransparency = 1,
     Image = "rbxassetid://127159574031561", -- ganti dengan ID logo-mu
-    Size = UDim2.new(0, 20, 0, 20),
+    Size = UDim2.new(0, 15, 0, 15),
     Position = UDim2.new(0, 5, 0, 0),
     ZIndex = 203,
     Parent = ToggleUIButton;
