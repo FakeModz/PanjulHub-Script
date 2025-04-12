@@ -5809,7 +5809,7 @@ local ToggleUIButton = Library:Create('TextButton', {
 -- Tambahkan logo di tengah jika mau
 local ToggleLogo = Library:Create('ImageLabel', {
     BackgroundTransparency = 1,
-    Image = "rbxassetid://4483345998", -- Ganti dengan ID kamu
+    Image = "rbxassetid://81873546091510", -- Ganti dengan ID kamu
     Size = UDim2.new(0, 40, 0, 40),
     Position = UDim2.new(0.5, -20, 0.5, -20),
     ZIndex = 204,
