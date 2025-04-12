@@ -5726,7 +5726,7 @@ function Library:CreateWindow(...)
 local ToggleUIOuter = Library:Create('Frame', {
     BorderColor3 = Color3.new(0, 0, 0),
     Position = UDim2.new(0.008, 0, 0.018, 0),
-    Size = UDim2.new(0, 50, 0, 50), -- Buat ukurannya persegi agar bisa jadi lingkaran
+    Size = UDim2.new(0, 60, 0, 60), -- Buat ukurannya persegi agar bisa jadi lingkaran
     ZIndex = 200,
     Visible = true,
     Parent = ScreenGui
@@ -5809,10 +5809,10 @@ local ToggleUIButton = Library:Create('TextButton', {
 -- Tambahkan logo di tengah jika mau
 local ToggleLogo = Library:Create('ImageLabel', {
     BackgroundTransparency = 1,
-    Image = "rbxassetid://81873546091510", -- Ganti dengan ID kamu
-    Size = UDim2.new(0, 20, 0, 20),
-    Position = UDim2.new(0.5, -10, 0.5, -10),
-    ZIndex = 203,
+    Image = "rbxassetid://4483345998", -- Ganti dengan ID kamu
+    Size = UDim2.new(0, 40, 0, 40),
+    Position = UDim2.new(0.5, -20, 0.5, -20),
+    ZIndex = 204,
     Parent = ToggleUIButton
 })
                                    
