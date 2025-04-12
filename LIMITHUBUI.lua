@@ -5801,6 +5801,7 @@ local ToggleUIButton = Library:Create('TextButton', {
     TextColor3 = Library.FontColor,
     TextSize = 40,
     TextXAlignment = Enum.TextXAlignment.Center,
+    TextYAlignment = Enum.TextYAlignment.Center,                                                 
     TextStrokeTransparency = 0,
     ZIndex = 203,
     Parent = ToggleUIInnerFrame
