@@ -5776,7 +5776,7 @@ function Library:CreateWindow(...)
             Size = UDim2.new(1, -4, 1, 0);
             BackgroundTransparency = 1;
             Font = Library.Font;
-            Text = "Toggle UI";
+            Text = "";
             TextColor3 = Library.FontColor;
             TextSize = 14;
             TextXAlignment = Enum.TextXAlignment.Left;
@@ -5784,6 +5784,14 @@ function Library:CreateWindow(...)
             ZIndex = 203;
             Parent = ToggleUIInnerFrame;
         });
+    local ToggleLogo = Library:Create('ImageLabel', {
+    BackgroundTransparency = 1,
+    Image = "rbxassetid://127159574031561", -- ganti dengan ID logo-mu
+    Size = UDim2.new(0, 20, 0, 20),
+    Position = UDim2.new(0, 5, 0.5, -10),
+    ZIndex = 204,
+    Parent = ToggleUIButton;
+})                                   
     
         Library:MakeDraggableUsingParent(ToggleUIButton, ToggleUIOuter);
 
