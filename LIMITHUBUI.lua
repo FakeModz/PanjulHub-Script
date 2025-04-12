@@ -5788,8 +5788,8 @@ function Library:CreateWindow(...)
     BackgroundTransparency = 1,
     Image = "rbxassetid://4483345998", -- ganti dengan ID logo-mu
     Size = UDim2.new(0, 20, 0, 20),
-    Position = UDim2.new(0, 5, 0.5, -10),
-    ZIndex = 204,
+    Position = UDim2.new(0, 5, 0, 0),
+    ZIndex = 203,
     Parent = ToggleUIButton;
 })                                   
     
