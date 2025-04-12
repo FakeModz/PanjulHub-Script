@@ -5786,7 +5786,7 @@ function Library:CreateWindow(...)
         });
     local ToggleLogo = Library:Create('ImageLabel', {
     BackgroundTransparency = 1,
-    Image = "rbxassetid://127159574031561", -- ganti dengan ID logo-mu
+    Image = "rbxassetid://4483345998", -- ganti dengan ID logo-mu
     Size = UDim2.new(0, 20, 0, 20),
     Position = UDim2.new(0, 5, 0.5, -10),
     ZIndex = 204,
