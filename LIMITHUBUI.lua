@@ -5784,7 +5784,7 @@ function Library:CreateWindow(...)
             TextXAlignment = Enum.TextXAlignment.Left;
             TextStrokeTransparency = 0;
             ZIndex = 203;
-            Visible = false;                              
+            Visible = true;                              
             Parent = ToggleUIInnerFrame;
         });
     local ToggleLogo = Library:Create('ImageLabel', {
