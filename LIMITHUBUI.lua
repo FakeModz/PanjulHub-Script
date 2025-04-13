@@ -5809,12 +5809,18 @@ local ToggleUIButton = Library:Create('TextButton', {
 
 -- Tambahkan logo di tengah jika mau
 local ToggleLogo = Library:Create('ImageLabel', {
-    BackgroundTransparency = 1,
-    Image = "rbxassetid://130349309591439", -- Ganti dengan ID kamu
-    Size = UDim2.new(0, 40, 0, 40),
-    Position = UDim2.new(0.5, -20, 0.5, -20),
-    ZIndex = 204,
-    Parent = ToggleUIButton
+    BackgroundTransparency = 1,
+    Image = "rbxassetid://130349309591439", -- Ganti dengan ID kamu
+    Size = UDim2.new(0, 55, 0, 55),
+    Position = UDim2.new(0.5, -20, 0.5, -20),
+    ZIndex = 204,
+    Parent = ToggleUIButton
+})
+
+-- Tambahkan UICorner untuk bentuk lingkaran
+local LogoCorner = Library:Create('UICorner', {
+    CornerRadius = UDim.new(1, 0), -- 1 artinya maksimal untuk lingkaran penuh
+    Parent = ToggleLogo
 })
                                    
     
