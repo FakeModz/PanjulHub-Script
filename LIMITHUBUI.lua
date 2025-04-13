@@ -4855,8 +4855,8 @@ function Library:CreateWindow(...)
 -- Logo mengikuti tinggi label (25x25)
 local LogoImage = Instance.new("ImageLabel")
 LogoImage.Name = "Logo"
-LogoImage.Size = UDim2.new(0, 25, 0, 20)
-LogoImage.Position = UDim2.new(0, 2, 0, 0) -- Tempel di pojok kiri atas
+LogoImage.Size = UDim2.new(0, 25, 0, 23)
+LogoImage.Position = UDim2.new(0, -10, 0, 0) -- Tempel di pojok kiri atas
 LogoImage.BackgroundTransparency = 1
 LogoImage.Image = "rbxassetid://130349309591439"
 LogoImage.ZIndex = 2
