@@ -5723,7 +5723,7 @@ function Library:CreateWindow(...)
         local ToggleUIOuter = Library:Create('Frame', {
             BorderColor3 = Color3.new(0, 0, 0);
             Position = UDim2.new(0.008, 0, 0.018, 0);
-            Size = UDim2.new(0, 60, 0, 60);
+            Size = UDim2.new(0, 50, 0, 50);
             ZIndex = 200;
             Visible = true;
             Parent = ScreenGui;
@@ -5750,6 +5750,10 @@ function Library:CreateWindow(...)
             ZIndex = 202;
             Parent = ToggleUIInner;
         });
+    local UiCornerd = Library:Create('UICorner', {
+    CornerRadius = UDim.new(1, 0), -- 1 artinya maksimal untuk lingkaran penuh
+    Parent = UIInner
+});                                                                                             
     
         local ToggleUIGradient = Library:Create('UIGradient', {
             Color = ColorSequence.new({
@@ -5782,6 +5786,22 @@ function Library:CreateWindow(...)
             ZIndex = 203;
             Parent = ToggleUIInnerFrame;
         });
+local ToggleLogo = Library:Create('ImageLabel', {
+    BackgroundTransparency = 1,
+    Image = "rbxassetid://130349309591439", -- Ganti dengan ID kamu
+    Size = UDim2.new(0, 50, 0, 50),
+    Position = UDim2.new(0.5, -20, 0.5, -20),
+    ZIndex = 204,
+    Parent = ToggleUIButton
+});
+      
+-- Tambahkan UICorner untuk bentuk lingkaran
+local LogoCorner = Library:Create('UICorner', {
+    CornerRadius = UDim.new(1, 0), -- 1 artinya maksimal untuk lingkaran penuh
+    Parent = ToggleLogo
+});
+                                                                                                  
+                                                                                                        
     
         Library:MakeDraggableUsingParent(ToggleUIButton, ToggleUIOuter);
 
