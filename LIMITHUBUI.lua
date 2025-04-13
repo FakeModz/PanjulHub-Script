@@ -4843,13 +4843,29 @@ function Library:CreateWindow(...)
     });
 
     local WindowLabel = Library:CreateLabel({
-        Position = UDim2.new(0, 7, 0, 0);
-        Size = UDim2.new(0, 0, 0, 25);
-        Text = Config.Title or '';
-        TextXAlignment = Enum.TextXAlignment.Left;
-        ZIndex = 1;
-        Parent = Inner;
-    });
+    Position = UDim2.new(0, 7, 0, 0);
+    Size = UDim2.new(0, 0, 0, 25); -- Lebar 0 (akan expand otomatis kalau pakai UIListLayout atau sesuai isi), tinggi 25
+    Text = Config.Title or '';
+    TextXAlignment = Enum.TextXAlignment.Left;
+    BackgroundTransparency = 1;
+    ZIndex = 1;
+    Parent = Inner;
+});
+
+-- Padding biar teks gak nabrak logo
+local Padding = Instance.new("UIPadding")
+Padding.PaddingLeft = UDim.new(0, 30) -- sedikit lebih besar dari ukuran logo
+Padding.Parent = WindowLabel
+
+-- Logo mengikuti tinggi label (25x25)
+local LogoImage = Instance.new("ImageLabel")
+LogoImage.Name = "Logo"
+LogoImage.Size = UDim2.new(0, 25, 0, 25)
+LogoImage.Position = UDim2.new(0, 2, 0, 0) -- Tempel di pojok kiri atas
+LogoImage.BackgroundTransparency = 1
+LogoImage.Image = "rbxassetid://130349309591439"
+LogoImage.ZIndex = 2
+LogoImage.Parent = WindowLabel
 
     local MainSectionOuter = Library:Create('Frame', {
         BackgroundColor3 = Library.BackgroundColor;
