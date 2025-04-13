@@ -9,7 +9,7 @@ local TweenService: TweenService = cloneref(game:GetService('TweenService'));
 local RenderStepped = RunService.RenderStepped;
 local LocalPlayer = Players.LocalPlayer;
 local Mouse = LocalPlayer:GetMouse();
-    
+
 local DrawingLib = typeof(Drawing) == "table" and Drawing or { drawing_replaced = true };
 local ProtectGui = protectgui or (function() end);
 local GetHUI = gethui or (function() return CoreGui end);
@@ -5720,7 +5720,7 @@ function Library:CreateWindow(...)
     end));
 
     if Library.IsMobile then
-            local ToggleUIOuter = Library:Create('Frame', {
+        local ToggleUIOuter = Library:Create('Frame', {
             BorderColor3 = Color3.new(0, 0, 0);
             Position = UDim2.new(0.008, 0, 0.018, 0);
             Size = UDim2.new(0, 50, 0, 50);
@@ -5781,8 +5781,7 @@ function Library:CreateWindow(...)
             TextStrokeTransparency = 0;
             ZIndex = 203;
             Parent = ToggleUIInnerFrame;
-        });                                                                                           
-                                                                                                        
+        });
     
         Library:MakeDraggableUsingParent(ToggleUIButton, ToggleUIOuter);
 
