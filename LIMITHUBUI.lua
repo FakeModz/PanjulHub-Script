@@ -5776,7 +5776,7 @@ local ToggleUIButton = Library:Create('TextButton', {
     Size = UDim2.new(1, -4, 1, 0),
     BackgroundTransparency = 1,
     Font = Library.Font,
-    Text = "LimitHub",
+    Text = "",
     TextColor3 = Library.FontColor,
     TextSize = 14,
     TextXAlignment = Enum.TextXAlignment.Left,
@@ -5789,16 +5789,16 @@ local ToggleUIButton = Library:Create('TextButton', {
 local ToggleLogo = Library:Create('ImageLabel', {
     BackgroundTransparency = 1,
     Image = "rbxassetid://130349309591439",
-    Size = UDim2.new(0, 30, 0, 30), -- Ukuran lebih kecil dari tombol
+    Size = UDim2.new(0, 40, 0, 40), -- Ukuran lebih kecil dari tombol
     Position = UDim2.new(0, 5, 0.5, -15), -- Sebelah kiri & tengah vertikal
     ZIndex = 204,
     Parent = ToggleUIInnerFrame, -- Bukan ToggleUIButton agar tidak overlap
 });
 
 -- Lingkaran
-local ToggleLogoCorner = Instance.new("UICorner")
-ToggleLogoCorner.CornerRadius = UDim.new(1, 0)
-ToggleLogoCorner.Parent = ToggleLogo
+--local ToggleLogoCorner = Instance.new("UICorner")
+--ToggleLogoCorner.CornerRadius = UDim.new(1, 0)
+--ToggleLogoCorner.Parent = ToggleLogo
 
       
                                                                                                   
