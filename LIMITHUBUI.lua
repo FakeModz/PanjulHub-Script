@@ -5750,10 +5750,7 @@ function Library:CreateWindow(...)
             ZIndex = 202;
             Parent = ToggleUIInner;
         });
-    local UiCornerd = Library:Create('UICorner', {
-    CornerRadius = UDim.new(1, 0), -- 1 artinya maksimal untuk lingkaran penuh
-    Parent = UIInner
-});                                                                                             
+                                                                                                 
     
         local ToggleUIGradient = Library:Create('UIGradient', {
             Color = ColorSequence.new({
@@ -5795,11 +5792,6 @@ local ToggleLogo = Library:Create('ImageLabel', {
     Parent = ToggleUIButton
 });
       
--- Tambahkan UICorner untuk bentuk lingkaran
-local LogoCorner = Library:Create('UICorner', {
-    CornerRadius = UDim.new(1, 0), -- 1 artinya maksimal untuk lingkaran penuh
-    Parent = ToggleLogo
-});
                                                                                                   
                                                                                                         
     
