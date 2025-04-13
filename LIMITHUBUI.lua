@@ -5774,7 +5774,7 @@ function Library:CreateWindow(...)
             Size = UDim2.new(1, -4, 1, 0);
             BackgroundTransparency = 1;
             Font = Library.Font;
-            Text = "Toggle UI";
+            Text = "";
             TextColor3 = Library.FontColor;
             TextSize = 14;
             TextXAlignment = Enum.TextXAlignment.Left;
@@ -5782,6 +5782,16 @@ function Library:CreateWindow(...)
             ZIndex = 203;
             Parent = ToggleUIInnerFrame;
         });
+
+local LogoImage = Instance.new("ImageLabel")
+LogoImage.Name = "ToggleLogo"
+LogoImage.Image = "rbxassetid://130349309591439" -- Ganti dengan ID asset logo kamu
+LogoImage.BackgroundTransparency = 1
+LogoImage.Size = UDim2.new(1, 0, 1, 0) -- 100% dari ukuran tombol
+LogoImage.Position = UDim2.new(0, 0, 0, 0) -- Diposisikan di tengah
+LogoImage.ZIndex = 204
+LogoImage.Parent = ToggleUIOuter
+
     
         Library:MakeDraggableUsingParent(ToggleUIButton, ToggleUIOuter);
 
@@ -5856,14 +5866,6 @@ function Library:CreateWindow(...)
             Parent = LockUIInnerFrame;
         });
 
-local LogoImage = Instance.new("ImageLabel")
-LogoImage.Name = "ToggleLogo"
-LogoImage.Image = "rbxassetid://130349309591439" -- Ganti dengan ID asset logo kamu
-LogoImage.BackgroundTransparency = 1
-LogoImage.Size = UDim2.new(1, 0, 1, 0) -- 100% dari ukuran tombol
-LogoImage.Position = UDim2.new(0.15, 0, 0.15, 0) -- Diposisikan di tengah
-LogoImage.ZIndex = 204
-LogoImage.Parent = ToggleUIOuter
 
     
         Library:MakeDraggableUsingParent(LockUIButton, LockUIOuter);
