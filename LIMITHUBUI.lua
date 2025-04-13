@@ -5728,7 +5728,7 @@ local ToggleUIOuter = Library:Create('Frame', {
     ZIndex = 200,
     Visible = true,
     Parent = ScreenGui,
-})
+});
 
 local ToggleUIInner = Library:Create('Frame', {
     BackgroundColor3 = Library.MainColor,
@@ -5737,11 +5737,11 @@ local ToggleUIInner = Library:Create('Frame', {
     Size = UDim2.new(1, 0, 1, 0),
     ZIndex = 201,
     Parent = ToggleUIOuter,
-})
+});
 
 Library:AddToRegistry(ToggleUIInner, {
     BorderColor3 = 'AccentColor',
-})
+});
 
 local ToggleUIInnerFrame = Library:Create('Frame', {
     BackgroundColor3 = Color3.new(1, 1, 1),
@@ -5750,7 +5750,7 @@ local ToggleUIInnerFrame = Library:Create('Frame', {
     Size = UDim2.new(1, -2, 1, -2),
     ZIndex = 202,
     Parent = ToggleUIInner,
-})
+});
 
 local ToggleUIGradient = Library:Create('UIGradient', {
     Color = ColorSequence.new({
@@ -5759,7 +5759,7 @@ local ToggleUIGradient = Library:Create('UIGradient', {
     }),
     Rotation = -90,
     Parent = ToggleUIInnerFrame,
-})
+});
 
 Library:AddToRegistry(ToggleUIGradient, {
     Color = function()
@@ -5768,7 +5768,7 @@ Library:AddToRegistry(ToggleUIGradient, {
             ColorSequenceKeypoint.new(1, Library.MainColor),
         })
     end
-})
+});
 
 -- Tombol tak terlihat yang bisa diklik
 local ToggleUIButton = Library:Create('TextButton', {
@@ -5783,7 +5783,7 @@ local ToggleUIButton = Library:Create('TextButton', {
     TextStrokeTransparency = 0,
     ZIndex = 203,
     Parent = ToggleUIInnerFrame,
-})
+});
 
 -- Logo di dalam tombol pojok kiri atas
 local ToggleLogo = Library:Create('ImageLabel', {
@@ -5793,7 +5793,7 @@ local ToggleLogo = Library:Create('ImageLabel', {
     Position = UDim2.new(0.5, -20, 0.5, -20), -- tengah dari tombol 50x50
     ZIndex = 204,
     Parent = ToggleUIInnerFrame,
-})
+});
 
 
 
