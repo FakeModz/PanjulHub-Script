@@ -1,4 +1,4 @@
- local cloneref = (cloneref or clonereference or function(instance: any) return instance end)
+  local cloneref = (cloneref or clonereference or function(instance: any) return instance end)
 local InputService: UserInputService = cloneref(game:GetService('UserInputService'));
 local TextService: TextService = cloneref(game:GetService('TextService'));
 local CoreGui: CoreGui = cloneref(game:GetService('CoreGui'));
@@ -9,7 +9,7 @@ local TweenService: TweenService = cloneref(game:GetService('TweenService'));
 local RenderStepped = RunService.RenderStepped;
 local LocalPlayer = Players.LocalPlayer;
 local Mouse = LocalPlayer:GetMouse();
- 
+
 local DrawingLib = typeof(Drawing) == "table" and Drawing or { drawing_replaced = true };
 local ProtectGui = protectgui or (function() end);
 local GetHUI = gethui or (function() return CoreGui end);
@@ -4843,15 +4843,13 @@ function Library:CreateWindow(...)
     });
 
     local WindowLabel = Library:CreateLabel({
-    Position = UDim2.new(0.5, 0, 0, 0);
-    AnchorPoint = Vector2.new(0.5, 0);
-    Size = UDim2.new(1, -20, 0, 25);
-    Text = Config.Title or '';
-    TextXAlignment = Enum.TextXAlignment.Center;
-    ZIndex = 1;
-    Parent = Inner;
-});
-
+        Position = UDim2.new(0, 7, 0, 0);
+        Size = UDim2.new(0, 0, 0, 25);
+        Text = Config.Title or '';
+        TextXAlignment = Enum.TextXAlignment.Left;
+        ZIndex = 1;
+        Parent = Inner;
+    });
 
     local MainSectionOuter = Library:Create('Frame', {
         BackgroundColor3 = Library.BackgroundColor;
@@ -5722,102 +5720,68 @@ function Library:CreateWindow(...)
     end));
 
     if Library.IsMobile then
-        -- Outer Frame
-local ToggleUIOuter = Library:Create('Frame', {
-    BorderColor3 = Color3.new(0, 0, 0),
-    Position = UDim2.new(0.008, 0, 0.018, 0),
-    Size = UDim2.new(0, 60, 0, 60), -- Buat ukurannya persegi agar bisa jadi lingkaran
-    ZIndex = 200,
-    Visible = true,
-    Parent = ScreenGui
-})
-
--- Tambahkan UICorner untuk bentuk lingkaran
-Library:Create('UICorner', {
-    CornerRadius = UDim.new(1, 0), -- 1 = full lingkaran
-    Parent = ToggleUIOuter
-})
-
--- Inner Frame
-local ToggleUIInner = Library:Create('Frame', {
-    BackgroundColor3 = Library.MainColor,
-    BorderColor3 = Library.AccentColor,
-    BorderMode = Enum.BorderMode.Inset,
-    Size = UDim2.new(1, 0, 1, 0),
-    ZIndex = 201,
-    Parent = ToggleUIOuter
-})
-
-Library:Create('UICorner', {
-    CornerRadius = UDim.new(1, 0),
-    Parent = ToggleUIInner
-})
-
-Library:AddToRegistry(ToggleUIInner, {
-    BorderColor3 = 'AccentColor';
-})
-
--- Frame Dalam
-local ToggleUIInnerFrame = Library:Create('Frame', {
-    BackgroundColor3 = Color3.new(1, 1, 1),
-    BorderSizePixel = 0,
-    Position = UDim2.new(0, 1, 0, 1),
-    Size = UDim2.new(1, -2, 1, -2),
-    ZIndex = 202,
-    Parent = ToggleUIInner
-})
-
-Library:Create('UICorner', {
-    CornerRadius = UDim.new(1, 0),
-    Parent = ToggleUIInnerFrame
-})
-
--- Gradient
-local ToggleUIGradient = Library:Create('UIGradient', {
-    Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0, Library:GetDarkerColor(Library.MainColor)),
-        ColorSequenceKeypoint.new(1, Library.MainColor),
-    }),
-    Rotation = -90,
-    Parent = ToggleUIInnerFrame
-})
-
-Library:AddToRegistry(ToggleUIGradient, {
-    Color = function()
-        return ColorSequence.new({
-            ColorSequenceKeypoint.new(0, Library:GetDarkerColor(Library.MainColor)),
-            ColorSequenceKeypoint.new(1, Library.MainColor),
-        })
-    end
-})
-
--- Tombol (TextButton)
-local ToggleUIButton = Library:Create('TextButton', {
-    Position = UDim2.new(0, 0, 0, 0),
-    Size = UDim2.new(1, 0, 1, 0),
-    BackgroundTransparency = 1,
-    Font = Enum.Font.SpecialElite,
-    Text = "L",
-    TextColor3 = Library.FontColor,
-    TextSize = 40,
-    TextXAlignment = Enum.TextXAlignment.Center,
-    TextYAlignment = Enum.TextYAlignment.Center,                                                 
-    TextStrokeTransparency = 0,
-    ZIndex = 203,
-    Parent = ToggleUIInnerFrame
-})
-
--- Tambahkan logo di tengah jika mau
-local ToggleLogo = Library:Create('ImageLabel', {
-    BackgroundTransparency = 1,
-    Image = "rbxassetid://130349309591439", -- Ganti dengan ID kamu
-    Size = UDim2.new(0, 40, 0, 40),
-    Position = UDim2.new(0.5, -20, 0.5, -20),
-    ZIndex = 204,
-    Parent = ToggleUIButton
-})
-
-                                   
+        local ToggleUIOuter = Library:Create('Frame', {
+            BorderColor3 = Color3.new(0, 0, 0);
+            Position = UDim2.new(0.008, 0, 0.018, 0);
+            Size = UDim2.new(0, 77, 0, 30);
+            ZIndex = 200;
+            Visible = true;
+            Parent = ScreenGui;
+        });
+    
+        local ToggleUIInner = Library:Create('Frame', {
+            BackgroundColor3 = Library.MainColor;
+            BorderColor3 = Library.AccentColor;
+            BorderMode = Enum.BorderMode.Inset;
+            Size = UDim2.new(1, 0, 1, 0);
+            ZIndex = 201;
+            Parent = ToggleUIOuter;
+        });
+    
+        Library:AddToRegistry(ToggleUIInner, {
+            BorderColor3 = 'AccentColor';
+        });
+    
+        local ToggleUIInnerFrame = Library:Create('Frame', {
+            BackgroundColor3 = Color3.new(1, 1, 1);
+            BorderSizePixel = 0;
+            Position = UDim2.new(0, 1, 0, 1);
+            Size = UDim2.new(1, -2, 1, -2);
+            ZIndex = 202;
+            Parent = ToggleUIInner;
+        });
+    
+        local ToggleUIGradient = Library:Create('UIGradient', {
+            Color = ColorSequence.new({
+                ColorSequenceKeypoint.new(0, Library:GetDarkerColor(Library.MainColor)),
+                ColorSequenceKeypoint.new(1, Library.MainColor),
+            });
+            Rotation = -90;
+            Parent = ToggleUIInnerFrame;
+        });
+    
+        Library:AddToRegistry(ToggleUIGradient, {
+            Color = function()
+                return ColorSequence.new({
+                    ColorSequenceKeypoint.new(0, Library:GetDarkerColor(Library.MainColor)),
+                    ColorSequenceKeypoint.new(1, Library.MainColor),
+                });
+            end
+        });
+    
+        local ToggleUIButton = Library:Create('TextButton', {
+            Position = UDim2.new(0, 5, 0, 0);
+            Size = UDim2.new(1, -4, 1, 0);
+            BackgroundTransparency = 1;
+            Font = Library.Font;
+            Text = "Toggle UI";
+            TextColor3 = Library.FontColor;
+            TextSize = 14;
+            TextXAlignment = Enum.TextXAlignment.Left;
+            TextStrokeTransparency = 0;
+            ZIndex = 203;
+            Parent = ToggleUIInnerFrame;
+        });
     
         Library:MakeDraggableUsingParent(ToggleUIButton, ToggleUIOuter);
 
@@ -5831,7 +5795,7 @@ local ToggleLogo = Library:Create('ImageLabel', {
             Position = UDim2.new(0.008, 0, 0.075, 0);
             Size = UDim2.new(0, 77, 0, 30);
             ZIndex = 200;
-            Visible = false;
+            Visible = true;
             Parent = ScreenGui;
         });
     
@@ -5841,7 +5805,7 @@ local ToggleLogo = Library:Create('ImageLabel', {
             BorderMode = Enum.BorderMode.Inset;
             Size = UDim2.new(1, 0, 1, 0);
             ZIndex = 201;
-            Visible = false;                                     
+            Visible = true;                                     
             Parent = LockUIOuter;
         });
     
@@ -5855,7 +5819,7 @@ local ToggleLogo = Library:Create('ImageLabel', {
             Position = UDim2.new(0, 1, 0, 1);
             Size = UDim2.new(1, -2, 1, -2);
             ZIndex = 202;
-            Visible = false;                                     
+            Visible = true;                                     
             Parent = LockUIInner;
         });
     
@@ -5884,11 +5848,11 @@ local ToggleLogo = Library:Create('ImageLabel', {
             Font = Library.Font;
             Text = "Lock UI";
             TextColor3 = Library.FontColor;
-            TextSize = 40;
+            TextSize = 14;
             TextXAlignment = Enum.TextXAlignment.Left;
             TextStrokeTransparency = 0;
             ZIndex = 203;
-            Visible = false;
+            Visible = true;
             Parent = LockUIInnerFrame;
         });
     
