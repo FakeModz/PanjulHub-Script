@@ -5818,7 +5818,7 @@ local ToggleLogo = Library:Create('ImageLabel', {
 })
 
 -- Tambahkan UICorner untuk bentuk lingkaran
-local LogoCorner = Library:Create('UICorner', {
+Library:Create('UICorner', {
     CornerRadius = UDim.new(1, 0), -- 1 artinya maksimal untuk lingkaran penuh
     Parent = ToggleLogo
 })
