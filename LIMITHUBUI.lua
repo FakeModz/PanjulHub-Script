@@ -5722,7 +5722,7 @@ function Library:CreateWindow(...)
     if Library.IsMobile then
         local ToggleUIOuter = Library:Create('Frame', {
             BorderColor3 = Color3.new(0, 0, 0);
-            Position = UDim2.new(0.008, 0, 0.018, 0);
+            Position = UDim2.new(0.5, -20, 0.5, -20);
             Size = UDim2.new(0, 50, 0, 50);
             ZIndex = 200;
             Visible = true;
@@ -5789,8 +5789,8 @@ local ToggleUIButton = Library:Create('TextButton', {
 local ToggleLogo = Library:Create('ImageLabel', {
     BackgroundTransparency = 1,
     Image = "rbxassetid://130349309591439",
-    Size = UDim2.new(0, 40, 0, 40), -- Ukuran lebih kecil dari tombol
-    Position = UDim2.new(0, 5, 0.5, -15), -- Sebelah kiri & tengah vertikal
+    Size = UDim2.new(0, 45, 0, 45), -- Ukuran lebih kecil dari tombol
+    Position = UDim2.new(0, 5, -20, 0.5, -20), -- Sebelah kiri & tengah vertikal
     ZIndex = 204,
     Parent = ToggleUIInnerFrame, -- Bukan ToggleUIButton agar tidak overlap
 });
