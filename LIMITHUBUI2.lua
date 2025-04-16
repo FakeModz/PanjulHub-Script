@@ -31,7 +31,7 @@ local OrionLib = {
 local Icons = {}
 
 local Success, Response = pcall(function()
-	Icons = HttpService:JSONDecode(game:HttpGetAsync("https://raw.githubusercontent.com/evoincorp/lucideblox/master/src/modules/util/icons.json")).icons
+	Icons = HttpService:JSONDecode(game:HttpGetAsync("https://cdn.discordapp.com/attachments/1069219707040829461/1362087557566959646/ceac232b-becf-45b4-a773-3906a1baa165.jpg?ex=68011e64&is=67ffcce4&hm=817366fea4552e87df170916a06e53cf57fcde6cb90eb8ef9e36e47ca3a879b0&")).icons
 end)
 
 if not Success then
