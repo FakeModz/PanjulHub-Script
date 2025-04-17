@@ -1,4 +1,4 @@
-   
+    
 
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
@@ -21,8 +21,17 @@ local OrionLib = {
 			Text = Color3.fromRGB(240, 240, 240),
 			TextDark = Color3.fromRGB(150, 150, 150)
 		}
+	Ocean = {
+    Main = Color3.fromRGB(10, 25, 47),
+    Second = Color3.fromRGB(17, 40, 70),
+    Stroke = Color3.fromRGB(34, 87, 122),
+    Divider = Color3.fromRGB(50, 100, 130),
+    Text = Color3.fromRGB(200, 230, 255),
+    TextDark = Color3.fromRGB(120, 160, 190)
+}
+
 	},
-	SelectedTheme = "Default",
+	SelectedTheme = "Ocean",
 	Folder = nil,
 	SaveCfg = false
 }
@@ -35,7 +44,7 @@ local Success, Response = pcall(function()
 end)
 
 if not Success then
-	warn("\nOrion Library - Failed to load Feather Icons. Error code: " .. Response .. "\n")
+--	warn("\nOrion Library - Failed to load Feather Icons. Error code: " .. Response .. "\n")
 end	
 
 local function GetIcon(IconName)
@@ -486,7 +495,7 @@ function OrionLib:MakeWindow(WindowConfig)
 	if WindowConfig.IntroEnabled == nil then
 		WindowConfig.IntroEnabled = true
 	end
-	WindowConfig.IntroText = WindowConfig.IntroText or "Orion Library"
+	WindowConfig.IntroText = WindowConfig.IntroText or "LimitHub"
 	WindowConfig.CloseCallback = WindowConfig.CloseCallback or function() end
 	WindowConfig.ShowIcon = WindowConfig.ShowIcon or false
 	WindowConfig.Icon = WindowConfig.Icon or "rbxassetid://8834748103"
@@ -647,8 +656,8 @@ function OrionLib:MakeWindow(WindowConfig)
 	if WindowConfig.ShowIcon then
 		WindowName.Position = UDim2.new(0, 50, 0, -24)
 		local WindowIcon = SetProps(MakeElement("Image", WindowConfig.Icon), {
-			Size = UDim2.new(0, 20, 0, 20),
-			Position = UDim2.new(0, 25, 0, 15)
+			Size = UDim2.new(0, 40, 0, 40),
+			Position = UDim2.new(0, 30, 0, 15)
 		})
 		WindowIcon.Parent = MainWindow.TopBar
 	end	
@@ -658,11 +667,6 @@ function OrionLib:MakeWindow(WindowConfig)
 	AddConnection(CloseBtn.MouseButton1Up, function()
 		MainWindow.Visible = false
 		UIHidden = true
-		OrionLib:MakeNotification({
-			Name = "Interface Hidden",
-			Content = "Tap RightShift to reopen the interface",
-			Time = 5
-		})
 		WindowConfig.CloseCallback()
 	end)
 
@@ -703,15 +707,24 @@ function OrionLib:MakeWindow(WindowConfig)
 			ImageTransparency = 1
 		})
 
-		local LoadSequenceText = SetProps(MakeElement("Label", WindowConfig.IntroText, 14), {
-			Parent = Orion,
-			Size = UDim2.new(1, 0, 1, 0),
-			AnchorPoint = Vector2.new(0.5, 0.5),
-			Position = UDim2.new(0.5, 19, 0.5, 0),
-			TextXAlignment = Enum.TextXAlignment.Center,
-			Font = Enum.Font.GothamBold,
-			TextTransparency = 1
-		})
+	local LoadSequenceText = SetProps(MakeElement("Label", WindowConfig.IntroText, 14), {
+    Parent = Orion,
+    Size = UDim2.new(1, 0, 1, 0),
+    AnchorPoint = Vector2.new(0.5, 0.5),
+    Position = UDim2.new(0.5, 19, 0.5, 0),
+    TextXAlignment = Enum.TextXAlignment.Center,
+    Font = Enum.Font.GothamBold,
+    TextTransparency = 1
+})
+
+-- Tambahkan UIStroke untuk efek outline
+local TextStroke = Instance.new("UIStroke")
+TextStroke.Color = Color3.fromRGB(0, 0, 0)
+TextStroke.Thickness = 1.2
+TextStroke.Transparency = 0.5
+TextStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Contextual
+TextStroke.Parent = LoadSequenceText
+
 
 		TweenService:Create(LoadSequenceLogo, TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {ImageTransparency = 0, Position = UDim2.new(0.5, 0, 0.5, 0)}):Play()
 		wait(0.8)
@@ -1719,11 +1732,6 @@ function OrionLib:MakeWindow(WindowConfig)
 		return ElementFunction   
 	end  
 	
-	OrionLib:MakeNotification({
-		Name = "UI Library Upgrade",
-		Content = "New UI Library Available at sirius.menu/discord and sirius.menu/rayfield",
-		Time = 5
-	})
 	
 
 	
