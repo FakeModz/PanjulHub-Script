@@ -14,12 +14,12 @@ local OrionLib = {
 	Flags = {},
 	Themes = {
 		Default = {
-			Main = Color3.fromRGB(25, 25, 25),
-			Second = Color3.fromRGB(32, 32, 32),
-			Stroke = Color3.fromRGB(60, 60, 60),
-			Divider = Color3.fromRGB(60, 60, 60),
-			Text = Color3.fromRGB(240, 240, 240),
-			TextDark = Color3.fromRGB(150, 150, 150)
+			Main = Color3.fromRGB(10, 25, 47),
+			Second = Color3.fromRGB(17, 40, 70),
+			Stroke = Color3.fromRGB(34, 87, 122),
+			Divider = Color3.fromRGB(50, 100, 130),
+			Text = Color3.fromRGB(200, 235, 255),
+			TextDark = Color3.fromRGB(120, 160, 190)
 		}
 	},
 	SelectedTheme = "Default",
@@ -647,8 +647,8 @@ function OrionLib:MakeWindow(WindowConfig)
 	if WindowConfig.ShowIcon then
 		WindowName.Position = UDim2.new(0, 50, 0, -24)
 		local WindowIcon = SetProps(MakeElement("Image", WindowConfig.Icon), {
-			Size = UDim2.new(0, 20, 0, 20),
-			Position = UDim2.new(0, 25, 0, 15)
+			Size = UDim2.new(0, 40, 0, 40),
+			Position = UDim2.new(0, 30, 0, 15)
 		})
 		WindowIcon.Parent = MainWindow.TopBar
 	end	
@@ -1719,11 +1719,7 @@ function OrionLib:MakeWindow(WindowConfig)
 		return ElementFunction   
 	end  
 	
-	OrionLib:MakeNotification({
-		Name = "UI Library Upgrade",
-		Content = "New UI Library Available at sirius.menu/discord and sirius.menu/rayfield",
-		Time = 5
-	})
+	
 	
 
 	
