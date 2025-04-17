@@ -707,24 +707,15 @@ function OrionLib:MakeWindow(WindowConfig)
 			ImageTransparency = 1
 		})
 
-	local LoadSequenceText = SetProps(MakeElement("Label", WindowConfig.IntroText, 14), {
-    Parent = Orion,
-    Size = UDim2.new(1, 0, 1, 0),
-    AnchorPoint = Vector2.new(0.5, 0.5),
-    Position = UDim2.new(0.5, 19, 0.5, 0),
-    TextXAlignment = Enum.TextXAlignment.Center,
-    Font = Enum.Font.GothamBold,
-    TextTransparency = 1
-})
-
--- Tambahkan UIStroke untuk efek outline
-local TextStroke = Instance.new("UIStroke")
-TextStroke.Color = Color3.fromRGB(0, 0, 0)
-TextStroke.Thickness = 1.2
-TextStroke.Transparency = 0.5
-TextStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Contextual
-TextStroke.Parent = LoadSequenceText
-
+		local LoadSequenceText = SetProps(MakeElement("Label", WindowConfig.IntroText, 14), {
+			Parent = Orion,
+			Size = UDim2.new(1, 0, 1, 0),
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.new(0.5, 19, 0.5, 0),
+			TextXAlignment = Enum.TextXAlignment.Center,
+			Font = Enum.Font.GothamBold,
+			TextTransparency = 1
+		})
 
 		TweenService:Create(LoadSequenceLogo, TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {ImageTransparency = 0, Position = UDim2.new(0.5, 0, 0.5, 0)}):Play()
 		wait(0.8)
@@ -1732,6 +1723,11 @@ TextStroke.Parent = LoadSequenceText
 		return ElementFunction   
 	end  
 	
+	OrionLib:MakeNotification({
+		Name = "UI Library Upgrade",
+		Content = "New UI Library Available at sirius.menu/discord and sirius.menu/rayfield",
+		Time = 5
+	})
 	
 
 	
