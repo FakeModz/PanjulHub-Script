@@ -21,15 +21,6 @@ local OrionLib = {
 			Text = Color3.fromRGB(240, 240, 240),
 			TextDark = Color3.fromRGB(150, 150, 150)
 		}
-	Ocean = {
-    Main = Color3.fromRGB(10, 25, 47),
-    Second = Color3.fromRGB(17, 40, 70),
-    Stroke = Color3.fromRGB(34, 87, 122),
-    Divider = Color3.fromRGB(50, 100, 130),
-    Text = Color3.fromRGB(200, 230, 255),
-    TextDark = Color3.fromRGB(120, 160, 190)
-}
-
 	},
 	SelectedTheme = "Default",
 	Folder = nil,
@@ -495,7 +486,7 @@ function OrionLib:MakeWindow(WindowConfig)
 	if WindowConfig.IntroEnabled == nil then
 		WindowConfig.IntroEnabled = true
 	end
-	WindowConfig.IntroText = WindowConfig.IntroText or "LimitHub"
+	WindowConfig.IntroText = WindowConfig.IntroText or "Orion Library"
 	WindowConfig.CloseCallback = WindowConfig.CloseCallback or function() end
 	WindowConfig.ShowIcon = WindowConfig.ShowIcon or false
 	WindowConfig.Icon = WindowConfig.Icon or "rbxassetid://8834748103"
