@@ -658,11 +658,6 @@ function OrionLib:MakeWindow(WindowConfig)
 	AddConnection(CloseBtn.MouseButton1Up, function()
 		MainWindow.Visible = false
 		UIHidden = true
-		OrionLib:MakeNotification({
-			Name = "Interface Hidden",
-			Content = "Tap RightShift to reopen the interface",
-			Time = 5
-		})
 		WindowConfig.CloseCallback()
 	end)
 
